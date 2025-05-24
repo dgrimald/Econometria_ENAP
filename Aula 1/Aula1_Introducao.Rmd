@@ -44,6 +44,7 @@ if(!require(stargazer)){install.packages("stargazer")}
 if(!require(knitr)){install.packages("knitr")}
 if(!require(kableExtra)){install.packages("kableExtra")}
 if(!require(formatR)){install.packages("formatR")}
+if(!require(sidrar)){install.packages("sidrar")}
 ```
 
 # Apresentação do curso
@@ -85,7 +86,11 @@ if(!require(formatR)){install.packages("formatR")}
   
 ## Visão Geral
 
-1 slide para falar sobre as listas, ementa email dos instrutores, site do curso etc
+- Todas as aulas terão uma parte conceitual e uma parte dedicada a programação aplicada
+
+- A avaliação será feita por meio de participação em sala (20%) e 8 listas de exercícios (10% cada).
+
+- Todo o material do curso será postado numa página do [\emph{\color{blue}{Github}}](https://github.com/dgrimald/Econometria_ENAP)
 
 # Conceitos básicos
 
@@ -114,6 +119,14 @@ if(!require(formatR)){install.packages("formatR")}
   - \textit{(i)} $P(\Omega)=1$;
   - \textit{(ii)} $\forall \; A \in \Omega, \; P(A)\ge0$;
   - \textit{(iii)} Para toda sequência $A_1, A_2, ...,A_n$ de eventos disjuntos, temos que $P(\bigcup^{\infty}_{i=1}A_i)=\sum^{\infty}_{i=1}P(A_i)$ 
+  
+## Proriedades da Probabilidade
+
+  - \textit{(i)} $P(A)=1-P(A^C)$
+  - \textit{(ii)} Sendo A e B dois eventos quaisquer, vale que $P(B)=P(B\cap A) + P(B \cap A^C)$
+  - \textit{(iii)} Se $A \subset B$, então $P(A)\leq P(B)$
+  - \textit{(iv)} Se $A \subset B$, então $P(A)\leq P(B)$
+  - \textit{(v)} Para quaisquer eventos $A_1, A_2, ...$, vale que: $P(\bigcup^{\infty}_{i=1}A_i) \leq \sum^{\infty}_{i=1}P(A_i)$
 
 ## \large Probabilidade condicional e independência
 
@@ -124,9 +137,7 @@ if(!require(formatR)){install.packages("formatR")}
 - Intuição: quando eventos são independentes, a ocorrência de um não informa nada sobre a ocorrência do outro.
   - $P(A|B)=\frac{P(A \cap B)}{P(B)}=\frac{P(A)P(B)}{P(B)}=P(A)$
   
-## 
-
-# Introdução ao R
+# O Básico de R
 
 ## Por quê usar o R?
 
@@ -153,7 +164,7 @@ if(!require(formatR)){install.packages("formatR")}
 
 -   Primeiro, você precisa instalar o [\emph{\color{blue}{R}}](https://cran.r-project.org/)
 
--   Mas ter também o [\emph{\color{blue}{RStudio}}](https://cran.r-project.org/) faz toda a diferença!
+-   Mas ter também o [\emph{\color{blue}{RStudio}}](https://posit.co/download/rstudio-desktop/) faz toda a diferença!
 
     -   Interface gráfica mais agradável e recursos 'point-and-click';
     -   Permite fazer a gestão, instalação e atualização de pacotes (**Sim, você vai precisar instalar/atualizar pacotes todo o tempo!**);
@@ -255,21 +266,20 @@ lista_1[[2]][2]
 \vspace{0.6cm}
 
 **Code Chunk 5: Criando bases de dados no R**
+
 \scriptsize
-```{r, echo=TRUE, eval=TRUE}
-sample_n=1000
-data <- data.frame("id"=paste("pf", 1:sample_n, sep="_"),
-                   "A"=sample(c(0.1, 0.3, 1.2), size=sample_n, 
-                              prob=(c(0.45, 0.45, 0.1)), replace=TRUE), 
-                   "k"=rnorm(n=sample_n, mean=15, sd=3),
-                   "l"=rnorm(n=sample_n, mean=5, sd=1),
-                   "tipo_local"=sample(c("resex", "assent", "outros_rural", 
-                                         "outros_urbano"),
+```{r, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+sample_n=10000
+data <- data.frame("id"=paste("cpf", 1:sample_n, sep="_"),
+                   "tipo_local"=sample(c("urbano", "rural"),
                                        size=sample_n,
-                                       prob=c(0.6, 0.3, 0.05, 0.05),
-                                       replace=TRUE))
-head(data$tipo_local, 5)
-head(data[,5], 5)
+                                       prob=c(0.84, 1-0.84),
+                                       replace=TRUE),
+                   "cor"=sample(c("branca", "preta", "parda"),
+                                size=sample_n,
+                                prob=c(0.48, 0.08, 0.44),
+                                replace=TRUE))
+head(data, 5)
 ```
 
 ## Exportando bases no R
@@ -283,7 +293,7 @@ head(data[,5], 5)
 if(dir.exists("./01 - Bases")){
   unlink("./01 - Bases", recursive = TRUE)
 }
-dir.create("./01 - Bases")
+dir.create("./01 - Bases", showWarnings = FALSE)
 
 # em formato nativo do R
 save(data, file="./01 - Bases/teste_data.Rdata")
@@ -307,103 +317,86 @@ write_dta(data, path = "./01 - Bases/teste_data.dta")
 \vspace{0.6cm}
 
 **Code Chunk 7: Importando dados no R**
+
 \scriptsize
 ```{r, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
 # R native file
 load(file="./01 - Bases/teste_data.Rdata") 
 
-# arquivo em formato Stata
-data <- read_dta("./01 - Bases/teste_data.dta")
-
 # arquivo de texto (txt, csv etc)
 data <- read_delim(file="./01 - Bases/teste_data.txt", delim = " ")
-data <- read_csv2(file="./01 - Bases/teste_data.txt")
+data <- read_csv2(file="./01 - Bases/teste_data.csv")
 
 # arquivo em formato excel
 data <- read.xlsx("./01 - Bases/teste_data.xlsx", sheet = 1)
 str(data)
 ```
 
+## Download de arquivos
+
+\vspace{0.6cm}
+
+**Code Chunk 7: Download de arquivos**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+# Dados de Rendimento domiciliar per capita do Censo
+tab3278 <- get_sidra(api="/t/3278/n1/all/v/allxp/p/all/c386/allxt/c1/allxt/c86/2776,2777,2778,2779,2780/c58/0") 
+save(tab3278, file="01 - Bases/Tab3278.Rdata")
+tab3278 <- tab3278[,c(5, 12, 14, 16)]
+names(tab3278) <- c("qtd", "classe_renda", "tipo_local", "cor")
+head(tab3278)
+```
+
 ## *mutate*
 
-**Code Chunk 8: Criação de variáveis**
 \scriptsize
 ```{r, echo=TRUE, eval=TRUE}
-data <- data %>% 
-  mutate(alpha=0.5,
-         y=A*l^alpha*k^(1-alpha)*1000,
-         across(matches("^[a-z]{1}$"), log, .names = "log_{.col}"),
-         true_status=case_when(y/12<218/2 ~ "extrem.pobreza",
-                                 y/12<218 ~ "pobreza",
-                                 TRUE ~ "regular")) %>% 
-  relocate(k, log_l, log_k, .after=l)
-head(data[,c("id", "y", "true_status")])
+tab3278 %<>%
+  mutate(classe_renda = case_when(classe_renda<=9683 ~ "1sm",
+                                  classe_renda>9683 ~ "1sm+",
+                                  TRUE ~ "2sm+"),
+         tipo_local = case_when(tipo_local==1 ~ "urbano",
+                               TRUE ~ "rural"),
+         cor = case_when(cor==2776 ~ "branca",
+                         cor==2777 ~ "preta",
+                         TRUE ~ "parda"))
+head(tab3278)
+```
+
+## *group_by*
+
+**Code Chunk 9: agregando a base de dados**
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+tab.probs <- tab3278 %>% 
+  filter(!is.na(qtd)) %>% 
+  group_by(cor, tipo_local, classe_renda) %>% 
+  summarise(qtd = sum(qtd)) %>% 
+  group_by(cor, tipo_local) %>% 
+  mutate(qtd_grupo = sum(qtd)) %>%
+  ungroup() %>% 
+  mutate(prob_renda_cond = qtd / qtd_grupo)
+head(tab.probs[tab.probs$cor=="parda",])
 ```
 
 ## *join*
 
 \vspace{0.6cm}
 
-**Code Chunk 9: bases de dados relacionadas**
+**Code Chunk 10: bases de dados relacionadas**
 \scriptsize
 ```{r, echo=TRUE, eval=TRUE}
 # criando informação de elegibilidade
-data.elegib <- data %>%
-  mutate(observavel=rbinom(sample_n, 1, 0.9), 
-         obs_status=case_when(observavel==1 ~ true_status,
-                              TRUE ~ NA)) %>% 
-  select(id, obs_status)
+tab.probs %<>%
+  filter(classe_renda=="1sm") %>% 
+  select(cor, tipo_local, prob_renda_cond)
 
 data %<>%
-  left_join(data.elegib, by="id") %>% 
-  mutate(elegivel=case_when(tipo_local %in% c("resex", "assent")
-                            & obs_status %in% 
-                              c("extrem.pobreza","pobreza") ~ 1,
-                            TRUE ~ 0))
+  left_join(tab.probs, by=c("cor", "tipo_local"))
+
 # existem outras opções de join: (inner_join, right_join, full_join)
-head(select(data, id, tipo_local, elegivel), 4)
-```
-
-## *group_by*
-
-**Code Chunk 10: colapsando a base de dados**
-\scriptsize
-```{r, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
-data.temp <- data %>%
-  filter(!is.na(obs_status)) %>% 
-  group_by(elegivel) %>% 
-  summarise(across(matches("^[a-z]{1}$"), mean, .names="mean_{.col}"),
-            across(matches("^[a-z]{1}$"), sd, .names="sd_{.col}"),
-            n=n_distinct(id))
-data.temp
-```
-
-## *group_by*
-
-**Code Chunk 11: incluindo variáveis associadas a grupos**
-\scriptsize
-```{r, echo=TRUE, eval=TRUE}
-data.temp <- data %>%
-  select(l, k, tipo_local) %>% 
-  group_by(tipo_local) %>% 
-  mutate(across(matches("^[a-z]{1}$"), mean, .names="mean_{.col}"),
-         across(matches("^[a-z]{1}$"), sd, .names="sd_{.col}")) %>% 
-  ungroup()
-head(data.temp, 5)
-```
-
-## *rbind*
-
-**Code Chunk 12: incluindo observações**
-\scriptsize
-```{r, echo=TRUE, eval=TRUE}
-data.temp <- data.frame("l"=rnorm(n=100, mean=5, sd=1),
-                    "k"=rnorm(n=100, mean=10, sd=2),
-                    "tipo_local"=rep(c("assent", "outro_rural"), 50)) %>% 
-  rbind(select(data, l, k, tipo_local))
-# rbindlist funciona para uma lista com múltiplas bases 
-# (requer package data.table)
-str(data.temp)
+head(data)
 ```
 
 ## Estrutura para looping
@@ -411,16 +404,12 @@ str(data.temp)
 **Code Chunk 13: Usando for para implementar looping**
 \scriptsize
 ```{r, echo=TRUE, eval=TRUE}
-# Criando status de tratamento
-data$tratado <- NA
+# Criando status de renda
+data$baixa.renda <- NA
 for (i in 1:nrow(data)){
-  if(data$elegivel[i]==1){
-    data$tratado[i] <- rbinom(1, 1, 0.9)
-  }else{
-    data$tratado[i] <- rbinom(1, 1, 0.1)
-  }
+  data$baixa.renda[i] <- sample(0:1, size=1, prob=c(1-data$prob_renda_cond[i], data$prob_renda_cond[i]))
 }
-table(data$tratado, data$elegivel, dnn = c("tratado", "elegivel"))
+head(data)
 ```
 
 ## Criando functions
@@ -431,36 +420,94 @@ table(data$tratado, data$elegivel, dnn = c("tratado", "elegivel"))
 \scriptsize
 ```{r, echo=TRUE, eval=TRUE}
 # Criando function
-get_id_info <- function(temp.id, source=data, s=FALSE){
-  temp <- filter(source,id==temp.id) %>%
-    select(id, elegivel) %>% 
-    mutate(tratado=case_when(elegivel==1 ~ rbinom(1, 1, 0.9),
-                             TRUE ~ rbinom(1, 1, 0.1)))
+gen_acesso_digital <- function(local, status.renda){
   
-  if(s){output <- temp$tratado}else{
-    output <- list("id"=temp$id, "status"=temp$elegivel,
-                   "tratamento"=temp$tratado)}
-  output
+  prob <- case_when(status.renda==1 & local=="urbano"~ 0.4,
+                    status.renda==1 & local=="rural"~ 0.2,
+                    status.renda==0 & local=="urbano"~ 0.75,
+                    status.renda==0 & local=="rural"~ 0.45,
+                    TRUE ~ 0.8)
 }
-dump("get_id_info", file = "get_id_info.R")
-rm(get_id_info)
-source("./get_id_info.R")
-unlist(get_id_info("pf_10"))
+dump("gen_acesso_digital", file = "gen_acesso_digital.R")
+rm(gen_acesso_digital)
+source("gen_acesso_digital.R")
+
+data %<>% 
+  mutate(acesso_digital = gen_acesso_digital(tipo_local, baixa.renda))
+head(data, 2)
 ```
 
-## lapply, sapply, mapply...
+# Hands on!
 
-**Code Chunk 15: Looping sem usar um *for***
+## Desenho do programa
+
+- Desenhamos um programa de combate à pobreza. A população-alvo são indivídios em famílias com renda per capita inferior a 1sm, mas não temos informação sobre a renda. 
+
+- Na prática, o programa consistirá em uma transferência incondicional de 1sm para qualquer indivíduo que aderir ao programa.
+  - 90% dos indivíduos com renda de até 1sm estão propensos a aderir.
+  - 40% dos indivíduos com renda superior a 1sm estão propensos a aderir.
+
+## Desenho do programa
+
+- Existem duas opções para o processo de adesão ao programa: (*i*) presencial ou (*ii*) digital (via Govbr).
+
+- No caso da adesão presencial:
+  - apenas 30% dos indíviduos em área rural (independente de renda) conseguirão se inscrever no programa pelas dificuldades de deslocamento;
+  - 100% dos indivúdos em área urbana poderão se inscrever.
+  
+## Falha de focalização
+
+- No caso da adesão por canal digital:
+  - apenas indivíduos com acesso a conectividade (cuja probabilidade é dependente de renda e localidade) terão condições de aderir ao programa.
+  
+- Considerando as probabilidades, qual desenho deveria levar à menor falha de focalização?
+  - Vamos definir falha de focalização como Qtd. de beneficiarios que não fazem parte da população-alvo sobre o total de beneficiários.
+
+## Falha de focalização
+
+**Code Chunk 15: Estimando probabilidade de adesao**
 \scriptsize
 ```{r, echo=TRUE, eval=TRUE}
-# Criando function
-data %<>%
-  select(-tratado)
-names(data)
-
-data$tratado <- sapply(data$id, get_id_info, s=TRUE)
-table(data$tratado, data$elegivel, dnn = c("tratado", "elegivel"))
+data %<>% 
+  mutate(prop_adesao= case_when(baixa.renda==1 ~ 0.9,
+                                TRUE ~ 0.4),
+         viabilidade_presencial = case_when(tipo_local=="rural" ~ 0.3,
+                                            TRUE ~ 1),
+         adesao_presencial = prop_adesao*viabilidade_presencial,
+         adesao_digital = prop_adesao*acesso_digital)
+head(data, 3)
 ```
+
+## Falha de focalização 
+
+**Code Chunk 16: Estimando probabilidade de adesao**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+data$beneficiario.digital <- NA
+data$beneficiario.presencial <- NA
+for (i in 1:nrow(data)){
+  data$beneficiario.digital[i] <- sample(0:1, size=1, 
+                                         prob=c(1-data$adesao_digital[i],
+                                                data$adesao_digital[i]))
+  data$beneficiario.presencial[i] <- sample(0:1, size=1, 
+                                            prob=c(1-data$adesao_presencial[i],
+                                                   data$adesao_presencial[i]))
+}
+head(data[,c("id", "baixa.renda", 
+             "beneficiario.digital", "beneficiario.presencial")], 3)
+```
+
+## Falha de focalização
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+table(data$baixa.renda, data$beneficiario.digital,
+      dnn = c("Baixa Renda", "Beneficiario"))
+
+table(data$baixa.renda, data$beneficiario.presencial, 
+      dnn = c("Baixa Renda", "Beneficiario"))
+```
+
+# Encerramento
 
 ## Dúvidas com R
 
@@ -485,6 +532,3 @@ table(data$tratado, data$elegivel, dnn = c("tratado", "elegivel"))
 
 - Econometrics: [\emph{\color{blue}{Causal inference: the mixtape}}](https://mixtape.scunning.com/) e [\emph{\color{blue}{The Effect}}](https://theeffectbook.net/)   
 
-# Hands on!
-
-## Simulação...
