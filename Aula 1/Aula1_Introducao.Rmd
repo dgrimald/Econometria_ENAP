@@ -1,0 +1,490 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Aula 1: Apresentação do curso e conceitos básicos"
+date: "3º Trimestre - 2025"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{hyperref}
+  - \usepackage{graphicx}
+  - \usepackage{setspace}
+  - \newcommand{\nsmall}{\footnotesize}
+output:
+  beamer_presentation:
+    theme: "ENAP"
+    latex_engine: xelatex
+    incremental: false
+suppress-bibliography: true
+bibliography: references.bib
+---
+
+```{r echo=FALSE, include=FALSE}
+# loading required packages
+library(knitr)
+library(devtools)
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+```
+
+# Apresentação do curso
+
+## Os Instrutores
+
+\textbf{Daniel Grimaldi:} Economista graduado pela UFRJ, com mestrado na USP e Ph.D. pela George Mason. Trabalha com monitoramento e avaliação de política pública desde 2011, com experiências no Ipea, BNDES, BID e agora na Secretaria de Avaliação de Políticas Públicas e Assuntos Econômicos (SMA/MPO).
+
+\textbf{Arthur Bragança:} Economista sênior na Prática Global de Meio Ambiente, Recursos Naturais e Economia Azul do Banco Mundial. É bacharel em Economia pela Universidade Federal de Minas Gerais, doutor em Economia na PUC-Rio e acadêmico visitante na Universidade de Harvard. Antes de ingressar no Banco Mundial, trabalhou como chefe de avaliação de políticas na Iniciativa de Política Climática (CPI).
+
+## Escopo do curso
+
+\textbf{Esse é um curso introdutório de \Large{\color{ENAPDarkGreen} econometria}}.
+
+\textit{The Econometric Society is an international society for the advancement of economic theory in its relation to \textbf{statistics} and \textbf{mathematics}. (...) Its main object shall be to promote studies that aim at a unification of the theoretical-quantitative and the empirical-quantitative approach to \textbf{economic problems} and that are penetrated by constructive and rigorous thinking similar to that which has come to \textbf{dominate in the natural sciences}.}
+[@frisch1933]
+
+## Escopo do curso
+
+\textbf{Esse é um curso \Large{\color{ENAPDarkGreen}introdutório de econometria aplicada}}.
+
+- Objetivo é que todos terminem o curso com capacidade de usar ferramental quantitativo para estudar problemas socioeconômicos.
+
+  - Compreender, contratar e implementar análises econométricas.
+
+- Não vamos nos aprofundar na teoria...
+  - Corolário 1: não vamos cobrar provas formais de teoremas, estimadores etc
+  
+## Escopo do curso
+
+\textbf{Esse é um curso \Large{\color{ENAPDarkGreen}introdutório de econometria aplicada}}.
+
+- Objetivo é que todos terminem o curso com capacidade de usar ferramental quantitativo para estudar problemas socioeconômicos. 
+
+  - Compreender, contratar e implementar análises econométricas.
+
+- ... mas vamos cobrar consolidação dos conceitos por meio de \textbf{aplicação direta do ferramental quantitativo}... 
+  - Corolário 2: vocês precisarão aprender e usar linguagem de programação ao longo do curso.
+  
+## Visão Geral
+
+1 slide para falar sobre as listas, ementa email dos instrutores, site do curso etc
+
+# Conceitos básicos
+
+## Espaço amostral e evento
+ 
+- Um \textbf{espaço amostral ($\Omega$)} é o conjunto de todos os resultados possíveis para um experimento aleatório.
+
+- Um \textbf{evento} é qualquer conjunto de resultados definidos dentro do espaço amostral.
+
+  - $A = \{A_1, A_2, ..., A_n\}; A_i \in \Omega \;  \forall \; i$
+
+- Se o resultado $A_i$ foi observado e $A_i \in A$, então dizemos que o evento A ocorreu.
+
+  - Um evento B está contido em A $\Leftrightarrow B_i \in A \; \forall \; i$ 
+  - A e B serão \textbf{eventos disjuntos} $\Leftrightarrow A \cap B = \varnothing$
+  - O \textbf{complementar de ($A^c$)} é formado por todos os resultados que fazem parte do conjunto amostral, mas não estão contidos em A, de tal forma que $A \cup A^c = \Omega$
+
+## Probabilidade
+
+- Se $\Omega$ é enumerável, então $P(A)=\frac{Qtd.\; de\; elementos\;  de\;  A}{Qtd.\; de\; elementos\; em\; \Omega}$
+
+- Se $\Omega$ não for enumerável, então $P(A)=\frac{Comprimento\; de\; A}{Comprimento\; de\; \Omega}$
+
+- Uma função $\varphi(A, \Omega)$ é uma probabilidade $\Leftrightarrow$ satisfaz os Axiomas de Kolmogorov:
+
+  - \textit{(i)} $P(\Omega)=1$;
+  - \textit{(ii)} $\forall \; A \in \Omega, \; P(A)\ge0$;
+  - \textit{(iii)} Para toda sequência $A_1, A_2, ...,A_n$ de eventos disjuntos, temos que $P(\bigcup^{\infty}_{i=1}A_i)=\sum^{\infty}_{i=1}P(A_i)$ 
+
+## \large Probabilidade condicional e independência
+
+- Sendo $P(B)>0$, a \textbf{probabilidade condicional} de A dado que ocorreu B ($P(A|B)$) é dada por $\frac{P(A\cap B)}{P(B)}$. Caso ($P(B)=0 \Rightarrow P(A|B)=P(A)$).
+
+- Eventos A e B são \textbf{independentes} $\Leftrightarrow P(A \cap B)=P(A)P(B)$
+
+- Intuição: quando eventos são independentes, a ocorrência de um não informa nada sobre a ocorrência do outro.
+  - $P(A|B)=\frac{P(A \cap B)}{P(B)}=\frac{P(A)P(B)}{P(B)}=P(A)$
+  
+## 
+
+# Introdução ao R
+
+## Por quê usar o R?
+
+-   \textbf{Gratuito}
+    -   Tempo e orçamento direcionados para o trabalho
+-   \textbf{Comunidade ativa}
+    -   Avanços metodológicos chegam primeiro no R;
+    -   Farto material (gratuito) para treinamento;
+    -   Diversos fóruns para troca de experiências.
+-   \textbf{É uma linguagem de programação, não um software}
+    -   Amplitude maior de tarefas (data munging, data scrapping, recursos gráficos, automação...)
+    -   Permite integração com outras linguagens (essa apresentação foi feita com **R + Latex**).
+
+## Figura
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\node[anchor=south west] at (-1, -4.5){\includegraphics[scale=0.38]{R vs Stata.png}};
+\end{tikzpicture}
+```
+## Instalando o R
+
+-   Primeiro, você precisa instalar o [\emph{\color{blue}{R}}](https://cran.r-project.org/)
+
+-   Mas ter também o [\emph{\color{blue}{RStudio}}](https://cran.r-project.org/) faz toda a diferença!
+
+    -   Interface gráfica mais agradável e recursos 'point-and-click';
+    -   Permite fazer a gestão, instalação e atualização de pacotes (**Sim, você vai precisar instalar/atualizar pacotes todo o tempo!**);
+    -   Permite integrar facilmente, via [\emph{\color{blue}{RMarkdown}}](https://rmarkdown.rstudio.com/), programação em R com [\emph{\color{blue}{LaTeX}}](https://miktex.org/), [\emph{\color{blue}{SQL}}](https://dept.stat.lsa.umich.edu/~jerrick/courses/stat701/notes/sql.html), Python, Julia, C, C++ etc.
+
+```{=tex}
+\begin{flushright}
+\textit{Essa apresentação foi gerada com um arquivo RMarkdown}
+\end{flushright}
+```
+## R
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\node[anchor=south west] at (-1.1, -4.5){\includegraphics[scale=0.25]{Screenshot RStudio.png}};
+\end{tikzpicture}
+```
+
+## Instalando pacotes
+
+**Code Chunk 1: Instalação de pacotes no R**
+
+```{r, echo=TRUE, eval=FALSE, tidy=TRUE, tidy.opts=list(arrow=TRUE, indent=2)}
+# "Simples"
+install.packages("tidyverse")
+require(tidyverse)
+
+# "Sofisticado"
+if(!require(tidyverse)){
+  install.packages("tidyverse")
+  require(tidyverse)}
+```
+
+## Aprendendo sobre pacotes
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\node[anchor=south west] at (-1.1, -4.5){\includegraphics[scale=0.25]{package_screen_shot.png}};
+\end{tikzpicture}
+```
+## Estruturas de dados em R
+
+-   Vetor (unidimensional e homogêneo);
+-   Matrix (bidimensional e homogêneo);
+-   Array (n-dimensional e homogêneo);
+-   Lista (unidimensional e heterogêneo);
+-   Data frame (bidimensional e heterogêneo)
+
+## Vetores
+
+**Code Chunk 2: Manipulando vetores** \nsmall
+
+```{r, echo=TRUE, eval=TRUE, tidy=TRUE, tidy.opts=list(arrow=TRUE, indent=2)}
+# criando
+vetor_1 <- c(1, 2, 3, 4, 5)
+# editando
+vetor_2 <- c(vetor_1, 6:10)
+vetor_2
+# operações com vetores
+c(vetor_2*2)[2]
+```
+
+## Matrizes
+
+\vspace{0.6cm}
+
+**Code Chunk 3: Manipulando matrizes** \scriptsize
+
+```{r, echo=TRUE, eval=TRUE, tidy=TRUE, tidy.opts=list(arrow=TRUE, indent=2)}
+# criando
+matrix_1 <- matrix(vetor_2, nrow = 2, ncol=5)
+matrix_1[2,5] <- 100
+matrix_1
+# operações com matrizes
+matrix_1*2
+matrix_1%*%t(matrix_1)
+```
+
+## Listas
+
+**Code Chunk 4: Manipulando listas** \scriptsize
+
+```{r, echo=TRUE, eval=TRUE, tidy=TRUE, tidy.opts=list(arrow=TRUE, indent=2)}
+# criando
+lista_1 <- list(matrix_1, vetor_1)
+lista_1[[1]]
+lista_1[[2]]
+lista_1[[1]][2,5]
+lista_1[[2]][2]
+```
+
+
+## Criando bases no R
+
+\vspace{0.6cm}
+
+**Code Chunk 5: Criando bases de dados no R**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+sample_n=1000
+data <- data.frame("id"=paste("pf", 1:sample_n, sep="_"),
+                   "A"=sample(c(0.1, 0.3, 1.2), size=sample_n, 
+                              prob=(c(0.45, 0.45, 0.1)), replace=TRUE), 
+                   "k"=rnorm(n=sample_n, mean=15, sd=3),
+                   "l"=rnorm(n=sample_n, mean=5, sd=1),
+                   "tipo_local"=sample(c("resex", "assent", "outros_rural", 
+                                         "outros_urbano"),
+                                       size=sample_n,
+                                       prob=c(0.6, 0.3, 0.05, 0.05),
+                                       replace=TRUE))
+head(data$tipo_local, 5)
+head(data[,5], 5)
+```
+
+## Exportando bases no R
+
+\vspace{0.6cm}
+
+**Code Chunk 6: Exportando bases**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+# gerando diretorio
+if(dir.exists("./01 - Bases")){
+  unlink("./01 - Bases", recursive = TRUE)
+}
+dir.create("./01 - Bases")
+
+# em formato nativo do R
+save(data, file="./01 - Bases/teste_data.Rdata")
+# em arquivo de texto (txt, csv etc)
+write.table(data, file = "./01 - Bases/teste_data.txt", sep = " ", 
+            row.names = FALSE)
+write.table(data, file = "./01 - Bases/teste_data.csv", sep = ";",
+            row.names = FALSE)
+write_csv2(data, file="./01 - Bases/teste_data.csv", append = TRUE)
+# write_delim é outra opcão
+
+# em arquivo formato excel (requer package openxlsx)
+write.xlsx(data, file="./01 - Bases/teste_data.xlsx")
+
+# em arquivo STATA (requer package: haven)
+write_dta(data, path = "./01 - Bases/teste_data.dta")
+```
+
+## Importando dados
+
+\vspace{0.6cm}
+
+**Code Chunk 7: Importando dados no R**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+# R native file
+load(file="./01 - Bases/teste_data.Rdata") 
+
+# arquivo em formato Stata
+data <- read_dta("./01 - Bases/teste_data.dta")
+
+# arquivo de texto (txt, csv etc)
+data <- read_delim(file="./01 - Bases/teste_data.txt", delim = " ")
+data <- read_csv2(file="./01 - Bases/teste_data.txt")
+
+# arquivo em formato excel
+data <- read.xlsx("./01 - Bases/teste_data.xlsx", sheet = 1)
+str(data)
+```
+
+## *mutate*
+
+**Code Chunk 8: Criação de variáveis**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+data <- data %>% 
+  mutate(alpha=0.5,
+         y=A*l^alpha*k^(1-alpha)*1000,
+         across(matches("^[a-z]{1}$"), log, .names = "log_{.col}"),
+         true_status=case_when(y/12<218/2 ~ "extrem.pobreza",
+                                 y/12<218 ~ "pobreza",
+                                 TRUE ~ "regular")) %>% 
+  relocate(k, log_l, log_k, .after=l)
+head(data[,c("id", "y", "true_status")])
+```
+
+## *join*
+
+\vspace{0.6cm}
+
+**Code Chunk 9: bases de dados relacionadas**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+# criando informação de elegibilidade
+data.elegib <- data %>%
+  mutate(observavel=rbinom(sample_n, 1, 0.9), 
+         obs_status=case_when(observavel==1 ~ true_status,
+                              TRUE ~ NA)) %>% 
+  select(id, obs_status)
+
+data %<>%
+  left_join(data.elegib, by="id") %>% 
+  mutate(elegivel=case_when(tipo_local %in% c("resex", "assent")
+                            & obs_status %in% 
+                              c("extrem.pobreza","pobreza") ~ 1,
+                            TRUE ~ 0))
+# existem outras opções de join: (inner_join, right_join, full_join)
+head(select(data, id, tipo_local, elegivel), 4)
+```
+
+## *group_by*
+
+**Code Chunk 10: colapsando a base de dados**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+data.temp <- data %>%
+  filter(!is.na(obs_status)) %>% 
+  group_by(elegivel) %>% 
+  summarise(across(matches("^[a-z]{1}$"), mean, .names="mean_{.col}"),
+            across(matches("^[a-z]{1}$"), sd, .names="sd_{.col}"),
+            n=n_distinct(id))
+data.temp
+```
+
+## *group_by*
+
+**Code Chunk 11: incluindo variáveis associadas a grupos**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+data.temp <- data %>%
+  select(l, k, tipo_local) %>% 
+  group_by(tipo_local) %>% 
+  mutate(across(matches("^[a-z]{1}$"), mean, .names="mean_{.col}"),
+         across(matches("^[a-z]{1}$"), sd, .names="sd_{.col}")) %>% 
+  ungroup()
+head(data.temp, 5)
+```
+
+## *rbind*
+
+**Code Chunk 12: incluindo observações**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+data.temp <- data.frame("l"=rnorm(n=100, mean=5, sd=1),
+                    "k"=rnorm(n=100, mean=10, sd=2),
+                    "tipo_local"=rep(c("assent", "outro_rural"), 50)) %>% 
+  rbind(select(data, l, k, tipo_local))
+# rbindlist funciona para uma lista com múltiplas bases 
+# (requer package data.table)
+str(data.temp)
+```
+
+## Estrutura para looping
+
+**Code Chunk 13: Usando for para implementar looping**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+# Criando status de tratamento
+data$tratado <- NA
+for (i in 1:nrow(data)){
+  if(data$elegivel[i]==1){
+    data$tratado[i] <- rbinom(1, 1, 0.9)
+  }else{
+    data$tratado[i] <- rbinom(1, 1, 0.1)
+  }
+}
+table(data$tratado, data$elegivel, dnn = c("tratado", "elegivel"))
+```
+
+## Criando functions
+
+\vspace{0.6cm}
+
+**Code Chunk 14: Criando functions**
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+# Criando function
+get_id_info <- function(temp.id, source=data, s=FALSE){
+  temp <- filter(source,id==temp.id) %>%
+    select(id, elegivel) %>% 
+    mutate(tratado=case_when(elegivel==1 ~ rbinom(1, 1, 0.9),
+                             TRUE ~ rbinom(1, 1, 0.1)))
+  
+  if(s){output <- temp$tratado}else{
+    output <- list("id"=temp$id, "status"=temp$elegivel,
+                   "tratamento"=temp$tratado)}
+  output
+}
+dump("get_id_info", file = "get_id_info.R")
+rm(get_id_info)
+source("./get_id_info.R")
+unlist(get_id_info("pf_10"))
+```
+
+## lapply, sapply, mapply...
+
+**Code Chunk 15: Looping sem usar um *for***
+\scriptsize
+```{r, echo=TRUE, eval=TRUE}
+# Criando function
+data %<>%
+  select(-tratado)
+names(data)
+
+data$tratado <- sapply(data$id, get_id_info, s=TRUE)
+table(data$tratado, data$elegivel, dnn = c("tratado", "elegivel"))
+```
+
+## Dúvidas com R
+
+- Google:
+  - 'how to [o que você quiser] R'
+  - 'how to [o que você quiser] R Cran' (se estiver procurando por um package específico)
+  - Fóruns importantes para dúvidas de programação são [\emph{\color{blue}{stackoverflow}}](https://stackoverflow.com/) e [\emph{\color{blue}{R-Bloggers}}](https://www.r-bloggers.com/)
+  
+- Programadores de R adoram montar Cheat sheets, que são pequenos resumos de comandos. Elas são muito úteis (principalmente no início). Salvamos diversas delas no grupo de treinamento do DAE.
+
+## Referências estruturadas
+
+- R Basics: [\emph{\color{blue}{R programming for data science}}](https://bookdown.org/rdpeng/rprogdatascience/), [\emph{\color{blue}{R for data science}}](https://r4ds.had.co.nz/index.html) e [\emph{\color{blue}{R Cookbook}}](https://rc2e.com/)
+
+- Manipução de dados: as referências de [\emph{\color{blue}{dplyr}}](https://dplyr.tidyverse.org/) e [\emph{\color{blue}{tidyr}}](https://tidyr.tidyverse.org/)  
+
+- Gráficos: as referências de [\emph{\color{blue}{ggplot2}}](https://ggplot2.tidyverse.org/reference/) e [\emph{\color{blue}{R Graph Gallery}}](https://r-graph-gallery.com/)
+
+- Tabelas: as referências de [\emph{\color{blue}{Kable}}](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) e [\emph{\color{blue}{Stargazer}}](https://www.jakeruss.com/cheatsheets/stargazer/#modifying-table-notes)
+
+- RMarkdown: [\emph{\color{blue}{The Definitive guide}}](https://bookdown.org/yihui/rmarkdown/)
+
+- Econometrics: [\emph{\color{blue}{Causal inference: the mixtape}}](https://mixtape.scunning.com/) e [\emph{\color{blue}{The Effect}}](https://theeffectbook.net/)   
+
+# Hands on!
+
+## Simulação...

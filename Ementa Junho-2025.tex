@@ -1,0 +1,214 @@
+\documentclass[12pt, a4paper]{article}
+%\usepackage{geometry}
+\usepackage[inner=2.5cm,outer=2.5cm,top=3.5cm,bottom=3.5cm]{geometry}
+\pagestyle{empty}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[portuguese]{babel}
+\usepackage[sectionbib]{natbib}
+\usepackage{chapterbib}
+
+\usepackage{fancyhdr, lastpage, bbding, pmboxdraw}
+\usepackage[usenames,dvipsnames]{color}
+\definecolor{darkblue}{rgb}{0,0,.6}
+\definecolor{darkred}{rgb}{.7,0,0}
+\definecolor{darkgreen}{rgb}{0,.6,0}
+\definecolor{red}{rgb}{.98,0,0}
+\usepackage[colorlinks,pdfusetitle,urlcolor=darkblue,citecolor=darkblue,linkcolor=darkred,bookmarksnumbered,plainpages=false]{hyperref}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{ \fancyplain{}{ENAP-MPAM - Métodos Quantitativos I} }
+%\chead{ \fancyplain{}{} }
+\rhead{ \fancyplain{}{\today} }
+%\rfoot{\fancyplain{}{page \thepage\ of \pageref{LastPage}}}
+%\fancyfoot[RO, LE] {page \thepage\ of \pageref{LastPage} }
+\thispagestyle{plain}
+
+%%%%%%%%%%%% LISTING %%%
+\usepackage{listings}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\usepackage{verbatim} % used to display code
+\usepackage{fancyvrb}
+\usepackage{acronym}
+\usepackage{amsthm}
+\VerbatimFootnotes % Required, otherwise verbatim does not work in footnotes!
+
+
+
+\definecolor{OliveGreen}{cmyk}{0.64,0,0.95,0.40}
+\definecolor{CadetBlue}{cmyk}{0.62,0.57,0.23,0}
+\definecolor{lightlightgray}{gray}{0.93}
+
+
+
+\lstset{
+%language=bash,                          % Code langugage
+basicstyle=\ttfamily,                   % Code font, Examples: \footnotesize, \ttfamily
+keywordstyle=\color{OliveGreen},        % Keywords font ('*' = uppercase)
+commentstyle=\color{gray},              % Comments font
+numbers=left,                           % Line nums position
+numberstyle=\tiny,                      % Line-numbers fonts
+stepnumber=1,                           % Step between two line-numbers
+numbersep=5pt,                          % How far are line-numbers from code
+backgroundcolor=\color{lightlightgray}, % Choose background color
+frame=none,                             % A frame around the code
+tabsize=2,                              % Default tab size
+captionpos=t,                           % Caption-position = bottom
+breaklines=true,                        % Automatic line breaking?
+breakatwhitespace=false,                % Automatic breaks only at whitespace?
+showspaces=false,                       % Dont make spaces visible
+showtabs=false,                         % Dont make tabls visible
+columns=flexible,                       % Column format
+morekeywords={__global__, __device__},  % CUDA specific keywords
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{center}
+{\Large \textsc{Métodos Quantitativos 1}}
+\end{center}
+\begin{center}
+Escola Nacional de Administração Pública - ENAP\\
+Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas \\
+Segundo Trimestre de 2025
+\end{center}
+
+\begin{center}
+\rule{6in}{0.6pt}
+\begin{minipage}[t]{.75\textwidth}
+\begin{tabular}{llcccll}
+\textbf{Professores:} &  Daniel Grimaldi   & \href{mailto:daniel.sgrimaldi@outlook.com.br}{daniel.sgrimaldi@outlook.com.br}\\
+& \href{https://arthurbraganca.com/} {Arthur Bragança (website)} & \href{mailto:arthurbraganca@gmail.com}{arthurbraganca@gmail.com}\\
+
+\textbf{Horário:} & Quartas-feiras: 9:00 - 12:00 \\
+%\textbf{Sala virtual:} & \href{https://meet.google.com/cdy-ercp-jwh}{Google meet (link)}
+
+\end{tabular}
+\end{minipage}
+\rule{6in}{0.6pt}
+\end{center}
+\vspace{.9cm}
+\setlength{\unitlength}{1in}
+\renewcommand{\arraystretch}{2}
+
+\noindent\textbf{Página do curso- Google Classroom:}
+
+\noindent\url{https://classroom.google.com/u/1/c/Njk5NjY5Njc2MDEy}
+
+\vskip.15in
+\noindent\textbf{O curso:} 
+O objetivo do curso é tornar os alunos familares com a econometria moderna. Com o curso, espera-se que os alunos possam compreender, intepretar e aplicar a econometria para abordar problemas do mundo real. Em particular, ao final do curso o aluno deverá possuir um conhecimento razoável para lidar com (micro) econometria aplicada a dados de cortes transversais (cross sections) e dados em painel, que acabam sendo os dados utilizados por aqueles que trabalham com avaliações de políticas públicas. Iremos tratar de inferência causal, mas sem tanto aprofundamento. O conteúdo do curso compõe a base econométrica necessária para o curso posterior de Avaliação de Impacto.  
+
+O foco do curso é entender e interpretar as hipóteses subjacentes às aplicações práticas de métodos econométricos nas principais discussões de políticas públicas. O curso, portanto, não tem a pretensão de ensinar econometria do ponto de vista teórico, com definições, axiomas, teoremas e demonstrações. O nível de conhecimento matemático necessário para acompanhar o curso, portanto, não é super avançado. Não há a necessidade de saber análise real ou teoria de medida, por exemplo. Isso não signifca, porém, que podemos abrir mãos de conceitos chave de probabilidade, estatística e álgebra linear, ou que as aulas serão desprovidas de notação matemática. 
+
+Finalmente, por ser um curso aplicado, é fundamental o uso de programação estatística e, para tanto, usaremos a linguagem de programação R. Esse não é um curso de R, mas todas as aulas conterão orientações de programação com aplicações práticas, que servirão para consolidar os conceitos apresentados e para desenvolver nos alunos a capacidade de aplicar econometria no dia a dia.     
+
+\vskip.15in
+\noindent\textbf{Conteúdos abordados:}
+Espaços amostrais, probabilidade, independência, variáveis aleatórias, probabilidades condicionais, distribuições de probabilidade, o valor esperado, variâcia, covariância, desvio padrão, parâmetros populacionais, amostra, Lei dos Grandes Números, Teorema do Limite Central, inferência, estimadores, propriedades dos estimadores, testes de hipóteses, erros do tipo I e tipo II, erro padrão, intervalos de confiança, p-valor,  vetores, matrizes, espaços vetoriais, soma e multiplicação de vetores por um escalar, independência linear, produto vetorial, matrizes e mudança de base, regressão linear simples, o método de mínimos quadrados ordinários (MQO), unidades de medida e forma funcional em MQO, valores esperados e variância, regressão múltipla, interpretação dos coeficientes, o teorema de Frisch-Waugh-Lovell, o R2, SQR, SQE, SQT, R2 ajustado, estimação da variância, viés de variável omitida, teste t, teste F, p-valores para testes de hipóteses em MQO, normalidade assintótica, causalidade, consistência e inconsistência de estimadores de MQO, homocedasticidade, heterocedasticidade, erros padrões clusterizados, FGLS, as condições de Gauss-Markov, má especificação da forma funcional, modelos com termos quadráticos e logarítimicos, interpretação de dummies, interpretação de interações, uso de proxies, identificação de outliers, modelos de variável binária, probit, logit, interpretação de coeficientes, a razão de chance, modelos para variáveis discretas, truncagem, viés de variável omitida, equações simultâneas, variáveis instrumentais, mínimo quadrado em dois estágios, dados em painel, dados empilhados, painel verdadeiro e painel falso, efeitos fixos, o estimador within e between, efeitos aleatórios.   
+\vskip.15in
+
+\vskip.15in
+\noindent\textbf{Pré-requisitos:} 
+É importante se familiarizar de alguma forma com o pacote R e R-Studio. A ENAP possui \href{https://enap.gov.br/pt/cursos/coding-bootcamp}{bootcamps} de programação, e vários cursos de R, como  \href{https://www.escolavirtual.gov.br/curso/325}{este da EVG} e \href{https://suap.enap.gov.br/portaldoaluno/curso/1587/?area=2}{este ao vivo}, que podem auxiliá-los. Todas as aulas também contarão com orientações de programação.
+\vskip.15in
+
+
+\noindent\textbf{Principais referências:} %\footnotemark
+
+\vskip.10in
+Referências obrigatória:
+
+\begin{itemize}
+    \item Huntington-Klein, Nick. 2022. The Effect: an introduction to research design and causality. \href{https://rstudio.com/products/rstudio/}{https://theeffectbook.net/}
+\end{itemize}
+
+\begin{itemize}
+    \item Wooldridge, Jeffrey. 2015. Introdução á Econometria: Uma Abordagem Moderna.  Tradução da 4a edição americana. Cengage Learning. São Paulo ISBN- 978-85-221-0446-8. 
+\end{itemize} 
+
+Infelizmente o último livro não é gratuito. Mas é um clássico para quem mexe com econometria. A versão mais atual pode ser comprada nas livrarias on line e não custa muito mais do que um jantar em Brasilia. 
+
+\vskip.15in
+Além desses, quem quiser se aprofundar um pouco mais, pode consultar
+
+\begin{itemize}
+    \item Angrist, J.D.; Pischke, J-S. Mostly harmless econometrics: an empiricist’s companion. Princeton,
+Nova Jersey: Princeton University Press, 2009.
+
+    \item Cameron, A. \& Trivedi, P. K. (2005). Microeconometrics: Methods and Applications. Analysis (Vol. 100).
+
+    \item Triola, Mario. Introdução à Estatística. 10a. ed. Rio de Janeiro: LTC, 2008.
+
+    \item Simon, Carl e Blume, Lawrence (2004): Matemática para Economistas. Cambridge University Press. Http://Doi.Org/10.1016/S0304-4076(00)00050-6.
+
+    \item Stock, James H, and Mark W Watson. 2012. Introduction to Econometrics. Third Edition.
+Pearson, Bosten. 2012. (SW)
+
+    \item Wooldridge, Jeffrey. 2010. Econometric Analysis of Cross Section and Panel Data: Second Edition. 978-0262232586, ‎ MIT Press (MA) (1 outubro 2010)
+
+\end{itemize}
+
+Além dos livros, poderemos fazer leituras de artigos científicos com conteúdos relacionados aos métodos cobertos ao longo do curso.  
+
+\vskip.15in
+\noindent\textbf{O uso do R:}
+Ao longo do curso, iremos lhes mostrar aplicações práticas utilizando a linguagem de programação R. Apesar de este não ser um curso de programação, todas as aulas conterão orientações sobre como aplicar os conceitos apresentados usando R. Por isso, todos devem instalar o \href{https://nbcgib.uesc.br/mirrors/cran/}{R} e o \href{https://rstudio.com/products/rstudio/}{RStudio} nos seus computadores. Os dois softwares são gratuitos.
+
+Recomendamos fortemente aos que não têm familiaridade com programação em R que leiam os slides do curso de \href{https://grantmcdermott.com/teaching/}{Data Science for Economists} do prof. \href{https://grantmcdermott.com/}{Grantt McDermott} ou façam os cursos de R oferecidos pela ENAP.
+
+\vspace*{.15in}
+
+\noindent \textbf{Avaliação:}
+\textbf{8 listas de exercício, cada uma valendo 10\% da nota final e a participação em aula valerá mais 20\%}. Todas as listas envolverão a aplicação de conceitos-chave das aulas por meio de programação em R. Vocês deverão submeter um relatório em R-Markdown com os códigos e os resultados da programação. 
+
+\vskip.15in
+\noindent \textbf{Participação:}
+Espera-se que todos estejam presentes a todas as aulas, sem atraso. Esperamos também que todos consigam se aprofundar nos temas e enriquecer as discussões durante as aulas. As vezes, poderemos perguntar algumas coisas a vocês. Não esperem ter sempre a resposta pronta na ponta da língua! O aprendizado é assim mesmo, feito de tentativas e erros. Não hesitem nunca em perguntar e em interromper caso um ponto não tenha ficado claro. \textbf{A presença em pelo menos 70\% das aulas é requisito obrigatório para a aprovação no curso}. 
+
+\vskip.15in
+\noindent\textbf{Aulas presenciais:}
+As aulas serão feitas prioritariamente presenciais. Prestem bastante atenção ao calendário para não confundirem e não perder nenhuma aula. 
+
+\newpage
+\vskip.15in
+\noindent\textbf{Calendário e tópicos:}   
+
+\begin{table}[hbt!]
+  \centering
+  \caption{Calendário}
+    \begin{tabular}{lll}
+    Data  & Aula  & \textbf{Professor}      Tópico       Referência \\
+    \midrule
+    \midrule
+    18/Jun & Aula 1 & \textbf{Daniel} Apresentação e revisão de conceitos de probabilidade \\
+    25/Jun & Aula 2 & \textbf{Daniel} Descrevendo variáveis aleatórias \\
+    02/Jul & Aula 3 & \textbf{Daniel} Testando hipóteses \\
+    09/Jul & Aula 4 & \textbf{Daniel} Descrevendo relações entre variáveis aleatórias  \\
+    16/Jul & Aula 5 & \textbf{Arthur} O Estimador de Mínimos Quadrados Ordinários (MQO)  \\
+    06/Ago & Aula 6 & \textbf{Daniel} Viés de omissão de variáveis e heteroscedasticidade  \\
+    13/Ago & Aula 7 & \textbf{Daniel} Outliers e viés de forma funcional \\
+    20/Ago & Aula 8 & \textbf{Daniel} Modelos em Painel: Efeitos Fixos  \\
+    27/Ago & Aula 9 & \textbf{Daniel} Modelos em Painel: Efeitos Aleatórios \\
+    03/set & Aula 10 & \textbf{Daniel} Fechamento do curso e atendimento de dúvidas com as listas \\ 
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+\vskip.15in
+\noindent\textbf{Integridade acadêmica:}   
+
+As listas de exercícios serão \textbf{individuais} e não deverão ser feitas em dupla ou em consulta com os colegas. Vocês são obviamente livres para consultar qualquer material na internet. A cópia dos exercícios de outros colegas poderá ser considerada como falta de integridade acadêmica.  
+
+Tenham cuidado para não copiar nenhum conteúdo de outros autores sem citar de forma apropriada. 
+
+
+
+%%%%%% THE END 
+\end{document} 
