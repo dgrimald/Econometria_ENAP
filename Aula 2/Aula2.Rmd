@@ -783,11 +783,38 @@ gen_normal_endiv(30000)
 
 # Lista 1
 
-## Convergência pelo LGN
+## Lista I: Orientações gerais
 
-- Objetivo: replicar a Figura do Slide 17, mas para valor estimado para o aporte
+- Objetivo: replicar a Figura do Slide 57, mas para valor estimado para o aporte
 
-- 
+- Vocês vão partir do arquivo modelo da [\emph{\color{blue}{Lista I}}](https://github.com/dgrimald/Econometria_ENAP/blob/main/Aula%202/Lista_1.Rmd), que é um arquivo tipo Rmd
+  - Lembrem de renomear o arquivo para um nome com padrão "Lista_1_nome" antes de submeter!
+  - submetam o relatório gerado (html) e o código (Rmd) antes da próxima aula, enviando-os para o email daniel.sgrimaldi@outlok.com.br
+
+## Lista I: Especificações
+
+- Vocês vão escrever a função exec_lista_1, que terá **obrigatoriamente 2 *inputs***
+  - nome (nome do aluno);
+  - max_sample_size (tamanho da maior amostra a ser considerado)
+  
+- A função exec_lista_1 terá **obrigatoriamente 3 *outputs***
+  - nome: um objeto tipo *character*, com o nome do aluno;
+  - data: um objeto tipo *data frame*, com os resultados das simulações
+  - fig: uma figura tal qual aquela do slide 57, mas para os valores estimados de aporte
+  
+## Lista I: Exemplo de *data*
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\node[anchor=south west] at (-1, -4.5){\includegraphics[scale=0.5]{Exemplo data.png}};
+\end{tikzpicture}
+```
 
 
 
+
+
+
+  
