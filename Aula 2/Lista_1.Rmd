@@ -1,0 +1,98 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Lista I: LGN e convergência para parâmetros populacionais"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r echo=TRUE}
+# loading required packages
+library(knitr)
+library(devtools)
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+### Carrega funções usadas na aula
+```{r echo=TRUE}
+gen_data <- function(sample_size){
+  data <- data.frame("id"=paste("cpf", 
+                              1:sample_size,
+                              sep="_")) %>% 
+  mutate(N=sample_size,
+         endividado = rbinom(sample_size, 1, 0.15),
+         divida = endividado * (130+rexp(sample_size, 5*10^(-5))))
+  data
+}
+
+get_estimativa <- function(data){
+  
+  N = first(data$N)
+  mu_hat = sum(data$divida)/sum(data$endividado)
+  endiv_d_hat <- sum(data$endividado)/nrow(data)
+  aporte_hat <- 200000000 * 0.5 * endiv_d_hat * mu_hat
+  
+  estimativa <- data.frame(
+    "N"=N,
+    "mu_hat"=mu_hat,
+    "endiv_d_hat"=endiv_d_hat,
+    "aporte_hat"=aporte_hat
+  )
+  estimativa
+}
+
+get_estimativas <- function(sample_size){
+  estimativa <- get_estimativa(gen_data(sample_size))
+}
+```
+
+### Constroi função
+
+```{r echo=TRUE, eval=FALSE}
+exec_lista1 <- function(nome, max_sample_size){
+  
+  # Parâmetros teóricos
+
+  # Construção da base de dados
+
+  # Geração da figura
+
+  # preparando objeto de saída da função
+  return <- list("nome"=nome, "data"=estimativas, "fig"=fig)
+}
+```
+
+### Implementa função
+
+```{r echo=TRUE}
+lista_1 <- exec_lista1(nome=, max_sample_size = 5000)
+```
+
+#### Aluno
+
+```{r echo=TRUE}
+lista_1$nome
+```
+
+#### Base de dados gerada
+
+```{r echo=TRUE}
+head(lista_1$data, 20)
+```
+
+#### Figura de convergência
+
+```{r echo=TRUE}
+lista_1$fig
+```

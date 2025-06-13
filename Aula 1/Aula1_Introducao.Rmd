@@ -45,6 +45,7 @@ if(!require(knitr)){install.packages("knitr")}
 if(!require(kableExtra)){install.packages("kableExtra")}
 if(!require(formatR)){install.packages("formatR")}
 if(!require(sidrar)){install.packages("sidrar")}
+source("../Tema Beamer/themes_enap.R")
 ```
 
 # Apresentação do curso
@@ -160,6 +161,7 @@ if(!require(sidrar)){install.packages("sidrar")}
 \node[anchor=south west] at (-1, -4.5){\includegraphics[scale=0.38]{R vs Stata.png}};
 \end{tikzpicture}
 ```
+
 ## Instalando o R
 
 -   Primeiro, você precisa instalar o [\emph{\color{blue}{R}}](https://cran.r-project.org/)

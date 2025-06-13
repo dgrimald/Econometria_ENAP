@@ -1,0 +1,793 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Aula 2: Descrevendo Variáveis"
+date: "3º Trimestre - 2025"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{hyperref}
+  - \usepackage{graphicx}
+  - \usepackage{setspace}
+  - \usepackage{amsmath}
+  - \newcommand{\nsmall}{\footnotesize}
+output:
+  beamer_presentation:
+    theme: "ENAP"
+    latex_engine: xelatex
+    incremental: false
+suppress-bibliography: true
+bibliography: references.bib
+---
+
+```{r echo=FALSE, include=FALSE}
+# loading required packages
+library(knitr)
+library(devtools)
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+source("../Tema Beamer/themes_enap.R")
+```
+
+```{r echo=FALSE, include=FALSE}
+seed=14
+```
+
+# Conceitos básicos
+
+## Variável
+
+- No contexto de pesquisa empírica, \textbf{uma variável é um conjunto de realizações (ou observações) de um mesmo fenômeno}.
+  - renda mensal dos brasileiros;
+  - idade dos moradores do plano piloto;
+  - emprego dos alunos da ENAP
+  
+- As variáveis podem representar fenômenos quantitativos ou qualitativos...
+
+- Elas sempre possuem uma distribuição
+  - Uma distribuição é uma descrição da frequência com que determinada variável assume um valor (ou conjunto de valores) específicos
+  
+## Definição formal
+
+Denominamos de variável aleatória (V.A.) qualquer função $X: \Omega \rightarrow \mathbb{R}$. Ou seja, é \textbf{uma função do espaço amostral $\Omega$ nos reais para a qual é possível calcular a probabilidade de ocorrência}.
+
+Sendo X uma V.A., sua \textbf{função de distribuição} é definida por:
+
+$$
+F_X(x)=P(X \in(-\infty,x])=P(X\leq x))
+$$
+Sempre vale que: $\lim\limits_{x \to \; -\infty}F(x)=0$, $\lim\limits_{x \to \infty}F(x)=1$ e $F(x)\leq F(y)$ sempre que $x \leq y, \; \forall\; x,y\in \mathbb{R}$
+
+## Tipos de variáveis
+
+- Formalmente, a \textbf{diferenciação relevante é entre variáveis aleatórias discretas e contínuas}
+  - \textbf{discreta:} assume somente um número enumerável de valores (finito ou infinito)
+  - \textbf{contínua:} podem assumir um número não enumerável de valores
+
+- Mas existem outras categorizações comuns: ordinais vs. categóricas; quantitativa vs. qualitativa
+
+## Variáveis Discretas
+
+Uma V.A. X \textbf{é discreta} se há uma associação entre probabilidades $p_1, p_2, ..., p_k$ e um conjunto de valores possíveis $x_1, x_2, ..., x_k$ \textbf{mediada por um função de probabilidade $p(x)$}, que satisfaz as seguintes propriedades:
+
+i. $0 \geq p(x_i) \leq 1, \; \forall \; i=1,2,3,..., k$;
+ii. $\sum\limits_{i=1}^{k} p(x_i) =1$
+
+\scriptsize Exemplos: resultados de um dado, número de carros na garagem da ENAP, número de eleitores que aprova o presidente da república etc. 
+
+\scriptsize Notas: $^1$ Quando uma V.A. discreta assume muitos valores possíveis, ela começa a se parecer muito com uma V.A. contínua - mas isso não significa que ela se torna contínua. 
+
+## Variáveis Contínuas
+
+Uma V.A. X \textbf{é contínua} se há uma associação entre probabilidades $p1, p2, ..., p_k$ e um conjunto de valores possíveis $x1, x2, ..., x_k$ \textbf{mediada por uma função de densidade $f(x)$}, que satisfaz as seguintes propriedades:
+
+i. $f(x)\geq0 \;  \forall \; x \in \mathbb{R}$;
+ii. $\int_{- \infty}^{\infty} f(x)d_x=1$
+
+\scriptsize Exemplos: salário, renda \textit{per capita}, preço do dólar etc. 
+
+\scriptsize Notas: $^1$ Quando a variável é contínua, não é possível associar uma probabilidade positiva a um valor particular, mas pode-se atribuir uma probabilidade para um intervalo arbitrariamente pequeno de valores. $^2$ Na prática, uma varíavel contínua pode assumir valores em toda a reta real, enquanto uma varíavel discreta somente pode assumir um conjunto enumerável de valores
+
+# Principais distribuições teóricas 
+
+## Uniforme Discreta
+
+Uma V.A. segue um modelo \textbf{Uniforme discreto} com valores $x1, x2, ..., x_k$ se tem uma \textbf{função de probabilidade $p(x)$} dada por:
+
+$$
+p(x_i)=\frac{1}{k} \; \forall i =1, 2, 3,...,k
+$$
+
+\scriptsize Exemplo: o valor observado para 1 lançamento de um dado não viesado. 
+
+\scriptsize Notas: $^1$ Na prática, o modelo uniforme atribui uma mesma probabilidade de ocorrência para cada valor possível. $^2$ Nesse caso dizemos que $X \sim U_d[E]\text{ sendo }E=\{1,...,6\}$
+
+## Distribuição Uniforme Discreta
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data <- data.frame(X = rdunif(10000000, 1, 6))
+fig <- ggplot(data) +
+  geom_histogram(aes(X, y=..density..),
+                 color=cores$verde_escuro,
+                 fill=cores$verde_claro, bins=6) +
+  scale_x_continuous(breaks=seq(1, 6)) +
+  labs(subtitle="Distribuição Uniforme Discreta",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Distribuição Uniforme Discreta
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig
+```
+
+## Bernoulli
+
+Uma V.A. segue um modelo \textbf{Bernoulli} se assume apenas os valores 0 e 1. Sua \textbf{função de probabilidade $p(x)$} é dada por:
+
+\begin{equation}
+p(x_i) = 
+\begin{cases}
+p & \text{se } x_i=1 \\
+1-p & \text{se } x_i=0
+\end{cases} \nonumber
+\end{equation}
+
+\scriptsize Exemplo: o resultado do lançamento de uma moeda. 
+
+\scriptsize Notas: $^1$ Nesse caso, dizemos que $X \sim Bernoulli(p)$.
+
+## Distribuição Bernoulli 
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data <- data.frame(X = rbern(10000, 0.5))
+fig <- ggplot(data) +
+  geom_histogram(aes(X, y=..ndensity..),
+                 color=cores$verde_escuro,
+                 fill=cores$verde_claro,
+                 bins=10) +
+  scale_x_continuous(breaks=seq(0, 1, by=0.1)) +
+  labs(title="Distribuição Bernoulli",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Distribuição Bernoulli
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig
+```
+
+## Binomial
+
+Uma V.A. segue um modelo \textbf{Binomial} se ela representa a quantidade total de sucessos obtidos por meio da realização de $n$ ensaios de Bernoulli. Sua \textbf{função de probabilidade $p(x)$} é dada por:
+
+\begin{equation}
+p(x) = \binom{n}{x}p^x(1-p)^{n-x} \nonumber
+\end{equation}
+
+\scriptsize Exemplo: A quantidade de "caras" após 10 lançamentos de uma moeda. 
+
+\scriptsize Notas: $^1$ Nesse caso, dizemos que $X \sim B(n, p)$.
+
+## Distribuição Binomial 
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data <- data.frame(X = rbinom(10000, 10, 0.5))
+fig <- ggplot(data) +
+  geom_histogram(aes(X),
+                 color=cores$verde_escuro,
+                 fill=cores$verde_claro,
+                 bins=11) +
+  scale_x_continuous(breaks=seq(0, 10, by=1)) +
+  labs(title="Distribuição Binomial",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Distribuição Binomial
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig
+```
+
+## Exponencial
+
+Uma V.A. $X$ segue um modelo \textbf{Exponencial} se sua \textbf{função densidade $f(x)$} é dada por:
+
+\begin{equation}
+f(x) = \lambda e^{-\lambda x}I_{(0,\infty)} \nonumber
+\end{equation}
+
+\scriptsize Exemplo: A quantidade de ligações que um serviço de atendimento ao consumidor recebe em 1 hora. 
+
+\scriptsize Notas: $^1$ Nesse caso, dizemos que $X \sim Exp(\lambda)$.
+
+## Distribuição Exponencial 
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data <- data.frame(X = rexp(10000, 5))
+fig <- ggplot(data) +
+  geom_density(aes(X),
+               color=cores$verde_escuro,
+               fill=cores$verde_claro, 
+               adjust=2) +
+  labs(title="Distribuição Exponencial",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Distribuição Exponencial
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig
+```
+
+## Normal
+
+Uma V.A. $X$ segue um modelo \textbf{Normal} se sua \textbf{função densidade $f(x)$} é dada por:
+
+\begin{equation}
+f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \nonumber
+\end{equation}
+
+\scriptsize Exemplo: Número de beneficiários do PBF em um município. 
+
+\scriptsize Notas: $^1$ Nesse caso, dizemos que $X \sim N(\mu, \sigma^2)$. $^2$ Sempre que $X \sim N(\mu, \sigma^2)$, $Z=\frac{X-\mu}{\sigma} \sim N(0,1)$. $^3$ Quando $log(X) \sim N(\mu, \sigma^2)$, dizemos que X tem distribuição log-normal. $^4$ A distribuição Normal é imensa em estatísitica. Ela serve como modelo para quantidades de interesse em Inferência Estatística e também é usada em aproximações.
+
+## Distribuição Normal
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data <- data.frame(X = rnorm(100000, 0, 1))
+fig <- ggplot(data) +
+  geom_density(aes(X),
+               color=cores$verde_escuro,
+               fill=cores$verde_claro,
+               adjust=2) +
+  labs(title="Distribuição Normal",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Distribuição Normal
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis'}
+fig
+```
+
+# Valor Esperado e Variância
+
+## Definição de Parâmetro
+
+Formalmente, um \textbf{parâmetro é uma constante que caracteriza uma família de distribuições} e, a partir disso, caracteriza uma população que tenha um Processo Gerador de Dados (PGD) orientado por essa distribuição.
+
+- Uma Normal, por exemplo, é caracterizada por ter valor esperado (ou esperança) $\mu$ e variância $\sigma^2$.
+
+- Portanto, qualquer realização de um PGD que siga uma $N(\mu, \sigma^2)$ terá a influência desses parâmetros.
+
+- Diversos parâmetros podem ser relevantes para caracterizarmos uma distribuição, mas a \textbf{esperança e a variância são os mais comumente utilizados}.
+
+## Valor Esperado
+
+Intuitivamente, o valor esperado (ou esperança) de uma variável $X$ ($E(X)$) \textbf{equivale à soma de todos os valores possíveis de $X$, ponderados pelas suas respectivas probabilidades}. Formalmente:
+
+\begin{equation}
+E(X) \equiv \mu_x = 
+\begin{cases}
+\sum\limits_{i} x_i p_X(x_i) \text{, se X tem distribuição discreta} \\
+\int_{- \infty}^{\infty} xf(x)d_x=1 \text{, se X tem distribuição contínua}
+\end{cases} \nonumber
+\end{equation}
+
+O valor esperado equivale ao momento de ordem 1 de uma V.A. e ele pode ser interpretado como uma medida de centralidade da distribuição.
+
+## Centralidade
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+N <- 5000
+data_0 <- data.frame(tipo="0",
+                     X=rnorm(N))
+data_5 <- data.frame(tipo="5",
+                     X=rnorm(N, 5))
+data <- rbind(data_0, data_5)
+fig <- ggplot(data) +
+  geom_density(aes(X, fill=tipo),
+               color=cores$cinza_escuro,
+               alpha=0.2, adjust=2) +
+  scale_fill_manual(values=c(cores$verde_escuro,
+                             cores$amarelo_escuro)) +
+  geom_vline(xintercept = mean(data_5$X),
+             color=cores$amarelo_escuro) +
+  geom_vline(xintercept = mean(data_0$X),
+             color=cores$verde_escuro) +
+  labs(title="Diferentes centralidades",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Centralidade
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig
+```
+
+## Propriedades do Valor Esperado
+
+Sendo $a$ e $b$ constantes e $X$ e $Y$ duas V.As. quaisquer, vale que:
+
+i. $E(a)=a$;
+ii. $E(aX) = aE(X)$;
+iii. $E(X+b) = E(X)+b$;
+iv. $E(X+Y) = E(X)+E(Y)$; e
+v. !Se $X$ e $Y$ são independentes $\Rightarrow E(XY) = E(X)+E(Y)$
+
+## Variância
+
+Intuitivamente, a variância é uma medida de quão distante, na média, uma realização específica de uma variável tende a estar do centro da distribuição. Formalmente:
+
+\begin{equation}
+Var(X) \equiv \sigma_x^2 = E[(X-\mu_x)^2] \nonumber
+\end{equation}
+
+A variância equivale ao momento de ordem 2 de uma V.A. e ela pode ser interpretada como uma medida de dispersão da distribuição. O desvio-padrão ($\sigma$) é a raiz quadrada da variância e tem a mesma unidade de medida da variância.
+
+## Dispersão
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+N <- 5000
+data_1 <- data.frame(tipo="0",
+                     X=rnorm(N, sd=1))
+data_5 <- data.frame(tipo="5",
+                     X=rnorm(N, sd=5))
+data <- rbind(data_0, data_5)
+fig <- ggplot(data) +
+  geom_density(aes(X, fill=tipo),
+               color=cores$cinza_escuro,
+               alpha=0.2, adjust=2) +
+  scale_fill_manual(values=c(cores$verde_escuro,
+                             cores$amarelo_escuro)) +
+  geom_vline(xintercept = mean(data_5$X),
+             color=cores$amarelo_escuro) +
+  geom_vline(xintercept = mean(data_0$X),
+             color=cores$verde_escuro) +
+  labs(title="Diferentes dispersoes",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Dispersão
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig
+```
+
+## Propriedades da Variância
+
+Sendo $a$ e $b$ constantes e $X$ e $Y$ duas V.As. quaisquer, vale que:
+
+i. $Var(X) \geq 0$;
+ii. $Var(a) = 0$;
+iii. $Var(aX) = a^2Var(X)$; 
+iv. $Var(X+b) = Var(x)$; e
+v. Se $X$ e $Y$ são independentes $\Rightarrow Var(X+Y) = Var(X)+Var(Y)$
+
+# Parâmetro e estimador
+
+## População e Amostra
+
+- \textbf{População:} grupo completo (exaustivo) de indivíduos que se deseja estudar
+
+- \textbf{Amostra:} um subconjunto da população
+
+  - usamos a amostra porque raramente podemos estudar toda a população de interesse;
+  - existem diferentes processos de amostragem;
+  - a amostra pode ou não ser representativa da população
+
+## Estimadores
+
+Um \textbf{estimador é uma função que associa a uma amostra um número (estimativa)}, com o objetivo de determinar o valor de um \textbf{parâmetro populacional}.
+
+- Como a amostra é um conjunto de realizações de V.A., \textbf{todo estimador é também uma V.A.}. Logo, ele tem medidas de centralidade e dispersão 
+
+- Usamos *^* como notação para um estimador. Por exemplo, $\hat{\mu_x}$ é um estimador de $\mu_x$
+
+- Existem diferentes famílias de estimadores (máxima verossimilhança, método de momentos etc.). Não vamos nos aprofundar nisso, mas saibam que: \textbf{todo parâmetro de interesse pode ter múltiplos estimadores}
+
+## Lei dos Grandes Números
+
+Sejam $Y_1, Y_2, ..., Y_N$ V.As. com esperança finita e $y_1, y_2,.., $y_N$ um conjunto de realizações dessas V.As.. Então, pela Lei dos Grandes Números (LGN), vale que:
+
+$$
+\frac{1}{N}\sum\limits_{i=1}^{N}y_i - \mu_y \xrightarrow{\,p\,} 0
+$$
+
+Intuitivamente: a média amostral ($\frac{1}{N}\sum\limits_{i=1}^{N}y_i$) converge para a média populacional ($\mu_y$) conforme aumenta o tamanho da amostra.
+
+## Teorema do Limite Central
+
+Sejam $Y_1, Y_2, ..., Y_N$ V.As. iid. com esperança $\mu$ e variância $\sigma^2$, e $y_1, y_2,.., y_N$ um conjunto de realizações dessas V.As.. Então, pel Teorema do Limite Central (TLC), vale que:
+
+$$
+\frac{\frac{1}{N}\sum\limits_{i=1}^{N}y_i - \mu_y}{\sigma \sqrt{n} } \xrightarrow{\,d\,} N(0,1)
+$$
+
+Intuitivamente: a distribuição da média amostral converge para uma distribuição normal conforme aumenta o tamanho da amostra.
+
+# Hands on
+
+## Caso Desenrola
+
+- Suponha que o governo queira desenvolver um programa para reduzir o endividamento da população. 
+
+- Para tanto, ele pretende criar um fundo público, que será usado para pagar 50% do valor das dívida de pessoas físicas, desde que o endividado aceite pagar pelos 50% restante.
+
+- O governo precisa definir o montante total a ser aportado nesse fundo. Contudo, o governo não sabe exatamente o número de endividados nem o valor médio da dívida deles.
+
+- Como podemos ter uma ideia do tamanho amostral necessário para uma boa estimativa?
+
+## Simulando um PGD
+
+- Primeiro, vamos definir nossa tolerância para uma \textit{boa estimativa}
+  - Suponhamos que um erro de $\pm \; 2\%$ no valor de aporte do fundo
+  
+- Agora vamos definir alguns parâmetros para o nosso PGD
+  - Suponhamos uma população de 200 milhões
+  - Suponhamos que a proporção de endividados na população seja de 15%
+  - Suponhamos que, dentre os endividados, o valor esperado da dívida - $E(D)$ - é igual BRL 130 $+ \epsilon$ e   $\epsilon \sim EXP(\lambda)$ e que $\lambda=5*10^{-5}$.
+  
+# Amostra: 100 mil
+
+## Simulação 
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+set.seed(seed)
+sample_n=100000
+data <- data.frame("id"=paste("cpf", 
+                              1:sample_n,
+                              sep="_")) %>% 
+  mutate(endividado = rbinom(sample_n, 1, 0.15),
+         divida = endividado * (130+rexp(sample_n, 5*10^(-5))))
+head(data, 3)
+```
+
+## Endividamento médio
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# Endividamente populacional
+mu <- 130 + 1/(5*10^(-5))
+mu
+# Endividamento médio amostral
+mu_hat <- sum(data$divida)/sum(data$endividado)
+mu_hat
+# Erro percentual no endividamento médio
+(mu_hat - mu)*100 / mu
+```
+
+## Proporção de endividados
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+endiv_d <- 0.15
+endiv_d_hat <- sum(data$endividado)/nrow(data)
+# Proporção de endividados
+endiv_d_hat
+# Erro percentual na proporção de endividados
+(endiv_d_hat - endiv_d)*100 / endiv_d
+```
+
+## Aporte no fundo
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+aporte <- 200000000 * endiv_d * mu
+# Valor necessário do aporte (em milhões)
+aporte/1000000
+aporte_hat <- 200000000 * endiv_d_hat * mu_hat
+# Valor estimado do aporte (em milhões)
+aporte_hat/1000000
+# Erro percentual no aporte
+(aporte_hat - aporte)*100 / aporte
+```
+
+## Distribuição do valor da dívida
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig <- ggplot(data) +
+  geom_density(aes(divida),
+                 color=cores$verde_escuro,
+                 fill=cores$verde_claro) +
+  labs(title="",
+       y="Densidade",
+       x="Divida (BRL)") +
+  tema_base_fundobranco()
+fig
+```
+
+# Amostra: 20
+
+## Simulação
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+set.seed(seed)
+sample_n=20
+data <- data.frame("id"=paste("cpf", 
+                              1:sample_n,
+                              sep="_")) %>% 
+  mutate(endividado = rbinom(sample_n, 1, 0.15),
+         divida = endividado * (130+rexp(sample_n, 5*10^(-5))))
+head(data, 3)
+```
+
+## Endividamento médio
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# Endividamente populacional
+mu <- 130 + 1/(5*10^(-5))
+mu
+# Endividamento médio amostral
+mu_hat <- sum(data$divida)/sum(data$endividado)
+mu_hat
+# Erro percentual no endividamento médio
+(mu_hat - mu)*100 / mu
+```
+
+## Proporção de endividados
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+endiv_d <- 0.15
+endiv_d_hat <- sum(data$endividado)/nrow(data)
+# Proporção de endividados
+endiv_d_hat
+# Erro percentual na proporção de endividados
+(endiv_d_hat - endiv_d)*100 / endiv_d
+```
+
+## Aporte no fundo
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+aporte <- 200000000 * 0.5 * endiv_d * mu
+# Valor necessário do aporte (em milhões)
+aporte/1000000
+aporte_hat <- 200000000 * 0.5 * endiv_d_hat * mu_hat
+# Valor estimado do aporte (em milhões)
+aporte_hat/1000000
+# Erro percentual no aporte
+(aporte_hat - aporte)*100 / aporte
+```
+# Convergência pela LGN 
+
+## Criação de amostra, para um dado N
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+gen_data <- function(sample_size){
+  data <- data.frame("id"=paste("cpf", 
+                              1:sample_size,
+                              sep="_")) %>% 
+  mutate(N=sample_size,
+         endividado = rbinom(sample_size, 1, 0.15),
+         divida = endividado * (130+rexp(sample_size, 5*10^(-5))))
+  data
+  }
+```
+
+## Cálculo de estimativa
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}  
+get_estimativa <- function(data){
+  
+  N = first(data$N)
+  mu_hat = sum(data$divida)/sum(data$endividado)
+  endiv_d_hat <- sum(data$endividado)/nrow(data)
+  aporte_hat <- 200 * 0.5 * endiv_d_hat * mu_hat
+  
+  estimativa <- data.frame(
+    "N"=N,
+    "mu_hat"=mu_hat,
+    "endiv_d_hat"=endiv_d_hat,
+    "aporte_hat"=aporte_hat
+  )
+  estimativa
+}
+```
+
+## Conjunto de estimativas
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}  
+get_estimativas <- function(sample_size){
+  estimativa <- get_estimativa(gen_data(sample_size))
+}
+estimativas <- lapply(20:5000, get_estimativas) %>% 
+  rbindlist()
+head(estimativas, 4)
+```
+
+## Fig: Estudando a convergência LGN
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+fig <- ggplot(estimativas, aes(x=N, y=endiv_d_hat)) +
+  geom_point(alpha=0.25, color=cores$verde_escuro) +
+  geom_hline(yintercept=0.15, color=cores$preto, size=1.3) +
+  labs(x="Tamanho da amostra",
+       title = "Convergência da média amostral para o parâmetro populacional",
+       subtitle = "Proporção de endividados") +
+  tema_base_fundobranco()
+fig
+```
+
+# Convergência pelo TLC
+
+## Ajustando a função do PGD
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+gen_data <- function(i, sample_size){
+  data <- data.frame("id"=paste("cpf", 
+                              1:sample_size,
+                              sep="_")) %>% 
+  mutate(i=i,
+         N=sample_size,
+         endividado = rbinom(sample_size, 1, 0.15),
+         divida = endividado * (130+rexp(sample_size, 5*10^(-5))))
+  data
+  }
+```
+
+## Função para anaálise de frequência
+
+\tiny
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}  
+gen_normal_endiv <- function(sample_size, n_samples=5000){
+  # parametros teóricos
+  mu <- 0.15
+  sigma_endiv <- sqrt(sample_size * 0.15 * (1-0.15))
+  
+  data <- lapply(1:n_samples, gen_data, sample_size=sample_size) %>% 
+    rbindlist() %>%
+    mutate(normal_endiv = 
+                sqrt(sample_size)*((endividado - 0.15)/(sigma_endiv))) %>% 
+    group_by(i) %>% 
+    summarise(normal_endiv = mean(normal_endiv))
+  
+  fig <- ggplot(data) +
+    geom_histogram(aes(normal_endiv),
+                   color=cores$verde_escuro,
+                   fill=cores$verde_claro) +
+      labs(title="Distribuição Dívida Normalizada",
+       subtitle=paste0("N=",sample_size),
+       y="Densidade") +
+    tema_base_fundobranco()
+  
+  plot(fig)
+}
+```
+
+## Fig: Estudando a convergência TLC
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+gen_normal_endiv(30)
+```
+
+## Fig: Estudando a convergência TLC
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+gen_normal_endiv(300)
+```
+
+## Fig: Estudando a convergência TLC
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+gen_normal_endiv(30000)
+```
+
+# Lista 1
+
+## Convergência pelo LGN
+
+- Objetivo: replicar a Figura do Slide 17, mas para valor estimado para o aporte
+
+- 
+
+
+
