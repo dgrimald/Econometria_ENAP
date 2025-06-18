@@ -54,7 +54,7 @@ source("../Tema Beamer/themes_enap.R")
 
 \textbf{Daniel Grimaldi:} Economista graduado pela UFRJ, com mestrado na USP e Ph.D. pela George Mason. Trabalha com monitoramento e avaliação de política pública desde 2009, com experiências no Ipea, BNDES, BID e agora na Secretaria de Avaliação de Políticas Públicas e Assuntos Econômicos (SMA/MPO).
 
-\textbf{Arthur Bragança:} Economista sênior na Prática Global de Meio Ambiente, Recursos Naturais e Economia Azul do Banco Mundial. É bacharel em Economia pela Universidade Federal de Minas Gerais, doutor em Economia na PUC-Rio e acadêmico visitante na Universidade de Harvard. Antes de ingressar no Banco Mundial, trabalhou como chefe de avaliação de políticas na Iniciativa de Política Climática (CPI).
+\textbf{Arthur Bragança:} Economista sênior do Departamento de Meio Ambiente do Banco Mundial. É bacharel em Economia pela Universidade Federal de Minas Gerais e doutor em Economia na PUC-Rio (com doutorado sanduiche na Universidade de Harvard). Antes de ingressar no Banco Mundial, trabalhou como chefe de avaliação de políticas na Climate Policy Initiative (CPI/PUC-Rio).
 
 ## Escopo do curso
 
