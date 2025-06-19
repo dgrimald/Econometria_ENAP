@@ -400,11 +400,11 @@ A variância equivale ao momento de ordem 2 de uma V.A. e ela pode ser interpret
 \scriptsize
 ```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 N <- 5000
-data_1 <- data.frame(tipo="0",
+data_1 <- data.frame(tipo="1",
                      X=rnorm(N, sd=1))
 data_5 <- data.frame(tipo="5",
                      X=rnorm(N, sd=5))
-data <- rbind(data_0, data_5)
+data <- rbind(data_1, data_5)
 fig <- ggplot(data) +
   geom_density(aes(X, fill=tipo),
                color=cores$cinza_escuro,
@@ -413,9 +413,9 @@ fig <- ggplot(data) +
                              cores$amarelo_escuro)) +
   geom_vline(xintercept = mean(data_5$X),
              color=cores$amarelo_escuro) +
-  geom_vline(xintercept = mean(data_0$X),
+  geom_vline(xintercept = mean(data_1$X),
              color=cores$verde_escuro) +
-  labs(title="Diferentes dispersoes",
+  labs(title="Diferentes dispersões",
        y="Densidade") +
   tema_base_fundobranco()
 ```
@@ -465,9 +465,23 @@ Um \textbf{estimador é uma função que associa a uma amostra um número (estim
 
 - Existem diferentes famílias de estimadores (máxima verossimilhança, método de momentos etc.). Não vamos nos aprofundar nisso, mas saibam que: \textbf{todo parâmetro de interesse pode ter múltiplos estimadores}
 
+## Estimadores clássicos
+
+- A média amostral ($\bar{Y}$) é um estimador comum para a média populacional
+
+$$
+\bar{Y} \equiv\hat{\mu_y}=\frac{1}{N}\sum\limits_{i=1}^{N}y_i
+$$
+
+- A variância amostral ($Var(\bar{Y})$) é um estimador comum para a variância populacional
+
+$$
+Var(\bar{Y})\equiv\hat{\sigma}^2_Y=\frac{1}{N}\sum\limits_{i=1}^{N}(y_i-\bar{Y})
+$$
+
 ## Lei dos Grandes Números
 
-Sejam $Y_1, Y_2, ..., Y_N$ V.As. com esperança finita e $y_1, y_2,.., $y_N$ um conjunto de realizações dessas V.As.. Então, pela Lei dos Grandes Números (LGN), vale que:
+Sejam $Y_1, Y_2, ..., Y_N$ V.As. com esperança finita e $y_1, y_2,.., y_N$ um conjunto de realizações dessas V.As.. Então, pela Lei dos Grandes Números (LGN), vale que:
 
 $$
 \frac{1}{N}\sum\limits_{i=1}^{N}y_i - \mu_y \xrightarrow{\,p\,} 0
@@ -480,7 +494,7 @@ Intuitivamente: a média amostral ($\frac{1}{N}\sum\limits_{i=1}^{N}y_i$) conver
 Sejam $Y_1, Y_2, ..., Y_N$ V.As. iid. com esperança $\mu$ e variância $\sigma^2$, e $y_1, y_2,.., y_N$ um conjunto de realizações dessas V.As.. Então, pel Teorema do Limite Central (TLC), vale que:
 
 $$
-\frac{\frac{1}{N}\sum\limits_{i=1}^{N}y_i - \mu_y}{\sigma \sqrt{n} } \xrightarrow{\,d\,} N(0,1)
+\sqrt{n}\frac{\frac{1}{N}\sum\limits_{i=1}^{N}y_i - \mu}{\sigma} \xrightarrow{\,d\,} N(0,1)
 $$
 
 Intuitivamente: a distribuição da média amostral converge para uma distribuição normal conforme aumenta o tamanho da amostra.
@@ -518,7 +532,8 @@ data <- data.frame("id"=paste("cpf",
                               1:sample_n,
                               sep="_")) %>% 
   mutate(endividado = rbinom(sample_n, 1, 0.15),
-         divida = endividado * (130+rexp(sample_n, 5*10^(-5))))
+         divida = endividado * (130+rexp(sample_n,
+                                         5*10^(-5))))
 head(data, 3)
 ```
 
@@ -590,7 +605,8 @@ data <- data.frame("id"=paste("cpf",
                               1:sample_n,
                               sep="_")) %>% 
   mutate(endividado = rbinom(sample_n, 1, 0.15),
-         divida = endividado * (130+rexp(sample_n, 5*10^(-5))))
+         divida = endividado * (130+rexp(sample_n,
+                                         5*10^(-5))))
 head(data, 3)
 ```
 
@@ -640,7 +656,8 @@ gen_data <- function(sample_size){
                               sep="_")) %>% 
   mutate(N=sample_size,
          endividado = rbinom(sample_size, 1, 0.15),
-         divida = endividado * (130+rexp(sample_size, 5*10^(-5))))
+         divida = endividado * (130+rexp(sample_size,
+                                         5*10^(-5))))
   data
   }
 ```
@@ -708,12 +725,13 @@ gen_data <- function(i, sample_size){
   mutate(i=i,
          N=sample_size,
          endividado = rbinom(sample_size, 1, 0.15),
-         divida = endividado * (130+rexp(sample_size, 5*10^(-5))))
+         divida = endividado * (130+rexp(sample_size,
+                                         5*10^(-5))))
   data
   }
 ```
 
-## Função para anaálise de frequência
+## Função para análise de frequência
 
 \tiny
 ```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}  
@@ -725,7 +743,7 @@ gen_normal_endiv <- function(sample_size, n_samples=5000){
   data <- lapply(1:n_samples, gen_data, sample_size=sample_size) %>% 
     rbindlist() %>%
     mutate(normal_endiv = 
-                sqrt(sample_size)*((endividado - 0.15)/(sigma_endiv))) %>% 
+                ((endividado - 0.15)/(sigma_endiv))) %>% 
     group_by(i) %>% 
     summarise(normal_endiv = mean(normal_endiv))
   
