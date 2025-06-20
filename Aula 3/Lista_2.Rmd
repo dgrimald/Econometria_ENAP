@@ -1,0 +1,102 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Gabarito Lista II: Poder do teste"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r echo=TRUE}
+# loading required packages
+library(knitr)
+library(devtools)
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+### Cria função
+
+```{r echo=TRUE}
+exec_lista2 <- function(nome, sample_size, n_samples){
+  
+  # define semente aleatória
+  set.seed(13)
+  
+  # Cria função local para PGD
+  # -> adaptar linhas 37 a 47 para construir PGD adequado 
+  pgd <- function(N=sample_size){
+    data <- data.frame("id"=paste0("cpf_", 1:N)) %>% 
+      mutate(alpha = ,
+             epsilon_0 = ,
+             D = ,
+             w_0 = ,
+             S = ,
+             delta = ,
+             epsilon_1 = ,
+             w_1 = 
+    )}
+  
+  # Cria vetor para armazenar parâmetros de interesse:
+  resultados <- c(rep(NaN, 5))
+  names(resultados) <- c("Erro_tipo_I", "Erro_tipo_II", "estimativa", "p-valor", "estatistic-t")
+
+  # Cria função local para geração de múltiplas amostras
+  gen_t_stat <- function(seed.i, mu.i, Si){
+    set.seed(seed.i) 
+    data_temp <- pgd(sample_size) %>% filter(S==Si)
+    t.test(data_temp$w_1, mu=mu.i, alternative="two.sided")$statistic
+  }
+    
+  # gera 1 amostra para teste
+  data <- pgd(sample_size)
+  data_serviu <- data %>% filter(S==1)
+  data_civil <- data %>% filter(S==0)
+  
+  # Calcula Erro Tipo I para salário do grupo que serviu
+  # -> escrever aqui código para cálculo de erro Tipo I
+
+  
+  # Calcula Erro Tipo II para H0: W1_civil = 3000
+  # -> escrever aqui código para cálculo de erro Tipo II
+  
+  # Teste-t para H0: civis e militares têm o mesmo salário
+  # -> escrever aqui código para cálculo do teste-t (use comando padrão do R)
+  
+  # preenche vetor com valores de interesse
+  resultados[1] <- 
+  resultados[2] <- 
+  resultados[3] <- 
+  resultados[4] <- 
+  resultados[5] <- 
+
+  return <- list("nome"=nome, "resultados"=resultados)
+}
+```
+
+### Implementa função
+
+```{r echo=TRUE}
+lista_2 <- exec_lista2("Daniel Grimaldi", sample_size = 100, n_samples=100)
+```
+
+#### Aluno
+
+```{r echo=TRUE}
+lista_2$nome
+```
+
+#### Parâmetros estimados
+
+```{r echo=TRUE}
+lista_2$resultados
+```
