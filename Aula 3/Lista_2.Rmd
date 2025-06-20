@@ -1,6 +1,6 @@
 ---
 title: "Métodos Quantitativos I"
-subtitle: "Gabarito Lista II: Poder do teste"
+subtitle: "Lista II: Teste de hipótese"
 author: "Professores: Daniel Grimaldi e Arthur Bragança"
 institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
 date: "`r Sys.Date()`"
