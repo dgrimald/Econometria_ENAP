@@ -1,0 +1,616 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Aula 3: Testando hipóteses"
+date: "3º Trimestre - 2025"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{hyperref}
+  - \usepackage{graphicx}
+  - \usepackage{setspace}
+  - \usepackage{amsmath}
+  - \newcommand{\nsmall}{\footnotesize}
+output:
+  beamer_presentation:
+    theme: "ENAP"
+    latex_engine: xelatex
+    incremental: false
+suppress-bibliography: true
+bibliography: references.bib
+---
+
+```{r echo=FALSE, include=FALSE}
+# loading required packages
+library(knitr)
+library(devtools)
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+source("../Tema Beamer/themes_enap.R")
+```
+
+```{r echo=FALSE, include=FALSE}
+seed=14
+```
+
+# Conceitos básicos
+
+## Inferência estatística
+
+\textbf{Teste de hipótese é o procedimento padrão para inferência estatística}
+
+- Na prática, ele é um procedimento que busca combinar a informação contida em um conjunto de dados observados com nosso conhecimento estatístico a respeito de distribuições téoricas (como as que vimos na aula anterior) para aprendermos sobre a realidade.
+
+  - Existem duas abordagens clássicas para inferência estatística: clássica e bayesiana
+  
+  - Nossa aula se concentrará sobre a abordagem clássica - que se baseia na idéia de identificar alguns parâmetros populacionais verdadeiros.
+  
+## Construindo a hipótese
+
+- O primeiro passo é construir uma hipótese que seja \textbf{falseável sob uma perspectiva estatística} 
+
+- Na abordagem clássica, isso significa três coisas:
+
+  i. Definir um parâmetro (ou conjunto de parâmetros) de interesse;
+  ii. Definir uma hipótese a respeito do valor assumido pelo(s) parâmetro(s); e
+  iii. Definir uma hipótese a respeito da distribuição probabilistica desse(s) parâmetro(s)
+  
+- O item ii. estabelece uma \textbf{hipótese nula ($H_0$)}, e o item iii. me permite testá-la. 
+  
+## Testando a hipótese
+
+- Após a definição da hipótese nula, podemos (por conta de iii.) definir uma \textbf{região crítica} para o parâmetro de interesse
+  - i.e: um intervalo de valores que, se observados empiricamente, tornam a nossa \textbf{$H_0$} altamente improvável
+  
+- O teste, então, passa ser conseguir uma amostra de dados que nos permita estimar o nosso(s) parâmetro(s)
+  - se o valor estimado estiver na região crítica, então devemos a \textbf{rejeitar nossa $H_O$}
+  
+## \large Exemplo: Renda informal de beneficiários do PBV
+
+- Quero testar se a renda média informal dos beneficiários do Programa Bolsa Verde ($\mu_{y}$) é igual a um determinado valor ($\mu_0$): $H_0: \mu_{y}=\mu_0$
+
+- Consigo, então uma amostra ($Y_1, Y_2, ..., Y_n$) para a renda dos beneficiários do PBF
+
+- Se $H_0$ estiver correta, pelo TLC, vale que em grandes amostras:
+
+\begin{align}
+\sqrt{n} \; \frac{\bar{\mu}_y - \mu_0}{\hat{\sigma}_{\bar{Y}}} \sim N(0,1)
+\end{align}
+
+## Região crítica
+
+- A estatística apresentada em (1) é também conhecida como **estatística *t***. Ela é uma das mais utilizadas em econometria. Se $t \sim N(0,1)$, então:
+  - $P(-1,96 \leq t \leq 1,96)=95\%$
+  - $P(-2,576 \leq t \leq 2,576)=99\%$
+
+- Ou seja, conforme o módulo da estatística $t$ se afasta de 0, nossa $H_0$ se torna cada vez mais improvável.
+  - A partir de um certo ponto, $t$ se torna tão improvável que a única conclusão possível é que $H_0$ deve ser rejeitada
+  - Chamamos de \textbf{região crítica} esse conjunto de valores que, quando observados, nos fazem rejeitar $H_0$
+
+## Erro tipo I
+
+- Note que valor de $t$ dentro da região crítica (qualquer que seja ela), não significa que $H_0$ é impossível, apenas que é improvável
+
+- Portanto, sempre existe a possibilidade de rejeitarmos $H_0$ mesmo sendo ela verdadeira
+
+- Chamamos essa possibilidade de Erro Tipo I, e podemos atribuir uma probabilidade a ele
+
+$$
+P(\text{rejeitar }H_0 | H_0 \text{ é verdadeira})=\alpha
+$$
+
+## Nível de significância
+
+- Imagine que $|t|\ge 1,96$ caracteriza a região crítica para o nosso teste. Então vale que:
+
+\begin{align}
+\alpha &=P(|t|\ge 1,96 \; | \; \mu_y= \mu) \\ \nonumber
+&=1 - P(|t|\leq 1,96 \; | \; \mu_y= \mu) \\ \nonumber
+&=5\% \nonumber
+\end{align}
+
+- $\alpha$ é também chamado de \textbf{nível de significância} (ou tamanho) do teste.
+  - \textbf{equivale ao grau de tolerância ao Erro do tipo I}
+  
+## Intervalo de confiança
+
+- O conjunto de valores para os quais "toleramos" $H_0$ é o complementar da região crítica
+
+- Esse intervalo dentro do qual confiamos em $H_0$ é denominado intervalo de confiança.
+  - Ele depende diretamente do nível de significância que estabelecermos para o teste
+
+- No nosso exemplo, dado um nível de significância de 5%, o intervalo de confiança é dado por:
+
+$$
+[\mu_0-1,96 \; \hat{\sigma}_{\bar{y}}, \mu_0+1,96 \; \hat{\sigma}_{\bar{y}}]
+$$
+
+## p-valor
+
+- No nosso exemplo, suponha que tenhamos observado um valor $t_i$ para a estatística $t$.
+
+- Ao invés de definirmos diretamente um nível de significância, podemos calcular a \textbf{probabilidade de observarmos um valor igual ou mais extremo do $t_i$ sendo $H_0$ verdadeira}. Chamamos essa probabilidade de \textbf{p-valor} 
+
+- Em um teste bicaudal, isso equivale a calcularmos $P(|t|\ge t_i)$
+
+## Erro Tipo II
+
+- É também verdade que observar valores "toleráveis" para $t$, não quer dizer que $H_0$ seja verdadeira.
+  - Outras hipóteses diferentes de $H_0$ também podem produzir valores de $t$ dentro da \textbf{região de aceitação de $H_0$}
+  
+- Por isso, existe também a possibilidade de não rejeitarmos $H_0$, mesmo sendo $H_0$ falsa.
+  - só pode ser calculado para uma hipótese alternativa definida 
+
+- Chamamos essa possibilidade de Erro Tipo II, cuja probibilidade é dada por:
+
+$$
+P(\text{aceitar }H_0 | H_1 \text{ é verdadeira})=\beta(H_1)
+$$
+
+## Poder do teste
+
+- Chamamos de \textbf{poder do teste} a probabilidade de rejeitar $H_0$ quando $H_0$ é falsa. É equivalente a $1-\beta(H_1)$
+
+  - Teste não viesado: $1-\beta \ge \alpha \; \forall \; \mu_0$;
+  - Teste consistente: $\lim(1-\beta)_{n\to\infty}=1$
+
+- Como regra geral, um teste vai ser não-viesado (consistente) se estiver baseado em um estimador não-viesado (consistente)
+
+## Estimador não-viesado
+
+- $\hat{\theta}$ é não-viesado $\Leftrightarrow E(\hat{\theta})=\theta$. Isso equivale dizer que o valor esperado do estimador equivale ao valor do parâmetro que se deseja estimar.
+
+- Por exemplo, a média amostral ($\bar{Y}$) é um estimador não-viesado da média populacional ($\mu_y$). 
+
+\begin{align}
+E(\bar{Y}) &= E(\frac{Y_1+Y_2+...+Y_N}{N}) \\ \nonumber
+ &= \frac{E(Y_1+Y_2+...+Y_N)}{N} \\ \nonumber 
+ &= \frac{N\mu_y}{N} \nonumber
+\end{align}
+
+## Estimador consistente
+
+- $\hat{\theta}$ é consistente $\Leftrightarrow \hat{\theta} \xrightarrow{\,p\,} \theta$. Isso equivale dizer que a probabilidade do valor estimado diferir do parâmetro que se deseja estimar se aproxima de $0$ conforme $n$ aumenta.
+
+- Por exemplo, a média amostral ($\bar{Y}$) é um estimador consistente da média populacional ($\mu_y$).
+
+\scriptsize
+\begin{align}
+\frac{1}{N}\sum\limits_{i=1}^{N}y_i - \mu_y &\xrightarrow{\,p\,} 0 \\ \nonumber
+\frac{1}{N}\sum\limits_{i=1}^{N}y_i &\xrightarrow{\,p\,} \mu_y \nonumber
+\end{align}
+
+\scriptsize Notas: $^1$ Falta de viés não implica em consistência. $^2$ Consistência não implica falta de viés.  
+
+# Hands On
+
+## \LARGE Serviço Militar Obrigatório
+
+O exemplo de hoje é inspirado em [\textit{Angrist, Joshua D. 1990. “Lifetime Earnings and the Vietnam Era Draft Lottery: Evidence from Social Security Administrative Records”. The American Economic Review 80 (3): 313–36.}](https://github.com/dgrimald/Econometria_ENAP/blob/main/Aula%203/Angrist%20-%201990%20-%20Lifetime%20Earnings%20and%20the%20Vietnam%20Era%20Draft%20Lotter.pdf) 
+
+- Investiga o impacto do serviço militar sobre a renda futura dos indivíduos;
+  - Havia debate a respeito de benefícios exagerados aos veteranos americanos...
+  - ...mas comparações diretas sofriam com viés de endogeneidade
+  
+## \Large Contexto do alistamento militar no Brasil
+
+- Há uma autoseleção no serviço militar obrigatório
+  - Como existem menos vagas do que alistamentos, preferência é dada por quem deseja servir; e
+  - Indivíduos com perspectiva de baixa remuneração na área civil, enxergam no alistamento uma grande oportunidade
+  
+- Por conta disso, uma comparação direta entre os que serviram no serviço militar obrigatório e os que não serviram, não permite inferência causal
+
+## Desejo de servir
+
+- Soldo equivale a BRL 2.100 e serviço dura 1 ano, sem possibilidade de renovação.
+
+- Salário civil ($w^0_{i}$) equivale a $\alpha_i + \epsilon^0_i$, sendo $\epsilon^0 \sim N(0, 800)$
+
+- Existem 2 tipos de indivíduos: tipo A tem $\alpha_i=\alpha_a=2.500$ e tipo B tem $\alpha_i=\alpha_b=2.000$.
+  - ambos indivíduos ocorrem com igual probabilidade
+
+- Desejo de servir ($D_i$) depende da expectativa salarial ($E(w^0_{i0})$), de tal forma que:
+
+\begin{equation}
+D_i = 
+\begin{cases}
+1 & \text{se } E(w^0_i)<2.100 \\
+0 & \text{se } c.c.
+\end{cases} \nonumber
+\end{equation}
+
+## Serviço militar
+
+- Por restrições de vagas, apenas 50% dos que desejam servir conseguem ($P(S_i=1|D_i=1)=0.5$)
+  - escolha é aleatória
+
+- $\delta_i$ mede o impacto do serviço militar sobre salário civil futuro ($w^1_i$), de tal forma que:
+
+\begin{align}
+w^1_i &= \delta{i} \; \alpha_i + \epsilon^1_i \\
+\delta_i &=
+\begin{cases}
+1.1 & \text{se } S_i=1 \\
+1 & \text{se } c.c.
+\end{cases} \nonumber
+\end{align}
+
+## PGD
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+pgd <- function(N){
+  data <- data.frame("id"=paste0("cpf_", 1:N)) %>% 
+    mutate(alpha = sample(c(2500, 2000),
+                          prob=c(0.5, 0.5),
+                          replace=TRUE,
+                          size=N),
+           epsilon_0=rnorm(N, 0, 800),
+           D = ifelse(alpha==2000, 1, 0),
+           w_0 = alpha + epsilon_0,
+           S = case_when(D==1 ~ rbern(N, 0.5),
+                         TRUE ~ 0),
+           delta = ifelse(S==1, 1.10, 1),
+           epsilon_1=rnorm(N, 0, 800),
+           w_1 = delta*alpha + epsilon_1
+    )
+}
+```
+
+## O que sabemos?
+
+- Dado o PGD, sabemos que:
+
+\tiny
+\begin{align}
+E(w^1_i|S=0)&=\frac{E(w^1_i|S=0 \cap \alpha_i=\alpha_a)P(\alpha_i=\alpha_a)+E(w^1_i|S=0 \cap \alpha_i=\alpha_b)P(\alpha_i=\alpha_b)}{P(S=0 \cap \alpha_i=\alpha_b \cup S=0 \cap \alpha_i=\alpha_a)} \\ \nonumber
+E(w^1_i|S=0)&=\frac{2500 \; 0.5 + 2000 * 0.25}{0.75} \\ \nonumber
+E(w^1_i|S=0)&=2333,33 \\ \nonumber
+\end{align}
+
+\tiny
+\begin{align}
+E(w^1_i|S=1)&=\frac{E(w^1_i|S=1 \cap \alpha_i=\alpha_a)P(\alpha_i=\alpha_a)+E(w^1_i|S=0 \cap \alpha_i=\alpha_b)P(\alpha_i=\alpha_b)}{P(S=0 \cap \alpha_i=\alpha_b \cup S=0 \cap \alpha_i=\alpha_a)} \\ \nonumber
+E(w^1_i|S=1)&=\frac{2200 * 0.25}{0.25} \\ \nonumber
+E(w^1_i|S=1)&=2200 \nonumber
+\end{align}
+
+## Teste de média simples (militares)
+
+- Quero testar se salário civil dos que serviram é igual a BRL 2.500,00 ($H_0: \mu_{w^1}=2500$)
+
+- Sob $H_0$, vale que:
+
+$$
+\sqrt{n}\frac{\bar{\mu}_{w^1} - 2500}{\hat{\sigma}_{w^1}} \simeq N(0,1)
+$$
+
+- Consideraremos \textbf{5\% como nível de significância}
+
+## Gerando amostra
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+set.seed(13)
+data <- pgd(2000)
+head(data)
+```
+
+## Teste-t (comando em R)
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data_serviu <- filter(data, S==1)
+t.test(data_serviu$w_1, mu=2500, alternative="two.sided")
+```
+
+## Teste-t (manualmente)
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# Estimador amostral do desvio-padrão
+sd_serviu <- sd(data_serviu$w_1)
+se_hat <- sd_serviu/sqrt(nrow(data_serviu))
+se_hat
+# Estimador amostral da média
+mu_hat <- mean(data_serviu$w_1)
+mu_hat
+```
+
+## Teste-t (manualmente)
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# estatística t
+t <- (mu_hat - 2500)/se_hat
+t
+# IC (95%) para média amostral
+ic <- c(mu_hat - 1.96*se_hat,
+        mu_hat + 1.96*se_hat)
+ic
+# p-valor
+pvalue <- dt(t, nrow(data_serviu)-1)
+pvalue
+```
+
+## Erro tipo I: cálculo
+
+\vspace{1cm}
+
+Se usamos 5% como nível de significância, significa que em amostragens repetidas $\approx$ 5% das vezes vamos rejeitar $H_0$, mesmo sendo ela verdadeira. \textbf{Também podemos usar nosso PGD para conferir isso.}
+
+\vspace{0.5cm}
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+gen_t_stat <- function(seed.i, mu.i, Si){
+  set.seed(seed.i) 
+  data_temp <- pgd(1000) %>% filter(S==Si)
+  t.test(data_temp$w_1, mu=mu.i, alternative="two.sided")$statistic
+}
+teste <- sapply(1:1000, gen_t_stat, mu.i=2200, Si=1, simplify = TRUE)
+prob_erro_I <- sum(abs(teste)>=1.96)/length(teste)
+prob_erro_I
+```
+
+## Erro tipo I: visualização
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+fig <- ggplot() +
+  geom_density(aes(teste),
+               color=cores$verde_escuro,
+               fill=cores$verde_claro,
+               alpha=0.6,
+               adjust=1.5) +
+  geom_vline(xintercept = 1.96, 
+             color=cores$vermelho_escuro, size=1.3, linetype=4) +
+  geom_vline(xintercept = -1.96, 
+             color=cores$vermelho_escuro, size=1.3, linetype=4) +
+  labs(title="Distribuição da Estatística-t",
+       y="Densidade") +
+  tema_base_fundobranco()
+```
+
+## Fig: Erro tipo I
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+fig
+```
+
+## Teste de média simples (civis)
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data_civil <- filter(data, S==0)
+t.test(data_civil$w_1, mu=2500, alternative="two.sided")
+```
+
+\scriptsize $*$ Importante notar que os intervalos de confiança dos salários de civis e militares (após o serviço militar) se cruzam.
+
+## Erro tipo II: cálculo
+
+- Vamos testar se salário civil dos que não serviram é igual a BRL 2200 ($H_0: \mu_{w^1_{S=0}}=2200$)
+  - Dado o PGD, sabemos que $H_0$ é falsa
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data_civil <- filter(data, S==0)
+t.test(data_civil$w_1, mu=2200, alternative="two.sided")
+```
+
+## Erro tipo II: cálculo
+
+Mantido 5% como nível de significância, nosso PGD indica que há uma probabilidade de $\approx$ 0,7% de aceitarmos $H_0$, mesmo sendo ela falsa. 
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+teste <- sapply(1:1000, gen_t_stat, mu.i=2200, Si=0, simplify = TRUE)
+prob_erro_II <- sum(abs(teste)<1.96)/length(teste)
+prob_erro_II
+```
+
+## Erro tipo II: cálculo
+
+Importante notar que o Erro Tipo II aumenta, conforme $H_0$ se aproxima da hipótese verdadeira. 
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+teste <- sapply(1:1000, gen_t_stat, mu.i=2300, Si=0, simplify = TRUE)
+prob_erro_II <- sum(abs(teste)<1.96)/length(teste)
+prob_erro_II
+```
+
+## Teste de diferença de médias
+
+- Vamos testar diretamente se salários dos civis é igual ao salário de militares após o serviço ($H_0: \mu_{S=1}=\mu_{S=0} \equiv \mu_{S=1}-\mu_{S=0}=0$)
+
+- Sob $H_0$, temos que:
+
+$$
+\sqrt{n_{S=0}+n_{S=1}}\frac{\bar{\mu}_{w^1_{S=0}} - \bar{\mu}_{w^1_{S=1}} - 0}{\hat{\sigma}_{w^1_{S=0, S=1}}} \simeq N(0,1)
+$$
+
+## Teste-t (comando em R)
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+t.test(data_serviu$w_1, data_civil$w_1, 
+       alternative="two.sided", var.equal=TRUE)
+```
+
+## Teste-t (manualmente)
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# Estimador amostral do desvio-padrão
+sd_civil <- sd(data_civil$w_1)
+n_civil <- nrow(data_civil)
+sd_serviu <- sd(data_serviu$w_1)
+n_serviu <- nrow(data_serviu)
+sd_pool <- sqrt(((n_civil - 1) * sd_civil^2 + (n_serviu - 1) * sd_serviu^2) / (n_civil + n_serviu - 2))
+se_hat <- sd_pool * sqrt(1/n_civil + 1/n_serviu)
+se_hat
+
+# Estimador amostral da média
+mu_civil <- mean(data_civil$w_1)
+mu_serviu <-  mean(data_serviu$w_1)
+mu_hat <- mu_serviu - mu_civil
+mu_hat
+```
+
+## Teste-t (manualmente)
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+# estatística t
+t <- (mu_hat - 0)/se_hat
+t
+# IC (95%) para média amostral
+ic <- c(mu_hat - 1.96*se_hat,
+        mu_hat + 1.96*se_hat)
+ic
+# p-valor
+pvalue_norm <- dnorm(t)
+pvalue_t <- dt(t, nrow(data)-2)
+c(pvalue_norm, pvalue_t)
+```
+
+## Interpretação dos resultados
+
+- Pelo conjunto de eviências, fica claro que a expectativa salarial daqueles que serviram é menor do que daqueles que não serviram
+  - e sabemos que isso é verdade pelo PGD
+  
+- Não podemos, a partir desse fato, concluir que serviço militar afeta negativamente a renda futura dos indivíduos
+  - e sabemos, pelo PGD, que essa afirmação seria falsa
+  
+- Isso é um exemplo do que chamamos em econometria de \textbf{víes de seleção}
+  - Indivíduos se autoselecionam para políticas públicas e uma mera comparação de beneficiários e não-beneficiários não permite conclusões causais.
+  - Vamos ver mais sobre isso nas próximas aulas.
+
+## Efeito causal
+
+- Pelo PGD, sabemos que o serviço militar aumenta a renda futura em BRL 200
+
+\tiny
+\begin{align}
+E(w^1_i|S=0) - E(w^1_i|S=1) &= E(\delta_{i} \; \alpha_i + \epsilon^1_i) - E(\alpha_i + \epsilon^1_i)   \\ \nonumber
+&= E(\delta_{i} \; \alpha_i) + E(\epsilon^1_i) - E(\alpha_i) - E(\epsilon^1_i)   \\ \nonumber
+&= \delta_{i} \; E(\alpha_i) - E(\alpha_i) \\ \nonumber
+&= (\delta_{i}-1) \; E(\alpha_i) \\ \nonumber
+&= 0.1 * 2000 \\ \nonumber
+\end{align}
+
+- Há algum teste-t que me permita estimar esse efeito causal?
+
+
+## Efeito causal
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+data_rct_treated <- filter(data, D==1, S==1)
+data_rct_control <- filter(data, D==1, S==0)
+rct <- t.test(data_rct_treated$w_1, data_rct_control$w_1, 
+                alternative="two.sided", var.equal=TRUE)
+rct
+```
+
+## Efeito causal
+ 
+- O efeito pontual estimado é de `r round(rct$estimate[[1]]-rct$estimate[[2]], 2)`, com intervalo de confiança de 95\% indo de `r round(rct$conf.int[[1]], 2)` a `r round(rct$conf.int[[2]], 2)`.
+  - Inclui o valor correto, portanto.
+
+- Dentre os que desejam se alistar, o acesso ao serviço militar (tratamento) foi definido de maneira aleatória.
+  - Com isso garantimos que o tratamento não depende de outros fatores que também explicam o salário;
+  - Controla-se, assim, o viés de seleção
+
+- Falaremos mais sobre a diferença entre efeito causal e correlação nas próximas aulas...
+
+# Lista II
+
+## Orientações gerais
+
+- Objetivo: replicar um teste de diferença de médias e uma análise de erros tipo I e II, tal qual fizemos nessa aula.
+  - mas usaremos um cenário alternativo
+
+- Novamente, vocês vão partir de um arquivo [\emph{\color{blue}modelo}](https://github.com/dgrimald/Econometria_ENAP/blob/main/Aula%203/Lista_2.Rmd), que é um arquivo tipo Rmd.
+  - Lembrem de renomear o arquivo para um nome com padrão “Lista_1_nome” antes de submeter;
+  - submetam o relatório gerado (html) e o código (Rmd) antes da próxima aula, enviando-os para o email daniel.sgrimaldi@outlook.com.br;
+  - o assunto do email deve seguiro padrão "Lista_1_nome"
+
+## Cenário alternativo
+
+- Dessa vez, imaginemos que o impacto do serviço militar acaba prejudicando a trajetória futura dos indivíduos, de tal forma que:
+
+\begin{align}
+\delta_i &=
+\begin{cases}
+1.1 & \text{se } S_i=1 \\
+1.3 & \text{se } c.c.
+\end{cases} \nonumber
+\end{align}
+
+- Isso pode ocorrer, por exemplo, porque os que não entram para o serviço militar seguem estudando e os estudos têm impacto maior sobre a produtividade futura.
+
+## Lista II: especificações
+
+- Vocês vão escrever a função exec_lista_2, que terá **obrigatoriamente 3 *inputs***
+  - nome (nome do aluno);
+  - sample_size=300 (tamanho da amostra a ser gerada para teste-t)
+  - n_samples=100 (qtd. de amostras a serem geradas para cálculo de erros tipo I e II)
+  
+- A função exec_lista_2 terá **obrigatoriamente 2 *outputs***
+  - nome: um objeto tipo *character* com o nome do aluno;
+  - resultados: um objeto tipo vetor com parâmetros de interesse
+  
+## Lista II: especificações
+
+- O teste-t
+  - você deve testar se os civis e militares têm o mesmo salário ($W_1$)
+
+- Erro Tipo I
+  - calcule o Erro Tipo I em um teste-t a respeito do salário dos militares ($\mu_{W^1_{{S=1}}}$)
+  - lembre-se que para esse teste, o valor de $H_0$ deve ser equivalente ao valor real de $\mu_{W^1_{{S=1}}}$, dado pelo PGD
+
+- Erro Tipo II
+  - calcule o Erro Tipo II em um teste-t a respeito do salário dos civis ($\mu_{W^1_{{S=0}}}$)
+  - para esse cálculo considere como $H_0$ o valor de BRL 3.000,00
+
+## Params
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
+\node[anchor=north west] at (-0.5, 3.5){\includegraphics[scale=0.5]{exemplo_resultados.png}};
+\end{tikzpicture}
+```
+
+
