@@ -348,9 +348,6 @@ t
 ic <- c(mu_hat - 1.96*se_hat,
         mu_hat + 1.96*se_hat)
 ic
-# p-valor
-pvalue <- dt(t, nrow(data_serviu)-1)
-pvalue
 ```
 
 ## Erro tipo I: cálculo
@@ -497,10 +494,6 @@ t
 ic <- c(mu_hat - 1.96*se_hat,
         mu_hat + 1.96*se_hat)
 ic
-# p-valor
-pvalue_norm <- dnorm(t)
-pvalue_t <- dt(t, nrow(data)-2)
-c(pvalue_norm, pvalue_t)
 ```
 
 ## Interpretação dos resultados
@@ -609,7 +602,7 @@ rct
 \begin{tikzpicture}
 \useasboundingbox;
 \node[anchor=south west] at (-1.5, -3){\includegraphics[width=16cm, height=14cm]{whitebox.png}};
-\node[anchor=north west] at (-0.5, 3.5){\includegraphics[scale=0.5]{exemplo_resultados.png}};
+\node[anchor=north west] at (-1, -2.5){\includegraphics[scale=0.5]{exemplo_resultado.png}};
 \end{tikzpicture}
 ```
 

@@ -9,8 +9,8 @@ output: html_document
 
 ```{r echo=TRUE}
 # loading required packages
-library(knitr)
-library(devtools)
+if(!require(devtools)){install.packages("devtools")}
+if(!require(knitr)){install.packages("knitr")}
 if(!require(tidyverse)){install.packages("tidyverse")}
 if(!require(magrittr)){install.packages("magrittr")}
 if(!require(data.table)){install.packages("data.table")}
