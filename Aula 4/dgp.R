@@ -1,8 +1,8 @@
 dgp <- function(n.id=4000,
                 delta_universidade=4000,
                 delta_publica=1000,
-                peso_alpha=1,
                 custo_universidade=1000,
+                peso_alpha=1
                 ){
   
   # cria estrutura da base
