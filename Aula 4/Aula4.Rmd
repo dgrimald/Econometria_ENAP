@@ -1,0 +1,757 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Aula 4: Relações entre variáveis"
+date: "3º Trimestre - 2025"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{hyperref}
+  - \usepackage{graphicx}
+  - \usepackage{setspace}
+  - \usepackage{amsmath}
+  - \newcommand{\nsmall}{\footnotesize}
+output:
+  beamer_presentation:
+    theme: "ENAP"
+    latex_engine: xelatex
+    incremental: false
+suppress-bibliography: false
+bibliography: references.bib
+---
+
+```{r echo=FALSE, include=FALSE}
+# loading required packages
+if(!require(knitr)){install.packages("knitr")}
+if(!require(devtools)){install.packages("devtools")}
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+if(!require(ggdag)){install.packages("ggdag")}
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+```{r echo=FALSE, include=FALSE}
+seed=14
+```
+
+# Relação entre variáveis
+
+## Contexto
+
+- Até agora, foco das aulas esteve em descrever variáveis e testar hipóteses, mas sempre partindo de distribuições independentes (que consideram apenas 1 variável).
+
+- Em pesquisa social normalmente queremos investigar a relação entre múltiplas variáveis. Essas relações podem ser:
+  - positivas, negativas ou inexistentes;
+  - lineares ou não;
+  - causais ou não.
+  
+- Para investigar essas relações, devemos entender como a distribuição de uma variável condiciona ("afeta") a distribuição das outras.
+  
+## Variância vs Covariância
+
+\vspace{0.4cm}
+- Variância mede o grau de dispersão de uma variável - ou o quão provável é observarmos um valor distante da média populacional.
+
+\begin{align}
+Var(X) \equiv \sigma_x^2 = E[(X-\mu_x)^2] = E[(X-\mu_x)(X-\mu_x)] \nonumber
+\end{align} 
+
+- Covariância mede a relação linear entre duas variáveis - ou o quão provável é observarmos um valor distante da média populacional para as duas variáveis conjuntamente.
+
+\begin{align}
+Cov(X,Y) \equiv \sigma_{xy}^2 &= E[(X-\mu_x)(Y-\mu_Y)]  \nonumber
+\end{align}
+
+## Propriedades da Covariância
+
+- Sendo $a,b,c$ e $d$ constantes e X e Y Variáveis Aleatórias, vale que:
+
+i. $Cov(X,X) = \sigma_x^2$;
+ii. $Cov(X,Y) = Cov(Y,X)$;
+iii. $Cov(X,Y) = E(XY)-E(X)E(Y)$;
+iv. $Cov(aX+b,cY+d) = ac \; Cov(X,Y)$
+
+- Independência implica covariância zero (isso fica claro por *iii*), mas a recíproca não é verdadeira.
+
+## Correlação
+
+- O Coeficiente de Correlação de Pearson (o mais comum) transforma a medida de covariância para termos uma número diretamente interpretável - é a covariância padronizada.
+
+\begin{align}
+Cor(X,Y) &= \frac{E[(X-\mu_x)(Y-\mu_Y)]}{\sqrt{Var(X)Var(Y)}} 
+\end{align}
+
+- Quanto mais perto de 1 (-1), mais positiva (negativa) é a relação linear entre as variáveis.
+
+## OLS e Correlação
+
+- Considere um modelo de regressão linear simples entre duas variáveis aleatórias Y e X, definido por: $Y = \alpha + \beta X + \epsilon$. O Coeficiente estimado por OLS para $\beta$ equivale a:
+
+\begin{align}
+\hat{\beta}_{ols} &= \frac{\sum(Y-\bar{Y})(X-\bar{x})}{\bar{\sigma_x}} 
+\end{align}
+
+- Vale notar que ele é fundamentalmente o coeficiente de correlação (dado pela Equação 1), mas sem a mesma padronização.
+  - Veremos o modelo OLS em detalhes nas próxima aulas
+
+
+
+# Causalidade em ciências sociais
+
+## Carecas de ouvir...
+
+- \Large "In god we trust, all others must bring data"
+\linebreak
+\vspace{0.2cm}
+\hspace*{1cm}\nsmall{W. Edwards Deming}
+
+- \Large "Let the data speak for themselves"
+\linebreak
+\vspace{0.2cm}
+\hspace*{1cm}\nsmall{Ronald Fisher}
+
+- \Large "Correlação não é causalidade!"
+\linebreak
+\vspace{0.2cm}
+\hspace*{1cm}\nsmall{Qualquer professor de STAT-001}
+
+\Large ... Então, o que os dados podem me dizer sobre causalidade?
+
+## Causalidade
+
+Em ciências sociais, a defesa de uma relação de **causalidade** entre $A$ e $B$ exige que todo pesquisador atenda a três condições:
+
+1. Demonstrar associação empírica entre $A$ e $B$;
+2. Demonstrar relação temporal apropriada $A$ e $B$;
+3. Convencer a todos que as duas condições anteriores não se devem a [\textcolor{blue}{fatores espúrios}](https://www.tylervigen.com/spurious-correlations).
+
+É virtualmente impossível atender à terceira condição só com dados... 
+
+## Karl Pearson
+
+- Pearson foi aluno de Francis Galton e o ajudou a desenvolver o conceito de regressão linear;
+- Fundador da Biometrika, até hoje uma das importantes revistas de estatística do mundo.
+
+<!-- *"I interpreted Galton to mean that there was a category broader than causation, namely correlation, of which causation was only the limit, and that his new conception of correlation brought psychology, anthropology, medicine, and sociology in large part into the field of mathematical treatment."* -->
+
+*"That a certain sequence has occurred and reoccurred in the past is a matter of experience to which we give expression in the concept of causation (...). Science in no case can demonstrate any inherent necessity in a sequence, nor prove with absolute certainty that it must be repeated."*
+
+## Sewall Wright
+
+![](Sewall Path.png)
+
+## Sewall vs. Niles
+
+- @wright_correlation_1921 defende o uso de **path analysis** para separar correlação de causalidade em outros contextos fora da genética.
+
+- @niles_correlation_1922 critica a proposta de @wright_correlation_1921
+
+*"To **contrast “causation” and “correlation” is unwarranted because causation is simply perfect correlation. Incomplete correlation denotes partial causation, the effect here being brought about by more than one important cause**. Many things show either high or perfect correlation that, on common-sense grounds, can not possibly be cause and effect. But we can not tell a priori what things are cause and effect (...)."* 
+
+## Judea Pearl
+
+- [Judea Pearl](http://bayes.cs.ucla.edu/jp_home.html) é professor de ciência da computação na UCLA e ganhador do prêmio Turing (2011);
+
+- Desenvolveu o arcabouço de Directed Acyclical Graphs (DAGs) com o objetivo de criar uma "linguagem" formal para inferência causal[@pearl_book_2018; @pearl_causal_2016; @chen_regression_2013].
+
+- Ferramenta tem se tornado mais relevante em ciências sociais [@imbens_potential_2020].
+
+# Show me the DAGs!
+
+## O que é um DAG?
+
+\begin{figure}[!h]
+  \includegraphics[width=5cm]{DAG_1.png}
+\end{figure}
+
+- **Causal Directed Acyclical Graphs (DAGs)** são uma representação gráfica (não-paramétrica) de uma relação causal teórica.
+- Os nódulos representam variáveis
+- As setas representam [potenciais] relações causais **diretas** 
+    - setas tracejadas indicam causalidade associada a variáveis não observáveis.
+    
+## Terminologia
+
+\begin{figure}[!h]
+  \includegraphics[width=5cm]{DAG_1.png}
+\end{figure}
+
+- **Children (Parents)** de um nódulo: todos os nódulos que diretamente são afetados (afetam)
+- **Descendants (Ancestors)** de um nódulo: todos os nódulos que direta ou indiretamente são afetados (afetam)
+- **Path**: uma associação ($\neq$ relação causal) ligando dois ou mais nódulos.
+
+## 
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-1.2, -6){\includegraphics[width=20cm, height=24cm]{pipes2.jpg}};
+\end{tikzpicture}
+```
+
+\vspace{-4cm}
+
+\large \textcolor{white}{\textbf{``As economists increasingly help governments design new policies and regulations, they take on an added responsibility to engage with the details of policy making and, in doing so, to adopt the mindset of a plumber."}}
+
+\nsmall \textcolor{white}{\textbf{Duflo (2017)}}
+
+## Quando o cano está aberto?
+
+\vspace{1cm}
+
+Um ***mediator***, como X na Figura A, permite que a associação flua entre Z e Y, mas controlar/condicionar por um ***mediator*** (ou seus descendentes) fecha o fluxo.
+
+\begin{figure}[!h]
+  \includegraphics[width=5cm]{DAG_2.png}
+  \caption{Figure A}
+\end{figure}
+
+Um ***collider***, como X na Figura B, bloqueia associação entre Z e Y, mas controlar/condicionar por um ***collider*** (ou seus descendentes) abre o fluxo. 
+
+\begin{figure}[!h]
+  \includegraphics[width=5cm]{DAG_3.png}
+  \caption{Figure B}
+\end{figure}
+
+## Fechando os canos certos
+
+\vspace{1cm}
+
+- Em todo DAG existem os *paths* que desejamos avaliar e *paths* alternativos (***backdoor paths***).
+
+- ***Backdoor criterion***: Devemos garantir que todos os *backdoor paths* estão bloqueados para medirmos apenas a relação de interesse.
+    - \nsmall É equivalente à hipótese de independência condicional (CIA) ou *unconfoundness*.
+
+\begin{figure}[!h]
+  \includegraphics[width=4cm]{DAG_4.png}
+\end{figure}
+
+# DAGs na prática
+
+## Quando usamos DAGs?
+
+- DAGs são utéis para orientar a reflexão e a apresentação da sua teoria (hipótese causal)
+\vspace{0.3cm}
+  - \nsmall É claro que existem outras formas de se fazer isso, mas DAGs criam uma estrutura comum.
+  - \nsmall Sem teoria, um número com três asteristicos ao lado é... só um número com três asteristicos ao lado.
+
+\vspace{0.4cm}
+- Uma teoria consolidada orienta decisões sobre como usar os dados
+\vspace{0.3cm}
+  - \nsmall Uma abordagem data-driven pura te torna refém dos dados
+  - \nsmall DAGs ajudam a tornar mais claros erros de especificação (*omitted variable bias*, *collider bias* e *bad controls*)
+
+# Hands On!
+
+## Características do programa
+
+- Imaginem **um programa de recolocação profissional** (como em [\emph{\color{blue}{Dehejia and Wahba, 2002}}](https://www.mitpressjournals.org/doi/abs/10.1162/003465302317331982?casa_token=ejfKkVBS-uoAAAAA%3AHVFCAjxc3eg09Knfmbtdv78mBjTOrV1O83Km2Un5G0h2KhgTI7_tF2BMwbFNCt2DKWi-DWI6mZvZmA&)):
+  - apenas funcionários que foram demitidos em $t_0$ são elegíveis para o programa;
+  - renda depende positivamente de habilidades não observáveis (S) de cada indivíduo;
+  - probabilidade de demissão e de participação no programa depende negativamente de S;
+  - **impacto do programa é *a priori* desconhecido**;
+
+## PGD
+
+\vspace{-0.2cm}
+\begin{align}
+&S \sim N(50, 10) \; ; \; \epsilon \sim N(0, 30) \\
+&P(D_i=1|S = s_i) = \frac{1}{1+e^{(\frac{s_i - \mu_{S}}{\sigma_{S}})}} \\
+&P(P_i=1|D=d_i,S=s_i) = d_i \; 1-\frac{1}{2+e^{\frac{s_i - \mu_{S}}{\sigma_{S}}}} \\
+&Y_{t_0}=800\;S_i-400\;D_i \; S_i+\epsilon_{t_0,i} \\
+&Y_{t_1}=1,000\;S_i-500\;D_i \; S_i-\delta \;P_i+\epsilon_{t_1,i}
+\end{align}
+
+## Implementando PGD
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+delta=-1000
+```
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE, results='asis'}
+pgd <- function(sample.size){
+set.seed(13)
+data <- data.frame(
+  S = rnorm(n=sample.size, mean=50, sd=30)) %>% 
+  mutate(p_D = 1/(1+exp(1+scale(S))),
+         D = sapply(p_D, function(i) rbinom(1,1, prob=i)),
+         e_0 = rnorm(n=sample.size, sd=30),
+         Y_0 = 800*S - 400*D + e_0,
+         p_P = D*(1-1/(1+exp(2+scale(S)))),
+         P = sapply(p_P, function(i) rbinom(1,1,prob=i)),
+         e_1 = rnorm(n=sample.size, sd=30),
+         Y_1 = 1000*S - 500*D*D + delta*P + e_1)
+data
+}
+```
+
+## Simulação
+
+\tiny
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+data <- pgd(10000)
+head(data)
+```
+
+## \Large Caso 1: Relação entre programa e renda futura
+
+- Temos acesso às seguintes informações:
+  - status de participação no programa ($P_i$);
+  - status sobre demissões ($D_{i}$);
+  - renda dos trabalhadores ($Y_{i,t_0}$ e $Y_{i,t_1}$)
+  
+- **Queremos investigar a relação entre a participação no programa e renda futura dos trabalhadores**.
+
+- É útil começarmos com uma inspeção visual...
+
+## Plot entre Y_1 e Y_0
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+fig <- ggplot(data, aes(x=Y_0, y=Y_1)) +
+  geom_point(color=cores$verde_escuro,
+             fill=cores$verde_claro,
+             alpha=0.1) +
+  labs(title="Relação entre Y_0 e Y_1",
+       y="Y_1",
+       x="Y_0") +
+  tema_base_fundobranco()
+```
+
+## geom_point
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig
+```
+
+## geom_point
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+fig <- ggplot(data, aes(x=P, y=Y_1)) +
+  geom_point(color=cores$verde_escuro,
+             fill=cores$verde_claro,
+             alpha=0.1) +
+  labs(title="Relação entre P e Y_1",
+       y="Y_1",
+       x="P") +
+  tema_base_fundobranco()
+```
+
+## geom_point
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig
+```
+
+## Histograma condicional: P
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+fig <- ggplot(data) +
+  geom_density(aes(Y_1, fill=as.factor(P)),
+               alpha=0.3,
+               color=cores$cinza_claro,
+               adjust=1.2) +
+  scale_fill_manual(values=c(cores$amarelo_fechado, cores$verde_escuro)) +
+  labs(title="Distribuição Renda Futura",
+       subtitle="Amostra completa",
+       y="Densidade",
+       x="Renda futura",
+       fill="Status de Participação") +
+  tema_base_fundobranco()
+```
+
+## Histograma condicional: P
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig
+```
+
+## Histograma condicional: P | D=1
+
+\scriptsize
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+fig <- ggplot(filter(data, D==1)) +
+  geom_density(aes(Y_1, fill=as.factor(P)),
+               alpha=0.3,
+               color=cores$cinza_claro,
+               adjust=1.2) +
+  scale_fill_manual(values=c(cores$amarelo_fechado, cores$verde_escuro)) +
+  labs(title="Distribuição Renda Futura",
+       subtitle="Apenas entre demitidos",
+       y="Densidade",
+       x="Renda futura",
+       fill="Status de Participação") +
+  tema_base_fundobranco()
+```
+
+## Histograma condicional: P | D=1
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig
+```
+
+## Estimando correlações
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE, results='asis'}
+cor_total <- cor(data$Y_1, data$P)
+cor_demitidos <- cor(data$Y_1[data$D==1], data$P[data$D==1])
+cor_total
+cor_demitidos
+```
+
+## Estimando coeficientes OLS
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+reg1 <- lm(Y_1 ~ P, data=data)
+reg2 <- lm(Y_1 ~ P + D, data=data)
+reg3 <- lm(Y_1 ~ P + Y_0, data=data)
+```
+
+## Estimando coeficientes OLS
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+stargazer(reg1, reg2, reg3, 
+          header = FALSE, keep.stat = c("n"),
+          font.size = "tiny", no.space = TRUE,
+          dep.var.labels.include = FALSE,
+          dep.var.caption = "Renda após P",
+          column.sep.width="1pt", digits=2,
+          digits.extra=0)
+```
+
+## \Large DAG para a teoria de mudança
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+set.seed(13)
+ex1_dag <- dagify(D ~ S,
+                  Y0 ~ S + D,
+                  P ~ S + D,
+                  Y1 ~ S + D + P) %>% 
+  tidy_dagitty() %>% 
+  mutate(color_node=ifelse(name=="S", "Unobserved", "Observed"),
+         edge_line=ifelse(name=="S", 2, 1))
+```
+
+## Gerando Gráfico DAG
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+graf1 <- ggplot(data= ex1_dag, aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(colour=color_node, fill=color_node), show.legend = FALSE) +
+  scale_color_manual(values = c(cores$verde_escuro, cores$amarelo_escuro)) +
+  geom_dag_edges(aes(edge_linetype=edge_line))+
+  geom_dag_text() +
+  labs(title = "Teoria causal do Programa",
+       y="",
+       x="") +
+  tema_base_fundobranco() +
+  theme(axis.line.x = element_line(colour=NA),
+        axis.text.x = element_text(size=0),
+        axis.text.y = element_text(size=0))
+```
+
+## Gráfico DAG
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+\vspace{-0.7cm}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.height=9.5, fig.width=12}
+set.seed(13)
+ex1_dag <- dagify(D ~ S,
+                  Y0 ~ S + D,
+                  P ~ S + D,
+                  Y1 ~ S + D + P) %>% 
+  tidy_dagitty() %>% 
+  mutate(color_node=ifelse(name=="S", "Unobserved", "Observed"),
+         edge_line=ifelse(name=="S", 2, 1))
+
+graf1 <- ggplot(data= ex1_dag, aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(colour=color_node, fill=color_node), show.legend = FALSE) +
+  scale_color_manual(values = c(cores$verde_escuro, cores$amarelo_escuro)) +
+  geom_dag_edges(aes(edge_linetype=edge_line))+
+  geom_dag_text() +
+  labs(title = "Teoria causal do Programa",
+       y="",
+       x="") +
+  tema_base_fundobranco() +
+  theme(axis.line.x = element_line(colour=NA),
+        axis.text.x = element_text(size=0),
+        axis.text.y = element_text(size=0))
+
+graf1
+```
+
+## \Large Quais canos estão abertos?
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+graf2.data <- dag_paths(ex1_dag, from = "P", to="Y1") %>% 
+  distinct(set, name, to, .keep_all=TRUE) %>% 
+  mutate(show_node=ifelse(is.na(path), 0, 1),
+         show_line=case_when(is.na(path) ~ 0.1,
+                             TRUE ~ 1))
+```
+
+## \Large Quais canos estão abertos?
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+\vspace{-0.3cm}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.height=9.5, fig.width=12}
+fig.data <- dag_paths(ex1_dag, from = "P", to="Y1") %>% 
+  distinct(set, name, to, .keep_all=TRUE) %>% 
+  mutate(show_node=ifelse(is.na(path), 0, 1),
+         show_line=case_when(is.na(path) ~ 0.1,
+                             TRUE ~ 1))
+
+fig <- ggplot(data=fig.data, aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(fill=color_node, color=color_node), size=11, show.legend = FALSE) +
+  scale_color_manual(values = c(cores$verde_escuro, cores$amarelo_escuro)) +
+  geom_dag_edges(aes(edge_linetype=edge_line, edge_alpha=show_line), show.legend = FALSE)+
+  geom_dag_text() +
+  labs(title="Paths entre Programa de Recolocação e Renda",
+       y="",
+       x="") +
+  facet_wrap(vars(set)) +
+  tema_base_fundobranco() + 
+  theme(axis.line.x = element_line(colour=NA),
+        axis.text.x = element_text(size=0),
+        axis.text.y = element_text(size=0))
+
+
+fig
+```
+
+## Qual o modelo correto?
+
+- Estimação (1) deixa todos os *paths* abertos, contaminando $\beta_{ols}$ com correlações espúrias (*paths* 2 a 5).
+
+- Estimação (2) fecha 3 dos 4 caminhos não-causais, mas ainda resta o *path* 5, que também contamina $\hat\beta_{ols}$
+
+- Estimação (3) fecha todos os *paths* não-causais, porque controla por um descendente de S e de D.
+  - $\delta =$ `r delta`
+  
+- Também é possível recuperar o efeito causal se controlarmos simultaneamente por $S$ e por $D$
+
+## Se tivermos informação sobre $S$
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+reg4 <- lm(Y_1 ~ P + S*D, data=data)
+stargazer(reg1, reg2, reg3, reg4, 
+          header = FALSE, keep.stat = c("n"),
+          font.size = "tiny", no.space = TRUE,
+          dep.var.labels.include = FALSE,
+          dep.var.caption = "Renda após P",
+          column.sep.width="1pt", digits=2,
+          digits.extra=0)
+```
+
+
+## \Large Caso 2: Relação entre Habilidade e Demissão
+
+- Por meio de uma pesquisa de campo, conseguimos uma medida confiável da habilidade dos trabalhadores
+  
+- **Queremos investigar a relação entre essa habilidade e a probabilidade de demissão**.
+
+- Por simplificação, pulemos agora a inspeção visual...
+
+## Estimando coeficientes OLS
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+reg1 <- lm(D ~ S, data=data)
+reg2 <- glm(D ~ S, family = binomial(link="logit"), data=data)
+reg3 <- lm(D ~ S + Y_0, data=data)
+reg4 <- glm(D ~ S + Y_0, family = binomial(link="logit"), data=data)
+```
+
+## Estimando coeficientes OLS
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+stargazer(reg1, reg2, reg3, reg4,
+          header = FALSE, keep.stat = c("n"),
+          font.size = "tiny", no.space = TRUE,
+          dep.var.labels.include = FALSE,
+          dep.var.caption = "P(D)",
+          column.sep.width="1pt", digits=2,
+          digits.extra=0)
+```
+
+## \Large Quais canos estão abertos?
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+\vspace{-0.3cm}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.height=9.5, fig.width=12}
+fig.data <- dag_paths(ex1_dag, from = "S", to="D") %>% 
+  distinct(set, name, to, .keep_all=TRUE) %>% 
+  mutate(show_node=ifelse(is.na(path), 0, 1),
+         show_line=case_when(is.na(path) ~ 0.1,
+                             TRUE ~ 1))
+
+fig <- ggplot(data=fig.data, aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(fill=color_node, color=color_node), size=11, show.legend = FALSE) +
+  scale_color_manual(values = c(cores$verde_escuro, cores$amarelo_escuro)) +
+  geom_dag_edges(aes(edge_linetype=edge_line, edge_alpha=show_line), show.legend = FALSE)+
+  geom_dag_text() +
+  labs(title="Paths entre Programa de Recolocação e Renda",
+       y="",
+       x="") +
+  facet_wrap(vars(set)) +
+  tema_base_fundobranco() + 
+  theme(axis.line.x = element_line(colour=NA),
+        axis.text.x = element_text(size=0),
+        axis.text.y = element_text(size=0))
+
+
+fig
+```
+
+## \Large Bad controls
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+fig.data <- dag_paths(ex1_dag, 
+                      from = "S",
+                      to="D",
+                      adjust_for = "Y0") %>% 
+  distinct(set, name, to, .keep_all=TRUE) %>% 
+  mutate(show_node=ifelse(is.na(path), 0, 1),
+         show_line=case_when(is.na(path) ~ 0.1,
+                             TRUE ~ 1))
+```
+
+## \Large Bad controls
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+\vspace{-0.3cm}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.height=9.5, fig.width=12}
+fig <- ggplot(data=fig.data, aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(fill=color_node, color=color_node), size=11, show.legend = FALSE) +
+  scale_color_manual(values = c(cores$verde_escuro, cores$amarelo_escuro)) +
+  geom_dag_edges(aes(edge_linetype=edge_line, edge_alpha=show_line), show.legend = FALSE)+
+  geom_dag_text() +
+  labs(title="Paths entre Programa de Recolocação e Renda",
+       y="",
+       x="") +
+  facet_wrap(vars(set)) +
+  tema_base_fundobranco() + 
+  theme(axis.line.x = element_line(colour=NA),
+        axis.text.x = element_text(size=0),
+        axis.text.y = element_text(size=0))
+
+
+fig
+```
+
+## \Large Bad controls
+
+- A inclusão de $Y_{t0}$ na regressão equivale a controlar por um *collider*
+  - Logo, ele abre um caminho não-causal (*path* 2) entre $S$ e $D$, que acaba contaminando o coeficiente estimado
+  
+- Mais controles não implica, necessariamente, um modelo mais robusto
+
+- É preciso ter uma teoria por trás a respeito de como deve operar a realidade, para que se possa julgar o modelo mais adequado
+  - DAGs ajudam nisso
+
+## Mais sobre DAGs
+
+\vspace{0.5cm}
+\nsmall
+<div id="refs"></div>
+
+# Obrigado!

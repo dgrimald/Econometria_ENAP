@@ -1,9 +1,4 @@
-dgp <- function(n.id=4000,
-                delta_universidade=4000,
-                delta_publica=1000,
-                custo_universidade=1000,
-                peso_alpha=1
-                ){
+dgp <- function(n.id=4000, delta_universidade=4000, delta_publica=-1000, peso_alpha=1){
   
   # cria estrutura da base
   set.seed(13)
@@ -15,8 +10,8 @@ dgp <- function(n.id=4000,
   alpha_i.vector <- lapply(alpha_i, rep, 2) %>% unlist()
   
   # cria efeito aleatório de periodos
-  alpha_0 <- rnorm(1, 1000, 200)
-  alpha_1 <- rnorm(1, 1100, 220)
+  alpha_0 <- rnorm(1, 1000, 1)
+  alpha_1 <- rnorm(1, 1100, 1)
 
   # consolida base sobre alphas
   sample.data %<>% 
@@ -25,8 +20,7 @@ dgp <- function(n.id=4000,
            alpha_id = alpha_i.vector)
   
   # cria probabilidade de concluir 1 ano de estudo (depende de habilidade não observável)
-  p_estudar_alpha <- 1/(1+exp(1-alpha_i))
-  p_estudar <- peso_alpha * p_estudar_alpha + (1-peso_alpha) * mean(p_estudar_alpha) 
+  p_estudar <- 1/(1+exp(1-alpha_i))
   p_estudar.vector <- lapply(p_estudar, rep, 2) %>% unlist()
   
   # cria x_1: anos de estudo (0 a 9 anos) em t0 e D_u: dummy de acesso a universidade em t0
@@ -45,33 +39,26 @@ dgp <- function(n.id=4000,
   
   # consolida base sobre anos de estudo
   sample.data %<>%
-    left_join(rbind(x_1.t0.data, x_1.t1.data)) %>% 
+    left_join(rbind(x_1.t0.data, x_1.t1.data), by=c("id", "t")) %>% 
     mutate(p_estudar = p_estudar.vector)
 
-  # Cria probabilidade de acesso à universidade pública
-  p_publica_alpha <- 1/(2+exp(1-alpha_i))
-  p_publica <- peso_alpha * p_publica_alpha + (1-peso_alpha) * mean(p_publica_alpha) 
-  D_publica <- rbinom(n=length(p_publica), size=1, prob=p_publica)
-  p_publica.vector <- lapply(p_publica, rep, 2) %>% unlist()
-  D_publica.vector <- lapply(D_publica, rep, 2) %>% unlist()
+  # Implementa processo seletivo para universidade pública (vestibular)
+  score_vestibular <- peso_alpha * scale(alpha_i) + (1-peso_alpha)*scale(rnorm(length(alpha_i)))
+  score_vestibular.vector <- lapply(score_vestibular, rep, 2) %>% unlist()
   
   # cria D_p: dummy de acesso a universidade pública
   sample.data %<>% 
-    mutate(p_publica = p_publica.vector,
-           D_p = D_publica.vector, 
-           D_p = case_when(t==1 & D_u==1 ~ D_p,  
-                           TRUE ~ 0))
-    
-  # cria x_2: gasto mensal com universidade
-  sample.data %<>% 
-    mutate(x_2 = case_when(t==0 ~ 0,
-                           TRUE ~ D_u * (1-D_p)*custo_universidade))
-    
+    mutate(score_vestibular = score_vestibular.vector) %>% 
+    group_by(D_u) %>% 
+    mutate(cut.off = median(score_vestibular)) %>% 
+    ungroup() %>% 
+    mutate(D_p = (t==1)*(D_u)*(score_vestibular > cut.off))
 
   # cria Y: renda familiar mensal
   sample.data %<>%
-    mutate(e = rnorm(n=n.sample, sd=300),
-           y = 5000 + 1000*(alpha_id+abs(min(alpha_i))) + alpha_t + delta_universidade*D_u + delta_publica*D_p - x_2 + e)
+    mutate(e = rnorm(n=n.sample, sd=1),
+           y = 5000 + 5500*(alpha_id+abs(min(alpha_i))) + alpha_t + delta_universidade*D_u + delta_publica*D_p + e)
   
-  sample.data
+  sample.data %<>%
+    select(-p_estudar, -score_vestibular, -e, -alpha_t)
 }
