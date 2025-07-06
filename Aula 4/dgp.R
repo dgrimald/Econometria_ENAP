@@ -2,6 +2,7 @@ dgp <- function(n.id=4000,
                 delta_universidade=4000,
                 delta_publica=1000,
                 peso_alpha=1,
+                custo_universidade=1000,
                 ){
   
   # cria estrutura da base
@@ -64,7 +65,7 @@ dgp <- function(n.id=4000,
   # cria x_2: gasto mensal com universidade
   sample.data %<>% 
     mutate(x_2 = case_when(t==0 ~ 0,
-                           TRUE ~ D_u * (1-D_p)*2500))
+                           TRUE ~ D_u * (1-D_p)*custo_universidade))
     
 
   # cria Y: renda familiar mensal
