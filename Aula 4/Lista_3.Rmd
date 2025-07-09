@@ -47,7 +47,7 @@ Usando a função que você acabou de carregar, crie, dentro do **Chunk 2** uma 
 
 - 5000 indivíduos;
 - o impacto de se concluir uma universidade sobre a renda é de BR\$ 6000,00;
-- o impacto adicional sobre o salário de cursar uma universidade pública vis-à-vis uma universidade pública é de - BR\$800,00;
+- o impacto adicional sobre o salário de cursar uma universidade pública vis-à-vis uma universidade particular é de - BR\$800,00;
 - o peso das habilidades intrínsecas é o maior possível (1). 
 
 Dê o nome de **sample_1** a essa base de dados que você vai criar e use a função *head* para incluir no seu relatório as 20 primeiras linhas de **sample_1**. 
@@ -60,7 +60,7 @@ sample_1 <-
 ```
 
 ### (2) DAG
-Considerando o pdg definido pela função *dgp*, use o **Chunk 3** para criar um gráfico de DAG mostrando todos os *paths* entre o acesso a univesidade pública e a renda futura -  tal qual o que fizemos no slide 44 da Aula 4. Lembre-se de incluir as seguintes variáveis: $y, x_1, x_2, \alpha_i, D_u \text{ e } D_p$.
+Considerando o pdg definido pela função *dgp*, use o **Chunk 3** para criar um gráfico de DAG mostrando todos os *paths* entre o acesso a univesidade pública e a renda futura -  tal qual o que fizemos no slide 45 da Aula 4. Lembre-se de incluir as seguintes variáveis: $y \text{ (renda)}, x_1\text{ (anos de estudo)}, \alpha_{i} \text{ (habilidade intrínseca)}, D_u \text{ (dummy de acesso à universidade)} \text{ e } D_p \text{ (dummy de acesso à universidade pública)}$.
 
 **Chunk 3: DAG: *paths* entre D_p e *y***
 ```{r echo=TRUE, fig.width=14, fig.height=10, eval=FALSE}
@@ -105,6 +105,10 @@ Lembre-se de levar em conta apenas as observações do período 1 (**t==1**) e d
 R: [insira aqui sua resposta]
 
 **Q2. O modelo (2) estimado acima encontra um coeficiente causal para o impacto da universidade pública sobre a renda futura? Justifique sua resposta usando o seu DAG.** R:
+
+R: [insira aqui sua resposta]
+
+**Bônus. Com os dados disponíveis em *sample_1*, é possível estimarmos um modelo que retorne os efeitos causais? Se sim, estime o modelo, apresente os coeficientes estimados e justifique usando o seu DAG porque eles capturam os efeitos causais.**
 
 R: [insira aqui sua resposta]
   
