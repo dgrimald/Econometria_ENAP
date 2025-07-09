@@ -448,17 +448,35 @@ cor_total
 cor_demitidos
 ```
 
-## Estimando coeficientes OLS
+## Estimando OLS
 
+\vspace{0.5cm}
+
+\scriptsize
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 reg1 <- lm(Y_1 ~ P, data=data)
-reg2 <- lm(Y_1 ~ P + D, data=data)
-reg3 <- lm(Y_1 ~ P + Y_0, data=data)
+summary(reg1)
 ```
 
-## Estimando coeficientes OLS
+## Construindo tabela de regressão
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+reg2 <- lm(Y_1 ~ P + D, data=data)
+reg3 <- lm(Y_1 ~ P + Y_0, data=data)
+stargazer(reg1, reg2, reg3, 
+          header = FALSE, keep.stat = c("n"),
+          font.size = "tiny", no.space = TRUE,
+          dep.var.labels.include = FALSE,
+          dep.var.caption = "Renda após P",
+          column.sep.width="1pt", digits=2,
+          digits.extra=0)
+```
+
+## Coeficientes de modelos OLS
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+reg2 <- lm(Y_1 ~ P + D, data=data)
+reg3 <- lm(Y_1 ~ P + Y_0, data=data)
 stargazer(reg1, reg2, reg3, 
           header = FALSE, keep.stat = c("n"),
           font.size = "tiny", no.space = TRUE,
