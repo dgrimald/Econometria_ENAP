@@ -1,0 +1,11 @@
+\babel@toc {brazilian}{}\relax 
+\beamer@sectionintoc {1}{Introdução}{3}{0}{1}
+\beamer@sectionintoc {2}{Modelo de Regressão Bivariado}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Modelo Populacional}{6}{0}{2}
+\beamer@subsectionintoc {2}{2}{Estimação}{15}{0}{2}
+\beamer@subsectionintoc {2}{3}{Interpretação}{35}{0}{2}
+\beamer@sectionintoc {3}{Modelo de Regressão Multivariado}{44}{0}{3}
+\beamer@subsectionintoc {3}{1}{Modelo Populacional}{44}{0}{3}
+\beamer@subsectionintoc {3}{2}{Estimação}{51}{0}{3}
+\beamer@subsectionintoc {3}{3}{Regressão Residual}{59}{0}{3}
+\beamer@sectionintoc {4}{Propriedades}{67}{0}{4}

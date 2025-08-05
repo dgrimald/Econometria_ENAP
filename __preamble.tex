@@ -1,0 +1,200 @@
+%_ PACKAGES __________________________________________________________________________ %
+
+    %__ INPUT/OUTPUT LANGUAGE _________________________________ %
+    \usepackage[brazilian]{babel}
+	\usepackage[utf8]{inputenc}
+	\usepackage{lmodern}
+	\usefonttheme{serif}
+
+    %__ MATH __________________________________________________ %
+    \usepackage{amssymb}
+    \usepackage{amsmath}
+    \usepackage{amsthm}
+    \usepackage{bbm}
+    \usepackage{amsfonts}
+    \DeclareMathOperator*{\argmax}{argmax}
+    
+    \usepackage{cancel}
+
+    %__ GRAPHS & TABLES________________________________________ %
+    \usepackage{graphicx}
+    \usepackage{booktabs}
+    \usepackage{multirow}
+    \usepackage{array}
+    \usepackage{lscape}
+    \usepackage{caption}
+    \usepackage{tabularx}
+    \usepackage{tabularx}
+        \newcolumntype{Z}{>{\centering\arraybackslash}X}
+        \newcolumntype{L}{>{\raggedright\arraybackslash}X}	
+    
+        \renewcommand{\arraystretch}{1.2}
+%        \usepackage{subcaption}			% SUBFIGURE IS DEPRECATED; SHOULD USE SUBCAPTION INSTEAD OF .
+    \usepackage[flushleft,online,para]{threeparttable}
+    \usepackage{multirow}
+    \usepackage{dcolumn}
+        \newcolumntype{d}[1]{D{.}{\cdot}{#1}}
+    \usepackage{rotating}                                      % for **sideways**tables
+
+    %\usepackage[nolists]{endfloat}     %   PUTS FIGURES AT THE END OF DOCUMENT.
+                                        %   DOESN'T WORK WITH \usepackage{float}
+
+
+%	\usepackage{ulem}
+
+  \usepackage{listings}
+  \usepackage{xcolor}
+      \definecolor{BackgroundGray}{cmyk}{0,0,0,.1}
+      \definecolor{CommentGreen}{cmyk}{.26,0,.50,.68}
+      \definecolor{CPIgraydark}{RGB}{104,102,100}
+      \definecolor{black}{rgb}{0.1,0.1,0.1}
+      \definecolor{pcolor}{rgb}{0.25,0.29,0.3}
+        
+\setbeamercolor{frametitle}{fg=black,bg=white}
+\setbeamercolor{title}{fg=black,bg=white}
+
+  \lstset{ %
+    backgroundcolor=\color{BackgroundGray}, % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+    basicstyle=\ttfamily\tiny,                 % the size of the fonts that are used for the code
+    breakatwhitespace=false,              % sets if automatic breaks should only happen at whitespace
+    breaklines=true,                      % sets automatic line breaking
+    captionpos=b,                         % sets the caption-position to bottom
+    commentstyle=\color{CommentGreen},    % comment style
+    deletekeywords={...},                 % if you want to delete keywords from the given language
+    escapechar={\@},                      % if you want to add LaTeX within your code
+    extendedchars=true,                   % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+    frame=none,                           % adds a frame around the code
+    keepspaces=true,                      % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+    keywordstyle=\color{blue},           % keyword style
+    language=R,                           % the language of the code
+    morekeywords={*,...},                 % if you want to add more keywords to the set
+    morestring=[b]",
+    morestring=[d]',
+    numbers=none,                         % where to put the line-numbers; possible values are (none, left, right)
+    numbersep=5pt,                        % how far the line-numbers are from the code
+    numberstyle=\tiny\color{gray},        % the style that is used for the line-numbers
+    rulecolor=\color{black},              % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+    showspaces=false,                     % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+    showstringspaces=false,               % underline spaces within strings only
+    showtabs=false,                       % show tabs within strings adding particular underscores
+    stepnumber=2,                         % the step between two line-numbers. If it's 1, each line will be numbered
+    stringstyle=\color{red},              % string literal style
+    tabsize=2,                            % sets default tabsize to 2 spaces
+    title=\lstname,                       % show the filename of files included with \lstinputlisting; also try caption instead of title
+    columns=flexible
+  }
+\lstset{literate=
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {Ã}{{\~A}}1 {ã}{{\~a}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\EUR}}1 {£}{{\pounds}}1
+}  
+  %\DefineShortVerb{\|}
+
+\setbeamertemplate{itemize item}{\color{black}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{black}$\blacksquare$}
+
+\setbeamercolor{enumerate item}{fg=black,bg=white}
+\setbeamercolor{enumerate subitem}{fg=black,bg=white}
+
+    %__ BIBLIOGRAPHY __________________________________________ %
+    \usepackage[round,longnamesfirst]{natbib}
+
+    %__ APPENDIX _____________________________________________ %
+%    \usepackage[titletoc,page]{appendix}
+
+    %__ PDF, DISPLAY & PRODUCTIVITY ___________________________ %
+    \usepackage{hyperref}
+    %\usepackage[textsize=footnotesize,colorinlistoftodos,textwidth=4cm,obeyDraft]{todonotes}
+    \usepackage{pgfpages}
+    \usepackage{pdfpages}    
+%    \usepackage{pdfsync}
+    \usepackage{pifont} % wtf?
+%    \usepackage{bbding} % wtf?
+    \usepackage{verbatim}
+
+    \usepackage{wasysym} % smiley/frownie
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\beamertemplatenavigationsymbolsempty
+
+    \newcommand{\mc}{\multicolumn}
+    \newcommand{\lbar}{\underline}
+    \newcommand{\ubar}{\overline}
+
+    \newtheorem{resposta}{Resposta}
+    \newtheorem{pergunta}{Pergunta}    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\AtBeginSection[] {
+%  \begin{frame}[plain]
+%    \frametitle{Chapters}
+%    \tableofcontents[currentsection]
+%  \end{frame}
+%  \addtocounter{totalframenumber}{-1}
+%}
+
+\addtocounter{framenumber}{-1}
+% FOOTLINE - PAGE NUMBER RIGHT
+\defbeamertemplate*{footline}{guildford foot theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.7\paperwidth,ht=1cm,dp=0ex,left]{}%
+    {
+    \insertsectionnavigationhorizontal{.5\paperwidth}{}{}
+    }
+ \end{beamercolorbox}
+ \begin{beamercolorbox}[wd=0.31\paperwidth,ht=1cm,dp=0ex,right]{}%
+	{\tiny
+	\insertframenumber{} / \inserttotalframenumber\hspace*{5ex}
+	}
+ \end{beamercolorbox}}%
+  \vskip5pt%
+}
+
+% Titles will appear in Small Cap Serif
+
+\usefonttheme{structuresmallcapsserif}
+
+% -----------------------------------------
+% Center the Frame Title
+% -----------------------------------------
+
+\setbeamertemplate{frametitle} {
+\begin{centering}
+\vspace{0.1in} \insertframetitle
+\par
+\end{centering}}
+
+% -----------------------------------------
+% Number the slides
+% -----------------------------------------
+
+\setbeamertemplate{footline}[frame number]
+
+% -----------------------------------------
+% Get rid of the irritating navigation bar
+% -----------------------------------------
+
+\setbeamertemplate{navigation symbols}{}
+
+%------------------------------------------
+
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{8pt}}{\enditemize}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

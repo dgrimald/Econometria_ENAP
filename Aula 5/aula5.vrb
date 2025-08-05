@@ -1,0 +1,21 @@
+\frametitle{Distribuição Normal}
+
+\begin{itemize}\itemsep1.2em
+
+\item \textbf{Hipótese adicional}:
+
+$$u | X \sim N(0, \sigma^2 I)$$
+
+\item Essa hipótese adicional caracteriza o que chamamos de \textbf{modelo de regressão linear clássico}.
+
+\item Ela implica que o estimador $\widehat{\beta}$ tem distribuição normal.
+
+\item \textbf{Por quê?}
+
+\begin{align*}
+& \widehat{\beta} = \beta + (X'X)^{-1} X'u \\
+& u | X \sim N(0, \sigma^2 I) \Longrightarrow \widehat{\beta} \sim N(\beta, \sigma^2 (X'X)^{-1})
+\end{align*}
+
+\end{itemize}
+
