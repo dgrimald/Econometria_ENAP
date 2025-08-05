@@ -1,0 +1,33 @@
+\frametitle{Viés de Atenuação (4)}
+
+\vspace{0.5cm}
+Viés de atenuação: $\sigma_x^2/(\sigma_x^2 + \sigma_{\nu}^2) \times \beta = 0.8 \times 0.6 = 0.48$
+
+\begin{lstlisting}
+
+  # Vetores #
+
+library(estimatr)
+
+summary(lm_robust(y ~ x, data = dados))
+
+Coefficients:
+            Estimate Std. Error t value   Pr(>|t|) CI Lower CI Upper   DF
+(Intercept)   1.0367    0.03987   26.01 2.520e-144   0.9586   1.1149 9998
+x             0.6093    0.01986   30.68 1.129e-197   0.5704   0.6483 9998
+
+Multiple R-squared:  0.08515 ,	Adjusted R-squared:  0.08506
+F-statistic: 941.5 on 1 and 9998 DF,  p-value: < 2.2e-16
+
+summary(lm_robust(y ~ xs, data = dados))
+
+Coefficients:
+            Estimate Std. Error t value   Pr(>|t|) CI Lower CI Upper   DF
+(Intercept)   1.0397    0.04027   25.82 2.231e-142   0.9608   1.1186 9998
+xs            0.4857    0.01817   26.73 4.293e-152   0.4501   0.5213 9998
+
+Multiple R-squared:  0.0669 ,	Adjusted R-squared:  0.06681
+F-statistic: 714.5 on 1 and 9998 DF,  p-value: < 2.2e-16
+
+\end{lstlisting}
+

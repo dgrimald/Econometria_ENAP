@@ -1,21 +1,24 @@
-\frametitle{Distribuição Normal}
+\frametitle{Regressão Residual}
 
-\begin{itemize}\itemsep1.2em
+\vspace{0.5cm}
+Rodo regressões residuais.
 
-\item \textbf{Hipótese adicional}:
+\begin{lstlisting}
 
-$$u | X \sim N(0, \sigma^2 I)$$
+summary(lm_robust(y ~ r2, data = dados))
 
-\item Essa hipótese adicional caracteriza o que chamamos de \textbf{modelo de regressão linear clássico}.
+Call:
+lm_robust(formula = y ~ r2, data = dados)
 
-\item Ela implica que o estimador $\widehat{\beta}$ tem distribuição normal.
+Standard error type:  HC2
 
-\item \textbf{Por quê?}
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|) CI Lower CI Upper   DF
+(Intercept)  0.04987   0.021497    2.32  0.02037 0.007732  0.09201 9998
+r2           0.39489   0.005439   72.60  0.00000 0.384224  0.40555 9998
 
-\begin{align*}
-& \widehat{\beta} = \beta + (X'X)^{-1} X'u \\
-& u | X \sim N(0, \sigma^2 I) \Longrightarrow \widehat{\beta} \sim N(\beta, \sigma^2 (X'X)^{-1})
-\end{align*}
+Multiple R-squared:  0.3466 ,	Adjusted R-squared:  0.3465
+F-statistic:  5271 on 1 and 9998 DF,  p-value: < 2.2e-16
 
-\end{itemize}
+\end{lstlisting}
 

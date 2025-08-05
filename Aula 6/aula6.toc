@@ -1,0 +1,7 @@
+\babel@toc {brazilian}{}\relax 
+\beamer@sectionintoc {1}{Introdução}{3}{0}{1}
+\beamer@sectionintoc {2}{Propriedades}{4}{0}{2}
+\beamer@sectionintoc {3}{Inferência em MQO}{13}{0}{3}
+\beamer@sectionintoc {4}{Heterocedasticidade}{25}{0}{4}
+\beamer@sectionintoc {5}{MQO em grandes amostras}{28}{0}{5}
+\beamer@sectionintoc {6}{Problemas com MQO}{32}{0}{6}
