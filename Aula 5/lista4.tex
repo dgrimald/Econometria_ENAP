@@ -1,0 +1,62 @@
+% -*- coding: utf-8 -*-
+\documentclass[a4paper, 12pt, final]{article}
+\input{_preamble}
+\usepackage{bm}
+\usepackage{enumerate}
+\graphicspath{{./floats/}}
+ 
+% _ DOCUMENT ATTRIBUTES ______________________________________________________________ %
+
+\title{\textbf{Lista 4}}
+\author{Métodos Quantitativos I (MPAM-ENAP)}
+\date{}
+
+% _ DOCUMENT _________________________________________________________________________ %
+
+\begin{document}
+
+\maketitle
+
+\textbf{Instruções: O trabalho deve ser entregue em um documento PDF contendo: (1) respostas dos exercícios; (2) tabelas / figuras com os resultados obtidos; (3) códigos em R utilizados.} 
+
+\vspace{11pt}
+
+Essa lista de exercícios utiliza um banco de dados de nascimentos de crianças nos EUA denominado BWGHT. Esse banco de dados pode ser carregado utilizando o pacote ``wooldridge'', uma biblioteca que disponibiliza os bancos de dados utilizados no livro \textbf{``Introductory Econometrics: A Modern Approach (7th edition)''} de Jeffrey M. Wooldridge.   
+
+\begin{enumerate}
+    
+\item Considere o seguinte modelo de regressão bivariado que conecta peso ao nascer com consumo de cigarro das mães:   
+\begin{align}
+\label{ols}
+bwght_i = \alpha + \beta {cigs}_{i} + \varepsilon_{i},
+\end{align}    
+em que ``bwght'' denota o peso ao nascer em gramas da criança $i$ e ``cigs'' o consumo médio de cigarros da mãe da criança `$i$. 
+
+Estime esse modelo e interprete os coeficientes obtidos.
+
+\item Calcule peso ao nascer predito pelo modelo da equação \eqref{ols} quando as mães não fumam ($cigs = 0$) e quando as mães fumam um máco de cigarros por dia ($cigs = 20$)? Em seguida, calcule as médias condicionais de peso ao nascer de crianças com mães que não fumam e que fumam um maço de cigarro por dia. Compare os valores obtidos e use-os para discutir a especificação do modelo.   
+
+\item Discuta a(s) hipótese(s) necessária(s) para que o coeficiente $\hat{\beta}$ obtido a partir da estimação da equação \eqref{ols} recupere o efeito causal do consumo de cigarros sobre o peso ao nascer.
+    
+\item Estime o modelo de regressão multivariado abaixo em que a variável o logaritmo natural da renda familiar (``lfaminc'') é incluído como regressor adicional ao modelo apresentado na equação \eqref{ols}. 
+\begin{align}
+\label{ols2}
+bwght_i = \alpha + \beta {cigs}_{i} + \gamma {lfaminc}_i + \varepsilon_{i},
+\end{align} 
+
+Interprete os resultados obtidos.
+
+\item Discuta a(s) hipótese(s) necessária(s) para que o coeficiente $\hat{\beta}$ obtido a partir da estimação da equação \eqref{ols2} recupere o efeito causal do consumo de cigarros sobre o peso ao nascer. Seja preciso sobre a diferença dessa hipótese de identificação da hipótese de identificação discutida no item 3.
+
+\item Discuta se você acredita que a variável ``lfaminc'' é um bom controle. 
+
+\item Utilize regressão residual para obter os coeficientes da equação \eqref{ols2}. Interprete os resultados. 
+
+	
+\end{enumerate}         
+
+\bibliographystyle{aer}
+\bibliography{biblio}
+        
+\end{document}
+

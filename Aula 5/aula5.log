@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.10)  5 AUG 2025 14:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.10)  5 AUG 2025 14:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -993,7 +993,7 @@ File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count368
 \l__pdf_internal_box=\box84
 )
-No file aula5.aux.
+(./aula5.aux)
 \openout1 = `aula5.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
@@ -1014,6 +1014,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
 LaTeX Font Info:    ... okay on input line 17.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
 LaTeX Font Info:    ... okay on input line 17.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1087,6 +1088,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 17.
 LaTeX Info: Redefining \pageref on input line 17.
 LaTeX Info: Redefining \nameref on input line 17.
+ (./aula5.out) (./aula5.out)
 \@outlinefile=\write5
 \openout5 = `aula5.out'.
 
@@ -1126,17 +1128,16 @@ Package caption Info: End \AtBeginDocument code.
 Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 )
-No file aula5.nav.
-[1
+(./aula5.nav) [1
 
-{/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-No file aula5.toc.
-[2
+{/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./aula
+5.toc) [2
 
 ]
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 5
 0.
- (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omllmm.fd
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
@@ -1202,7 +1203,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
  [11
 
 ]
-<fig1.png, id=89, 662.475pt x 601.24625pt>
+<fig1.png, id=142, 662.475pt x 601.24625pt>
 File: fig1.png Graphic file (type png)
 <use fig1.png>
 Package pdftex.def Info: fig1.png  used on input line 260.
@@ -1214,7 +1215,7 @@ Package pdftex.def Info: fig1.png  used on input line 260.
 ] [14
 
 ]
-<scatter.png, id=109, 1027.84pt x 685.56125pt>
+<scatter.png, id=162, 1027.84pt x 685.56125pt>
 File: scatter.png Graphic file (type png)
 <use scatter.png>
 Package pdftex.def Info: scatter.png  used on input line 331.
@@ -1231,7 +1232,7 @@ Package pdftex.def Info: scatter.png  used on input line 331.
 ] [19
 
 ]
-<fig2.png, id=139, 660.4675pt x 528.97626pt>
+<fig2.png, id=191, 660.4675pt x 528.97626pt>
 File: fig2.png Graphic file (type png)
 <use fig2.png>
 Package pdftex.def Info: fig2.png  used on input line 422.
@@ -1284,7 +1285,7 @@ File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 \openout4 = `aula5.vrb'.
 
  (./aula5.vrb
-<fit.pdf, id=190, 505.89pt x 505.89pt>
+<fit.pdf, id=241, 505.89pt x 505.89pt>
 File: fit.pdf Graphic file (type pdf)
 <use fit.pdf>
 Package pdftex.def Info: fit.pdf  used on input line 4.
@@ -1315,7 +1316,7 @@ Overfull \vbox (28.72743pt too high) detected at line 617
 
 
 (./aula5.vrb
-<fit_melhor.pdf, id=218, 505.89pt x 505.89pt>
+<fit_melhor.pdf, id=269, 505.89pt x 505.89pt>
 File: fit_melhor.pdf Graphic file (type pdf)
 <use fit_melhor.pdf>
 Package pdftex.def Info: fit_melhor.pdf  used on input line 4.
@@ -1513,20 +1514,14 @@ Overfull \vbox (6.85843pt too high) detected at line 1737
 \openout8 = `aula5.snm'.
 
  (./aula5.aux)
-
-Package rerunfilecheck Warning: File `aula5.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `aula5.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  948295975F77B33291D85C86F0B90B1A;1430.
+Package rerunfilecheck Info: File `aula5.out' has not changed.
+(rerunfilecheck)             Checksum: 948295975F77B33291D85C86F0B90B1A;1430.
  ) 
 Here is how much of TeX's memory you used:
- 29191 strings out of 478268
- 545933 string characters out of 5846347
+ 29410 strings out of 478268
+ 548267 string characters out of 5846347
  1142397 words of memory out of 5000000
- 46547 multiletter control sequences out of 15000+600000
+ 46756 multiletter control sequences out of 15000+600000
  526684 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,12n,122p,409b,1951s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1556,10 +1551,10 @@ exlive/2022/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2022
 1/public/lm/lmtt8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/am
 sfonts/symbols/msam10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/publi
 c/amsfonts/symbols/msbm10.pfb>
-Output written on aula5.pdf (75 pages, 702189 bytes).
+Output written on aula5.pdf (75 pages, 704024 bytes).
 PDF statistics:
- 599 PDF objects out of 1000 (max. 8388607)
- 455 compressed objects within 5 object streams
+ 640 PDF objects out of 1000 (max. 8388607)
+ 496 compressed objects within 5 object streams
  161 named destinations out of 1000 (max. 500000)
- 68 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 148 words of extra memory for PDF output out of 10000 (max. 10000000)
 
