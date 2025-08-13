@@ -1,0 +1,185 @@
+%_ PACKAGES __________________________________________________________________________ %
+    
+    %__ INPUT/OUTPUT LANGUAGE _________________________________ %
+    \usepackage[brazilian]{babel}
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    %\usepackage{indentfirst}
+    
+    %__ MATH __________________________________________________ %
+    \usepackage{amsfonts}
+    \usepackage{amssymb}
+    \usepackage{amsmath}
+    \usepackage{amsthm}
+    \usepackage{bbm}
+    
+    %__ GRAPHS & TABLES________________________________________ %
+    \usepackage{graphicx}
+    \usepackage{booktabs}
+    \usepackage{multirow}
+    \usepackage{array}    
+    \usepackage{lscape}
+    \usepackage{caption}
+    \usepackage{subcaption}
+    \usepackage[flushleft,online,para]{threeparttable}
+    \usepackage{multirow}
+    
+    \usepackage{parskip}                       % WHAT IS THIS FOR?
+    \usepackage{gastex}                        % WHAT IS THIS FOR?
+    \usepackage[nolists]{endfloat}             % PUT FIGURES AT THE END OF DOCUMENT; DOESN'T WORK WITH \usepackage{float}
+    
+    \usepackage{floatrow}
+        \floatsetup[table]{style=plaintop}     % LEAVE TABLE CAPTIONS AT THE TOP
+        \floatsetup[figure]{style=plaintop}     % LEAVE TABLE CAPTIONS AT THE TOP
+    
+    \usepackage{dcolumn}
+        \newcolumntype{d}[1]{D{.}{\cdot}{#1}}
+    
+    \usepackage{rotating}                      % for **sideways**tables
+    
+    %__ BIBLIOGRAPHY __________________________________________ %
+    \usepackage[round,longnamesfirst]{natbib}
+    %\usepackage[alf,abnt-and-type=e,abnt-etal-list=2]{abntcite}
+    
+    %__ PDF, DISPLAY & PRODUCTIVITY ___________________________ %
+    \usepackage{xcolor}
+        \definecolor{darkblue}{rgb}{0,0,0.5}
+    \usepackage{hyperref}
+        \hypersetup{
+            colorlinks = true,
+            linkcolor = darkblue,
+            citecolor = darkblue,
+            pdfborder = 0 0 0,
+            pdfdisplaydoctitle = true,
+            pdfhighlight = /N,
+            pdfpagelayout = OneColumn,
+            pdfpagemode = UseNone,
+            pdfstartview = {FitH},
+            pdfauthor = {{AB \& VP}},
+            pdftitle = {{MPAM 2022}}
+        }
+        
+    \usepackage{geometry}
+        \geometry{verbose,tmargin=2.0cm,bmargin=2.0cm,lmargin=2.0cm,rmargin=2.0cm}
+    \usepackage{setspace}
+        \onehalfspacing
+    
+    \usepackage[bottom, multiple]{footmisc}    % keep footnotes at the bottom of the page, and allow for multiple footnotes at one place.
+    
+    \usepackage{verbatim}
+    \usepackage[normalem]{ulem}     % strikethrough fonts
+    \usepackage{mathpazo}
+        
+    % HEADER & FOOTER ________________________ %
+    \usepackage{fancyhdr}
+    \pagestyle{fancy}
+    % header __________________
+    \fancyhead{} % clear fields
+%    \fancyhead[L]{TPE I}
+%    \fancyhead[R]{2018.2}
+    \setlength{\headheight}{16pt}    % tim's document says 46.445pt, but that's too much
+
+    % \renewcommand{\headrule}{   % formating the header's line
+    %    {\color{CPIorange}       % color
+    %     \hrule                  % ?
+    %     width\textwidth         % width
+    %     height 2pt}  % thickness
+    % }            
+
+    % footer __________________
+      \fancyfoot{} % clear fields
+        \fancyfoot[L]{MPAM-ENAP}
+        \fancyfoot[R]{\thepage}
+        
+        %\renewcommand{\footruleskip}{\baselineskip}
+        \renewcommand{\footrule}{   % formating the footers's line
+           {                        % color
+            \hrule                  % ?
+            width\textwidth         % width
+            height 1pt}             % thickness
+        }            
+      \fancypagestyle{plain}{%
+        %\renewcommand{\headrulewidth}{0pt}%
+%        \fancyhead[L]{Técnicas de Pesquisa em Economia}
+%        \fancyhead[R]{2018.2}
+        
+        \fancyfoot[L]{MPAM-ENAP}
+        \fancyfoot[R]{\thepage}
+      }        
+        
+    %__ APPENDIX _____________________________________________ %
+    \usepackage[toc,page]{appendix}
+
+%__ COMMANDS _________________________________________________________________________ %
+    \newcommand{\mc}{\multicolumn}
+    \newcommand{\lbar}{\underline}
+    \newcommand{\ubar}{\overline}
+    
+    \DeclareMathOperator*{\argmax}{argmax}
+    
+    \newtheorem{theorem}{Theorem} %[section]
+    \newtheorem{definition}{Definition}
+    \newtheorem{remark}{Remark}
+    \newtheorem{proposition}{Proposition}
+    \newtheorem{condition}{Condition}
+    \newtheorem{example}{Example}
+    \newtheorem{lemma}{Lemma}
+    \newtheorem{corollary}{Corollary}
+    \newtheorem{assumption}{Assumption}
+    \newtheorem{claim}{Claim}
+    \newtheorem{fact}{Fact}
+    
+      \usepackage{listings}
+  \usepackage{xcolor}
+      \definecolor{BackgroundGray}{cmyk}{0,0,0,.1}
+      \definecolor{CommentGreen}{cmyk}{.26,0,.50,.68}
+      \definecolor{CPIgraydark}{RGB}{104,102,100}
+
+  \lstset{ %
+    backgroundcolor=\color{BackgroundGray}, % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+    basicstyle=\ttfamily\tiny,                 % the size of the fonts that are used for the code
+    breakatwhitespace=false,              % sets if automatic breaks should only happen at whitespace
+    breaklines=true,                      % sets automatic line breaking
+    captionpos=b,                         % sets the caption-position to bottom
+    commentstyle=\color{CommentGreen},    % comment style
+    deletekeywords={...},                 % if you want to delete keywords from the given language
+    escapechar={\@},                      % if you want to add LaTeX within your code
+    extendedchars=true,                   % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+    frame=none,                           % adds a frame around the code
+    keepspaces=true,                      % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+    keywordstyle=\color{blue},           % keyword style
+    language=R,                           % the language of the code
+    morekeywords={*,...},                 % if you want to add more keywords to the set
+    morestring=[b]",
+    morestring=[d]',
+    numbers=none,                         % where to put the line-numbers; possible values are (none, left, right)
+    numbersep=5pt,                        % how far the line-numbers are from the code
+    numberstyle=\tiny\color{gray},        % the style that is used for the line-numbers
+    rulecolor=\color{black},              % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+    showspaces=false,                     % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+    showstringspaces=false,               % underline spaces within strings only
+    showtabs=false,                       % show tabs within strings adding particular underscores
+    stepnumber=2,                         % the step between two line-numbers. If it's 1, each line will be numbered
+    stringstyle=\color{red},              % string literal style
+    tabsize=2,                            % sets default tabsize to 2 spaces
+    title=\lstname,                       % show the filename of files included with \lstinputlisting; also try caption instead of title
+    columns=flexible
+  }
+\lstset{literate=
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {Ã}{{\~A}}1 {ã}{{\~a}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\EUR}}1 {£}{{\pounds}}1
+}  
+  %\DefineShortVerb{\|}
+
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
+\newcommand{\darkblue}[1]{{\color{darkblue} #1}}

@@ -1,0 +1,419 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/Arthur/Dropbox (Personal)/TPE2020/lista09/Readme.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 7 Jun 2020, 22:52:54
+
+{com}. codebook
+
+{txt}{hline}
+{res}household_id{right:Scrambled household identifier}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}float{txt})
+
+{col 18}range:  [{res}100001{txt},{res}174922{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}66,385{col 51}{txt}missing .:  {res}0{txt}/{res}74,922
+
+{txt}{col 19}mean:{res}{col 26}  140312
+{txt}{col 15}std. dev:{res}{col 26} 21441.2
+
+{txt}{col 12}percentiles:{col 32}10%{col 42}25%{col 52}50%{col 62}75%{col 72}90%
+{res}{col 27}  109361{col 37}  122288{col 47}  141645{col 57}  159052{col 67}  168731
+
+{txt}{hline}
+{res}treatment{right:Selected in the lottery}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+{ralign 22:label}:  {res:lottery}
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}0{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.   Numeric  Label
+{col 21}{res}    45,088{col 33}       0{col 43}{txt}Not selected
+{col 21}{res}    29,834{col 33}       1{col 43}{txt}Selected
+
+{txt}{hline}
+{res}weight_12m{right:Final 12-month weights}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}float{txt})
+
+{col 18}range:  [{res}0{txt},{res}5.9037251{txt}]{col 55}units:  {res}1.000e-07
+{col 10}{txt}unique values:  {res}45{col 51}{txt}missing .:  {res}16,517{txt}/{res}74,922
+
+{txt}{col 19}mean:{res}{col 26} .997281
+{txt}{col 15}std. dev:{res}{col 26} 1.10136
+
+{txt}{col 12}percentiles:{col 32}10%{col 42}25%{col 52}50%{col 62}75%{col 72}90%
+{res}{col 27}       0{col 37}       0{col 47}       1{col 57}       1{col 67}  2.8238
+
+{txt}{hline}
+{res}rx_any_12m{right:Currently taking any prescription medications}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+{ralign 22:label}:  {res:yesno}
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}56,590{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.   Numeric  Label
+{col 21}{res}     6,457{col 33}       0{col 43}{txt}No
+{col 21}{res}    11,875{col 33}       1{col 43}{txt}Yes
+{col 21}{res}    56,590{col 33}       .{col 43}
+
+{txt}{hline}
+{res}rx_num_mod_12m{right:Number of prescription meds currently taking, truncated at 2*99th percentile}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}24{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}25{col 51}{txt}missing .:  {res}56,601{txt}/{res}74,922
+
+{txt}{col 19}mean:{res}{col 26} 2.34823
+{txt}{col 15}std. dev:{res}{col 26} 2.87181
+
+{txt}{col 12}percentiles:{col 32}10%{col 42}25%{col 52}50%{col 62}75%{col 72}90%
+{res}{col 27}       0{col 37}       0{col 47}       1{col 57}       4{col 67}       6
+
+{txt}{hline}
+{res}doc_any_12m{right:Any primary care visits}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+{ralign 22:label}:  {res:yesno}
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}51,394{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.   Numeric  Label
+{col 21}{res}     9,312{col 33}       0{col 43}{txt}No
+{col 21}{res}    14,216{col 33}       1{col 43}{txt}Yes
+{col 21}{res}    51,394{col 33}       .{col 43}
+
+{txt}{hline}
+{res}doc_num_mod_12m{right:Num prim. care visits, truncated at 2*99th%ile}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}30{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}29{col 51}{txt}missing .:  {res}51,445{txt}/{res}74,922
+
+{txt}{col 19}mean:{res}{col 26} 1.94957
+{txt}{col 15}std. dev:{res}{col 26} 2.92646
+
+{txt}{col 12}percentiles:{col 32}10%{col 42}25%{col 52}50%{col 62}75%{col 72}90%
+{res}{col 27}       0{col 37}       0{col 47}       1{col 57}       3{col 67}       5
+
+{txt}{hline}
+{res}er_any_12m{right:Any ER visits}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+{ralign 22:label}:  {res:yesno}
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}51,372{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.   Numeric  Label
+{col 21}{res}    17,550{col 33}       0{col 43}{txt}No
+{col 21}{res}     6,000{col 33}       1{col 43}{txt}Yes
+{col 21}{res}    51,372{col 33}       .{col 43}
+
+{txt}{hline}
+{res}er_num_mod_12m{right:Num of ER visits, truncated at 2*99th%ile}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}10{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}11{col 51}{txt}missing .:  {res}51,405{txt}/{res}74,922
+
+{txt}{col 19}mean:{res}{col 26} .448016
+{txt}{col 15}std. dev:{res}{col 26} .991752
+
+{txt}{col 12}percentiles:{col 32}10%{col 42}25%{col 52}50%{col 62}75%{col 72}90%
+{res}{col 27}       0{col 37}       0{col 47}       0{col 57}       1{col 67}       2
+
+{txt}{hline}
+{res}hosp_any_12m{right:Any hospital visits}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+{ralign 22:label}:  {res:yesno}
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}51,313{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.   Numeric  Label
+{col 21}{res}    21,925{col 33}       0{col 43}{txt}No
+{col 21}{res}     1,684{col 33}       1{col 43}{txt}Yes
+{col 21}{res}    51,313{col 33}       .{col 43}
+
+{txt}{hline}
+{res}hosp_num_mod_12m{right:Number hospital visits, truncated at 2*99th%ile}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}4{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}5{col 51}{txt}missing .:  {res}51,347{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    21,925{col 33}0
+{col 21}     1,189{col 33}1
+{col 21}       276{col 33}2
+{col 21}       161{col 33}3
+{col 21}        24{col 33}4
+{col 21}    51,347{col 33}.
+
+{txt}{hline}
+{res}ohp_all_ever_survey{right:Ever enrolled in Medicaid from 1st not. date (10mar2008) to 30sep2009}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+{ralign 22:label}:  {res:enrolled}
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}0{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.   Numeric  Label
+{col 21}{res}    56,563{col 33}       0{col 43}{txt}NOT enrolled
+{col 21}{res}    18,359{col 33}       1{col 43}{txt}Enrolled
+
+{txt}{hline}
+{res}ddddraw_sur_2{right:draw_survey_12m==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    52,226{col 33}0
+{col 21}     6,585{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraw_sur_3{right:draw_survey_12m==3}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    52,224{col 33}0
+{col 21}     6,587{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraw_sur_4{right:draw_survey_12m==4}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    50,589{col 33}0
+{col 21}     8,222{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraw_sur_5{right:draw_survey_12m==5}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    50,551{col 33}0
+{col 21}     8,260{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraw_sur_6{right:draw_survey_12m==6}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    46,376{col 33}0
+{col 21}    12,435{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraw_sur_7{right:draw_survey_12m==7}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    48,711{col 33}0
+{col 21}    10,100{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}dddnumhh_li_2{right:numhh_list==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}0{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    57,686{col 33}0
+{col 21}    17,236{col 33}1
+
+{txt}{hline}
+{res}dddnumhh_li_3{right:numhh_list==3}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}0{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    74,764{col 33}0
+{col 21}       158{col 33}1
+
+{txt}{hline}
+{res}ddddraXnum_2_2{right:draw_survey_12m==2 & numhh_list==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    56,494{col 33}0
+{col 21}     2,317{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraXnum_2_3{right:draw_survey_12m==2 & numhh_list==3}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    58,745{col 33}0
+{col 21}        66{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraXnum_3_2{right:draw_survey_12m==3 & numhh_list==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    56,459{col 33}0
+{col 21}     2,352{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraXnum_3_3{right:draw_survey_12m==3 & numhh_list==3}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    58,773{col 33}0
+{col 21}        38{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraXnum_4_2{right:draw_survey_12m==4 & numhh_list==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    55,956{col 33}0
+{col 21}     2,855{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraXnum_5_2{right:draw_survey_12m==5 & numhh_list==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    55,969{col 33}0
+{col 21}     2,842{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraXnum_6_2{right:draw_survey_12m==6 & numhh_list==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    54,682{col 33}0
+{col 21}     4,129{col 33}1
+{col 21}    16,111{col 33}.
+
+{txt}{hline}
+{res}ddddraXnum_7_2{right:draw_survey_12m==7 & numhh_list==2}
+{txt}{hline}
+
+{col 19}type:  numeric ({res}byte{txt})
+
+{col 18}range:  [{res}0{txt},{res}1{txt}]{col 55}units:  {res}1
+{col 10}{txt}unique values:  {res}2{col 51}{txt}missing .:  {res}16,111{txt}/{res}74,922
+
+{txt}{col 13}tabulation:  Freq.  Value
+{col 21}{res}    58,481{col 33}0
+{col 21}       330{col 33}1
+{col 21}    16,111{col 33}.
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/Arthur/Dropbox (Personal)/TPE2020/lista09/Readme.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 7 Jun 2020, 22:53:10
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
