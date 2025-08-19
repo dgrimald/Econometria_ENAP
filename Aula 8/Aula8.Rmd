@@ -1,0 +1,460 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Aula 8: Modelos em Painel: Efeitos Fixos"
+date: "3º Trimestre - 2025"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{hyperref}
+  - \usepackage{graphicx}
+  - \usepackage{setspace}
+  - \usepackage{amsmath}
+  - \newcommand{\nsmall}{\footnotesize}
+output:
+  beamer_presentation:
+    theme: "ENAP"
+    latex_engine: xelatex
+    incremental: false
+---
+
+```{r echo=FALSE, include=FALSE}
+# loading required packages
+if(!require(knitr)){install.packages("knitr")}
+if(!require(devtools)){install.packages("devtools")}
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+if(!require(ggdag)){install.packages("ggdag")}
+if(!require(mvtnorm)){install.packages("mvtnorm")}
+if(!require(estimatr)){install.packages("estimatr")}
+if(!require(modelsummary)){install.packages("modelsummary")}
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+```{r echo=FALSE, include=FALSE}
+seed=14
+```
+
+# Contexto
+
+## Dados em *cross-section*
+
+- Durante as aulas de OLS, estivemos trabalhando com dados em corte transversal (*cross-section*).
+
+- Isso equivale a um contexto em que observamos *i* indivíduos, todos em um mesmo momento do tempo.
+
+Formalmente, nesse contexto temos modelos de regressão que podem ser representados pela Equação (1)
+
+\begin{align}
+y_{i} = \beta_0 + \beta_1 \; x^1_i + ... + \beta_k \; x^k_i + u_i
+\end{align}
+
+## Dados em painel
+
+- Dados em painel são aqueles que combinam uma dimensão transversal (*i*) com outra longitudinal (*t*).
+
+- Isso equivale a um contexto em que observamos *i* indivíduos, em múltiplos momentos de tempo.
+  - tipicamente, em um modelo de painel, a dimensão transveral é maior que a longitudinal.
+
+Formalmente, nesse contexo passamos a ter um modelo como o da Equação (2).
+
+\begin{align}
+y_{it} = \beta_0 + \beta_1 \; x^1_{it} + ... + \beta_k \; x^k_{it} + u_{it}
+\end{align}
+
+## \Large Como dados em painel podem ser úteis?
+
+- Já vimos que em vários contextos não conseguimos obervar todas os controles que são necessários para garantir a hipótese de exogeneidade estrita (ou *backdoor path criteria* na literatura de DAGs).
+
+- Sempre que $E[u_i|x_{i}] \neq 0$, teremos um $\hat{\beta}_{ols}$ viesado - que, portanto, não recupera o efeito causal de $X$ em $y$.
+
+- Com os dados em painel podemos usar um modelo de efeitos fixos (FE), que controla por qualquer variável (observável ou não) desde que ela permaneça constante ao longo do tempo dentro uma categoria específica.
+
+## Como isso acontece?
+
+- Considere um modelo como da Equação (3)
+
+\begin{align}
+y_{it} = \beta_0 + \beta_1 \; x^1_{it} + u_{it}
+\end{align}
+
+- E considere que: $(i) \; u_{it} = a_i + \epsilon_{it}$; e $(ii) \; E[\epsilon_{it}]=0$.
+
+- Neste caso, temos que: $E[u_{it}|x^1_{it}] = E[a_i + \epsilon_{it}] \equiv E[a_i]$.
+  - Então, $\hat{\beta}_{ols}$ é viesado
+  
+## Como FE resolve?
+
+- Na prática, tratamos $a_i$ como uma variável a ser estimada. Dessa forma, a Equação (3) pode ser reescrita:
+
+\begin{align}
+y_{it} =& \beta_0 + a_i + \beta_1 \; x^1_{it} + \epsilon{it} \\
+=& \alpha_i + \beta_1 \; x^1_{it} + \epsilon{it} \nonumber
+\end{align}
+
+- Agora, temos que: $(i) \; E[\epsilon_{it} | a_i, x^1_{it}] = E[\epsilon_{it}] \equiv 0$
+
+- Ou seja, ao controlarmos pelo elemento não observável $\alpha_i$, recuperamos a validada da hipótese de exogeneidade estrita.
+
+## FE e a variância dos dados
+
+- Num contexto de painel, podemos decompor a variância total dos dados em variância *within* e *betwewen*.
+
+  - **Variância *within* (ou intragrupo)**: variância longitudinal de uma variável para um mesmo indivíduo *i*
+  - **Variância *between* (ou intergrupo)**: variância de uma variável entre diferentes indivíduos.
+  
+- Na prática, um modelo FE expurga dos dados toda a variância *between*. Isso tem uma implicação importante: em um modelo FE não é possível estimarmos coeficientes para variáveis que sem variância longitudinal (fixas no tempo).
+
+## Transformação within
+
+\vspace{0.7cm}
+
+- Considere um modelo como o da Equação (4) e defina uma função $h(v)$ que calcula a média longitudinal de $v$ para cada $i$. Então, temos que:
+
+\vspace{-0.5cm}
+\begin{align}
+h(y_{it}) =& h(\alpha_i) + h(\beta_1 \; x^1_{it}) + h(\epsilon{it}) \\
+=& \alpha_i + \beta_1 \; h(x^1_{it}) + h(\epsilon{it}) \nonumber
+\end{align}
+
+- Agora, podemos subtrair (5) dos dois lados de (4) e temos que:
+
+\vspace{-0.5cm}
+
+\begin{align}
+y_{it} - h(y_{it})  =& \alpha_i - \alpha_i + \beta_1 \; ( x^1_{it}-h(x^1_{it})) + \epsilon_{it}-h(\epsilon_{it}) \\
+\ddot{y_{it}} =&  \beta_1 \; (\ddot{X^1_{it}}) + \ddot{\epsilon}_{it} \nonumber
+\end{align}
+
+## Usando dummies
+
+- A Equação (6) pode ser estimada diretamente por meio de um MQO. 
+  - A vantagem é que essa estimação é computacionalmente mais simples (e rápida). 
+  - A desvantagem é que não estimamos *de facto* os efeitos fixos - apenas expurgamos os seus efeitos.
+
+- Uma alternativa é estimar a Equação (4) diretamente por meio da inclusão de dummies de efeitos fixos ($\alpha_i$)
+  - A vantagem é que assim conseguimos estimativas interpretáveis para $\alpha_i$.
+  - Contudo, em casos onde existem muitas categorias, esse processo se torna computacionalmente muito demandante.
+  
+## Autocorrelação e clusterização
+
+- Uma das hipóteses para que o estimador MQO seja BLUE é que os resíduos devem ser homoscedásticos e não autocorrelacionaldos. Em um contexto de painel, isso implica que:
+
+\begin{align}
+(i) \; E[\epsilon_{it}]=\sigma_\epsilon \forall i,t \nonumber \\
+(ii) \; E[\epsilon_{it}\epsilon{ik}]=0 \forall i, t, k \nonumber
+\end{align}
+
+## Autocorrelação e clusterização
+
+Note que (ii) é altamente improvável - ambos os resíduos estão associados ao mesmo indivíduo. Por isso, usar estimativas de desvio-padrão que assumem homoscedasticidade e ausência de autocorrelação serial tendem a produzir intervalos de confiança subestimados.
+
+- A regra geral é assumir que existe correlação entre diferentes observações de um mesmo indivíduo e corrigir o desvio-padrão estimado considerando isso. A isso chamamos de *clusterizar* o desvio-padrão (cada indivíduo passa a ser um cluster)
+
+## Painel não balanceado
+
+- Painel não balanceado: um painel em que certos indivíduos estão ausentes em alguns períodos. 
+
+- A estimação de um modelo FE com dados não balanceados (seja por transformação within ou por inclusão de dummies) ocorre exatamente da mesma maneira de um painel balanceado, mas...
+
+- é crucial entendermos o que gera o não balanceamento. Se a ausência de observações possuir um padrão claro, então há risco de vies e/ou perda de validade externa da estimação.
+
+## Quando FE não resolve?
+
+- FE se dedica a controlar o viés decorrente da **omissão de variáveis fixas no tempo**.
+  - Se a variável não-observável possuir tendência heterogênea (entre categorias) ao longo do tempo, mesmo o FE será viesado 
+  - Se o tratamento tiver efeitos heterogêneos associados à variável não heterogênea, o FE também não conseguirá recuperar causalidade...
+
+# Hands on
+
+## \Large Autodefesa enquanto política de segurança
+
+O exemplo de hoje é inspirado em [\textit{Cheng, Cheng, and Mark Hoekstra. 2013. “Does Strengthening Self-Defense Law Deter Crime or Escalate Violence? Evidence from Expansions to Castle Doctrine.” Journal of Human Resources.
+}](https://doi.org/10.3368/jhr.48.3.821)
+
+- Investigam se mudanças legislativas que facilitam autodefesa levam a redução de criminalidade
+  - entre 2000 e 2010 há uma expansão de medidas estaduais flexibilizando *Castle Doctrine*;
+  - mas essa expansão foi centrada em locais com características específicas
+
+## Aproximando do contexto brasileiro
+
+- Temos um painel de municípios ($i$) ao longo dos anos ($t$) e o nível de segurança-pública é medido por um índice de mortes violentas anuais por 100 mil habitantes ($y_{it}$)
+
+- $y_{it}$ depende de fatores observáveis, tais como:
+  - taxa de desemprego médio ($x^1_{it}$); e
+  - nível de desigualdade médio, medido pelo \% da renda detido pelo 1\% mais ricos ($x^2_{it}$). 
+ 
+- $y_{it}$ também depende de um fator não observável ($\alpha_{it}$): a intensidade de disputa territorial por parte de grupos criminosos armados
+  - $\alpha_{it}$ causa aumento de $y_{it}$.
+  
+## Política de armamento
+
+- Nesse contexto, imaginemos que o governo decide criar uma política pública que permite aos municípios encorajar autodefesa por meio da facilitação no acesso a armas.
+
+  - adesão está associada a $\alpha$, de forma que populações de municípios com confrontos territoriais mais deflagrados têm medo de portar armas;
+  - Tal qual em Cheng, Cheng e Mark Hoekstra (2013) política tem impacto negativo na violência, aumentando $y_{it}$, em $\delta_p=1$ 
+  
+## PGD: Formação de $y_{it}$
+
+\begin{align}
+&\alpha_{i} \sim N(2, 2) ; \; \alpha_{it} = \alpha_i \forall t \\
+&x^1_{i} \sim N(7, 0.5); \; \; x^1_{it} = x^1_i + \upsilon^1_{it} \\  
+&x^2_{i} \sim N(40, 10); \; \; x^2_{it} = x^2_i + \upsilon^2_{it} \\
+&y_{it} = \alpha_{it} + \beta_1 x^1_{it} + \beta_2 x^2_{it} + \delta P_{it} \epsilon_{it}\\
+&\upsilon^1_{it} \sim N(0, 1); \; \upsilon^2_{it} \sim N(0, 5); \; \epsilon_{it} \sim N(0, 1) \\
+&\beta_1 = 0.5; \; \beta_2 = 0.1; \; \delta =  5
+\end{align}
+
+## PGD: Adesão a $P_{it}$
+
+O acesso à política P é definido pelas equações (13) e (14). 
+
+\begin{align}
+S_{it} &= \frac{1}{1+e^{\alpha_{it}}} \\
+P_{it} &= \begin{cases}
+0; \; B(T, s_{it})<\frac{T}{2} \\
+1; \; B(T, s_{it})>=\frac{T}{2}
+\end{cases}
+\end{align}
+
+$P_{it}$ assume valores 0 ou 1, a dependender da realização de uma binomial cuja probabilidade de sucesso é dada por $S_{it}$ e $T$ (total de períodos dentro do painel). **Por simplificação, todos os indivíduos que têm acesso à política, começam a receber o tratamento no mesmo período $t_p=\frac{T}{2}+1$.**
+
+## Implementando PGD
+
+Como de costume, escrevemos uma [função]() para simular esse PGD
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, results='asis'}
+source("pgd.R")
+data <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2)
+```
+
+## Exploração dos dados: alpha
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig <- ggplot(data) +
+  geom_density(aes(alpha, fill=as.factor(P)),
+               alpha=0.3,
+               color=cores$cinza_claro,
+               adjust=1.2) +
+  scale_fill_manual(values=c(cores$amarelo_fechado, cores$verde_escuro)) +
+  labs(title="Distribuição dos municípios",
+       subtitle="Amostra completa",
+       y="Densidade",
+       x="Intensidade de confrontos territoriais",
+       fill="Status de Participação na Política") +
+  tema_base_fundobranco()
+fig
+```
+
+## Exploração dos dados: y
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig <- ggplot(data) +
+  geom_density(aes(y, fill=as.factor(P)),
+               alpha=0.3,
+               color=cores$cinza_claro,
+               adjust=1.2) +
+  scale_fill_manual(values=c(cores$amarelo_fechado, cores$verde_escuro)) +
+  labs(title="Distribuição dos municípios",
+       subtitle="Amostra completa",
+       y="Densidade",
+       x="Mortes violentas por 100 mil",
+       fill="Status de Participação na Política") +
+  tema_base_fundobranco()
+fig
+```
+
+## Exploração dos dados: y antes
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig <- ggplot(filter(data, pos==0)) +
+  geom_density(aes(y, fill=as.factor(D)),
+               alpha=0.3,
+               color=cores$cinza_claro,
+               adjust=1.2) +
+  scale_fill_manual(values=c(cores$amarelo_fechado, cores$verde_escuro)) +
+  labs(title="Distribuição dos municípios",
+       subtitle="Antes do início da política",
+       y="Densidade",
+       x="Mortes violentas por 100 mil",
+       fill="Status de Participação na Política") +
+  tema_base_fundobranco()
+fig
+```
+
+## Exploração dos dados: y após
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, result='asis'}
+fig <- ggplot(filter(data, pos==1)) +
+  geom_density(aes(y, fill=as.factor(D)),
+               alpha=0.3,
+               color=cores$cinza_claro,
+               adjust=1.2) +
+  scale_fill_manual(values=c(cores$amarelo_fechado, cores$verde_escuro)) +
+  labs(title="Distribuição dos municípios",
+       subtitle="Após o início da política",
+       y="Densidade",
+       x="Mortes violentas por 100 mil",
+       fill="Status de Participação na Política") +
+  tema_base_fundobranco()
+fig
+```
+
+## Gráfico DAG
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+\vspace{-0.7cm}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.height=9.5, fig.width=12}
+set.seed(14)
+ex1_dag <- dagify(Y_t0 ~ X_t0 + alpha,
+                  Y_tf ~ X_tf + P + alpha,
+                  P ~ alpha) %>% 
+  tidy_dagitty() %>% 
+  mutate(color_node=ifelse(name=="S", "Unobserved", "Observed"),
+         edge_line=ifelse(name=="S", 2, 1))
+
+graf1 <- ggplot(data= ex1_dag, aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(colour=color_node, fill=color_node), show.legend = FALSE) +
+  scale_color_manual(values = c(cores$verde_escuro, cores$amarelo_escuro)) +
+  geom_dag_edges(aes(edge_linetype=edge_line))+
+  geom_dag_text() +
+  labs(title = "Teoria causal do Programa",
+       y="",
+       x="") +
+  tema_base_fundobranco() +
+  theme(axis.line.x = element_line(colour=NA),
+        axis.text.x = element_text(size=0),
+        axis.text.y = element_text(size=0))
+
+graf1
+```
+
+## MQO: Estimação
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+require(estimatr)
+reg1 <- lm_robust(y ~ x1 + x2 + P, data=data)
+reg2 <- lm_robust(y ~ x1 + x2 + P, data=filter(data, pos==1))
+reg3 <- lm_robust(y ~ x1 + x2 + P + alpha, data=data)
+```
+
+## MQO: Resultados
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+summary(reg1)
+```
+
+## MQO: Resultados
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+summary(reg2)
+```
+
+## MQO: Resultados
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+summary(reg3)
+```
+
+## FE: Estimação por dummies
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+require(fixest)
+reg1 <- feols(y ~ x1 + x2 + P | id, data)
+summary(reg1)
+```
+
+## \Large FE: Estimação por transformação within
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+data %<>%
+  group_by(id) %>% 
+  mutate(y_mean_i = mean(y),
+         x1_mean_i = mean(x1),
+         x2_mean_i = mean(x2),
+         P_mean_i = mean(P)) %>% 
+  ungroup() %>% 
+  mutate(y_within = y - y_mean_i,
+         x1_within = x1 - x1_mean_i,
+         x2_within = x2 - x2_mean_i,
+         P_within = P - P_mean_i)
+reg2 <- lm_robust(y_within ~ x1_within + x2_within + P_within, data=data)
+```
+
+
+## \Large FE: Estimação por transformação within
+
+\scriptsize
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+summary(reg2)
+```
+
+# Obrigado!
