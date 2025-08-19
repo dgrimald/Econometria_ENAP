@@ -161,8 +161,8 @@ y_{it} - h(y_{it})  =& \alpha_i - \alpha_i + \beta_1 \; ( x^1_{it}-h(x^1_{it})) 
 - Uma das hipóteses para que o estimador MQO seja BLUE é que os resíduos devem ser homoscedásticos e não autocorrelacionaldos. Em um contexto de painel, isso implica que:
 
 \begin{align}
-(i) \; E[\epsilon_{it}]=\sigma_\epsilon \forall i,t \nonumber \\
-(ii) \; E[\epsilon_{it}\epsilon{ik}]=0 \forall i, t, k \nonumber
+(i) \; E[\epsilon_{it}]&=\sigma_\epsilon  \;  \forall \;  i,t \nonumber \\
+(ii) \; E[\epsilon_{it}\epsilon{ik}]&=0 \; \forall \; i, t, k \nonumber
 \end{align}
 
 ## Autocorrelação e clusterização
@@ -189,7 +189,7 @@ Note que (ii) é altamente improvável - ambos os resíduos estão associados ao
 
 ## \Large Autodefesa enquanto política de segurança
 
-O exemplo de hoje é inspirado em [\textit{Cheng, Cheng, and Mark Hoekstra. 2013. “Does Strengthening Self-Defense Law Deter Crime or Escalate Violence? Evidence from Expansions to Castle Doctrine.” Journal of Human Resources.
+O exemplo de hoje é inspirado em [\textit{Cheng and Hoekstra. 2013. “Does Strengthening Self-Defense Law Deter Crime or Escalate Violence? Evidence from Expansions to Castle Doctrine.” Journal of Human Resources.
 }](https://doi.org/10.3368/jhr.48.3.821)
 
 - Investigam se mudanças legislativas que facilitam autodefesa levam a redução de criminalidade
@@ -230,18 +230,16 @@ O exemplo de hoje é inspirado em [\textit{Cheng, Cheng, and Mark Hoekstra. 2013
 O acesso à política P é definido pelas equações (13) e (14). 
 
 \begin{align}
-S_{it} &= \frac{1}{1+e^{\alpha_{it}}} \\
-P_{it} &= \begin{cases}
-0; \; B(T, s_{it})<\frac{T}{2} \\
-1; \; B(T, s_{it})>=\frac{T}{2}
-\end{cases}
+S_{i} &= \frac{1}{1+e^{g(\alpha_{it})}} \\
+g(\alpha_{it}) &= \sum_T \alpha_{it} - \mu_{\alpha} \\
+P_{i} &\sim Bern(S_i)
 \end{align}
 
-$P_{it}$ assume valores 0 ou 1, a dependender da realização de uma binomial cuja probabilidade de sucesso é dada por $S_{it}$ e $T$ (total de períodos dentro do painel). **Por simplificação, todos os indivíduos que têm acesso à política, começam a receber o tratamento no mesmo período $t_p=\frac{T}{2}+1$.**
+$P_{it}$ assume valores 0 ou 1, a dependender da realização de uma Bernoulli com probabilidade de sucesso $S_{i}$. **Por simplificação, todos os indivíduos que têm acesso à política, começam a receber o tratamento no mesmo período $t_p=\frac{T}{2}$.**
 
 ## Implementando PGD
 
-Como de costume, escrevemos uma [função]() para simular esse PGD
+Como de costume, escrevemos uma função (denominada [pgd.R](https://github.com/dgrimald/Econometria_ENAP/blob/ee6d8db83c7312a705608bc0378be873c5a10cec/Aula%208/pgd.R)) para simular esse PGD.
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE, results='asis'}
 source("pgd.R")
