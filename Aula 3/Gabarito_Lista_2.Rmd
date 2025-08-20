@@ -1,0 +1,108 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Gabarito Lista II: teste de hipótese"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r echo=TRUE}
+# loading required packages
+if(!require(devtools)){install.packages("devtools")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+### Cria função
+
+```{r echo=TRUE}
+exec_lista2 <- function(nome, sample_size, n_samples){
+  
+  # define semente aleatória
+  set.seed(13)
+  
+  # Cria função local para PGD
+  pgd <- function(N=sample_size){
+    data <- data.frame("id"=paste0("cpf_", 1:N)) %>% 
+      mutate(alpha = sample(c(2500, 2000),
+                            prob=c(0.5, 0.5),
+                            replace=TRUE,
+                            size=N),
+             epsilon_0=rnorm(N, 0, 800),
+             D = ifelse(alpha==2000, 1, 0),
+             w_0 = alpha + epsilon_0,
+             S = case_when(D==1 ~ rbern(N, 0.5),
+                           TRUE ~ 0),
+             delta = ifelse(S==1, 1.1, 1.3),
+             epsilon_1=rnorm(N, 0, 800),
+             w_1 = delta*alpha + epsilon_1
+    )}
+  
+  # Cria vetor para armazenar parâmetros de interesse:
+  resultados <- c(rep(NaN, 5))
+  names(resultados) <- c("Erro_tipo_I", "Erro_tipo_II", "estimativa", "p-valor", "estatistic-t")
+
+  # Cria função local para geração de múltiplas amostras
+  gen_t_stat <- function(seed.i, mu.i, Si){
+    set.seed(seed.i) 
+    data_temp <- pgd(sample_size) %>% filter(S==Si)
+    t.test(data_temp$w_1, mu=mu.i, alternative="two.sided")$statistic
+  }
+    
+  # gera 1 amostra para teste
+  data <- pgd(sample_size)
+  data_serviu <- data %>% filter(S==1)
+  data_civil <- data %>% filter(S==0)
+  
+  # Calcula Erro Tipo I para salário do grupo que serviu
+  teste <- sapply(1:n_samples, gen_t_stat, mu.i=2200, Si=1, simplify = TRUE)
+  prob_erro_I <- sum(abs(teste)>=1.96)/length(teste)
+
+  
+  # Calcula Erro Tipo II para H0: W1_civil = 3000
+  teste <- sapply(1:n_samples, gen_t_stat, mu.i=3000, Si=0, simplify = TRUE)
+  prob_erro_II <- sum(abs(teste)<1.96)/length(teste)
+  
+  # Teste-t para H0: civis e militares têm o mesmo salário
+  teste.t <- t.test(data_serviu$w_1, data_civil$w_1, 
+                    alternative="two.sided", var.equal=TRUE)
+  
+  # preenche vetor com valores de interesse
+  resultados[1] <- prob_erro_I
+  resultados[2] <- prob_erro_II
+  resultados[3] <- teste.t$estimate[[1]]-teste.t$estimate[[2]]
+  resultados[4] <- teste.t$p.value
+  resultados[5] <- teste.t$statistic
+
+  return <- list("nome"=nome, "resultados"=resultados)
+}
+```
+
+### Implementa função
+
+```{r echo=TRUE}
+lista_2 <- exec_lista2("Daniel Grimaldi", sample_size = 100, n_samples=100)
+```
+
+#### Aluno
+
+```{r echo=TRUE}
+lista_2$nome
+```
+
+#### Parâmetros estimados
+
+```{r echo=TRUE}
+lista_2$resultados
+```

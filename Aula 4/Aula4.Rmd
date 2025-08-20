@@ -490,6 +490,7 @@ stargazer(reg1, reg2, reg3,
 
 \scriptsize
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
+require(ggdag)
 set.seed(13)
 ex1_dag <- dagify(D ~ S,
                   Y0 ~ S + D,
