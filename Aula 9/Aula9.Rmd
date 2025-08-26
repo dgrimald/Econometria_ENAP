@@ -1,0 +1,654 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Aula 9: Modelos em Painel: tópicos avançados"
+date: "3º Trimestre - 2025"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{hyperref}
+  - \usepackage{graphicx}
+  - \usepackage{setspace}
+  - \usepackage{amsmath}
+  - \newcommand{\nsmall}{\footnotesize}
+output:
+  beamer_presentation:
+    theme: "ENAP"
+    latex_engine: xelatex
+    incremental: false
+---
+
+```{r echo=FALSE, include=FALSE}
+# loading required packages
+if(!require(knitr)){install.packages("knitr")}
+if(!require(devtools)){install.packages("devtools")}
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+if(!require(ggdag)){install.packages("ggdag")}
+if(!require(mvtnorm)){install.packages("mvtnorm")}
+if(!require(estimatr)){install.packages("estimatr")}
+if(!require(modelsummary)){install.packages("modelsummary")}
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+# Efeitos Aleatórios (RE)
+
+## RE vs FE
+
+- Podemos pensar no FE como um modelo em que o intercepto varia livremente entre os indivíduos - conforme $\alpha_i$ na Equação (1). 
+
+\begin{align}
+y_{it} =& \alpha_i + \beta_1 \; x^1_{it} + \epsilon_{it}
+\end{align}
+
+- Na prática, ao não impormos nenhuma restrição sobre o PGD de $\alpha_i$, **ganhamos robustez ao custo de eficiência estatística**.
+  - Dependendo do painel, cada $\alpha_i$ será estimado com algumas poucas observações, o que reduz a precisão das estimativas. 
+  
+
+## RE vs FE
+
+- O modelo de efeitos aleatórios (RE) também assume que os interceptos são diferentes entre os indivíduos, mas assume que:
+
+  - o PGD de $\alpha_i$ e equivale a uma distribuição aleatória conhecida - por exemplo, todos vêm de uma distribuição Normal; e
+  - essa heterogeneidade não está correlacionada com as demais variáveis dependentes - $E[\alpha_i X_{it}] = 0$.
+  
+- Isso aumenta a precisão das estimativas, mas produz estimativas viesadas se o $E[\alpha_i X_{it}] \neq 0$
+  
+## Modelagem de um RE
+
+- Podemos pensar em um caso em que $\alpha_i = \alpha_0 + \upsilon_i$, sendo que $\upsilon_i \sim N(0,1)$, conforme Equação (2) 
+
+\begin{align}
+y_{it} =& \alpha_i + \beta_1 \; x^1_{it} + \epsilon_{it} \\ \nonumber
+=& \alpha_0 + \beta_1 \; x^1_{it} + \upsilon_i + \epsilon_{it} \\ \nonumber
+=& \alpha_0 + \beta_1 \; x^1_{it} + \eta_{it} \nonumber
+\end{align}
+
+- Neste caso, a omissão de $\upsilon_i$ do modelo de regressão leva a perda de eficiência por autocorrelação dos resíduos (existente entre distintas observações de um mesmo indivíduo), mas não produz viés.
+
+## \Large RE como Mínimos Quadrados Ponderados
+
+- Em um contexto de painel, um (pooled) MQO assume que: 
+
+\begin{align}
+E[\eta_{it}\eta_{js}]=
+\begin{cases} 
+\sigma^2_{\eta}; \textit{ se } i=j \land t=s \\
+0; \textit{ cc.}
+\end{cases}
+\end{align}
+
+## \Large RE como Mínimos Quadrados Ponderados
+
+- O modelo RE estima a Equação (2) por meio de Mínimos Quadrados Ponderados assumindo uma matriz de variância robusta à autocorrelação, de tal forma que:
+
+\begin{align}
+E[\eta_{it}\eta_{js}]=
+\begin{cases} 
+\sigma^2_{\epsilon} + \sigma^2_{\upsilon}; \textit{ se } i=j \land t=s \\
+\sigma^2_{\upsilon}; \textit{ se } i=j \land t \neq s \\
+0; \textit{ cc.}
+\end{cases}
+\end{align}
+
+- Ao ajustarmos a estrutura imposta à matriz de covarância, conseguimos uma estimativa mais precisa.
+
+# Extensões de FE
+
+## Múltiplos efeitos fixos
+
+- Vimos até agora apenas o caso em que incluímos um efeito fixo (indivíduos), mas um modelo em painel pode ser estimado com múltiplos efeitos fixos, desde exista grau de liberdade (variância) para múltiplas categorias:
+
+  - Por exemplo, se no painel temos diferentes categorias de gênero em diferentes municípios, podemos incluir um efeito de gênero e outro de município
+  
+- Contudo, não é possível incluir simultaneamente um efeito fixo de município e outro de UF, pois não há variância de UFs dentro de um mesmo município.
+  - Neste caso, a inclusão do efeito fixo de município já controla por efeitos de UFs.
+
+## \Large Two-way Fixed Effects (TWFE)
+
+- O TWFE é um caso particular de estimação em painel com múltiplos efeitos fixos. Mais especificamente, o TWFE inclui efeitos fixos para indivíduos ($\alpha_i$) e para períodos de tempo ($\alpha_t$)
+
+- Podemos pensar nesse modelo como uma sequência de transformações within (a ordem não importa), onde controlamos por fatores não observados que afetaram os diferentes indivíduos (sem variar no tempo) e os diferentes períodos de tempo (sem variar entre indivíduos).
+
+## \Large TWFE e DiD
+
+O Diferenças-em-diferenças canônico (DiD) pode ser representado pela Equação (5), onde $T_i$ e $P_t$ representam dummies que, identificam respectivamente, indivíduos tratados e períodos após o tratamento.
+
+\begin{align}
+y_{it} =& \alpha + T_i + P_t + T_iP_t + \epsilon_{it}  
+\end{align}
+
+- Note que esse modelo pode ser pensado como um caso particular de TWFE, com efeitos fixos para indivíduos tratados ($T_i=1$) e períodos posteriores ao tratamento ($P_t=1$)
+
+# Hands on
+
+## \Large Caso Geral
+
+- Vamos partir do mesmo exemplo da [aula 8](https://github.com/dgrimald/Econometria_ENAP/blob/a5772480b48ab72ebad893dd237c297e62ea72bb/Aula%208/Aula8.pdf)
+
+- Ainda temos um painel de $i$ municípios acompanhados por $t$ anos e queremos estimar o efeito de uma política pública de facilitação de acesso a armas ($P$) sobre o nível de segurança pública - medido por um índice de morte violentas anuais por 100 mil habitantes ($Y_{it}$)
+
+- Mas faremos alguns ajustes para tornar o PGD um pouco mais flexível...
+
+- ... e vamos **entender como mudanças nos parâmetros do PGD afetam estimativas de MQO, FE e RE**.
+
+
+## PGD: Formação de $y_{it}$
+
+\begin{align}
+&\alpha_{i} \sim N(0, 2) ; \; \alpha_{it} = \alpha_i \; (1+\theta_{1})^t \\
+&\gamma_{0} \sim N(0, 2) ; \; \gamma_{t} = \gamma_0 \; (1+\theta_{2})^t + \upsilon^3{t} \\
+&x^1_{i} \sim N(7, 0.5); \; \; x^1_{it} = x^1_i + \upsilon^1_{it} \\  
+&x^2_{i} \sim N(40, 10); \; \; x^2_{it} = x^2_i + \upsilon^2_{it} \\
+&y_{it} = \alpha_{it} + \gamma_t + \beta_1 x^1_{it} + \beta_2 x^2_{it} + \delta P_{it} \epsilon_{it}\\
+&\upsilon^1_{it} \sim N(0, 1); \; \upsilon^2_{it} \sim N(0, 5); \; \upsilon^3_{t} \sim N(0, 1); \epsilon_{it} \sim N(0, 1)
+\end{align}
+
+## PGD: Adesão a $P$
+
+O acesso à política P é definido pelas equações (13) a (15). 
+
+\begin{align}
+S_{i} &= \frac{1}{1+e^{g(\alpha_{it})}} \\
+g(\alpha_{it}) &= 0 + \zeta (\sum_T \alpha_{it} - \mu_{\alpha}) \\
+P_{i} &\sim Bern(S_i)
+\end{align}
+
+$P_{it}$ assume valores 0 ou 1, a dependender da realização de uma Bernoulli com probabilidade de sucesso $S_{i}$. **Por simplificação, todos os indivíduos que têm acesso à política, começam a receber o tratamento no mesmo período $t_p=\frac{T}{2}$.**
+
+## \Large Caso 1: $\alpha_i$ não afeta acesso
+
+- Neste primeiro caso $\alpha_{it} = \alpha_i \; \forall \; t$ e o acesso à política não é determinado por ele.
+  - $\theta_{1}=0 \textit{ e } \zeta=0$
+
+- Os efeitos fixos de tempo são aleatórios:
+    - $\theta_{2}=0$
+  
+- O impacto da política segue sendo negativo sobre os índices de criminalidade
+  - $\delta=1$
+
+- Além disso: $\beta_1 = 0.5 \; e \;  \beta_2 = 0.1$
+
+- Qual é o modelo mais adequado?
+
+## Implementando o PGD - caso 1
+
+Como de costume, escrevemos uma função (denominada [pgd.R](inserir link...) para simular esse PGD.
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+source("pgd.R")
+set.seed(1)
+data1 <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0, theta_2=0,
+            zeta=0)
+```
+
+## Estimando os modelos - caso 1
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+require(plm)
+data.reg <- data1 %>%
+  plm.data(index=c("id", "t"))
+
+reg_ols <- plm(y ~ x1 + x2 + P, 
+               model="pooling", data=data.reg)
+reg_fe <- plm(y ~ x1 + x2 + P,
+              model="within", data=data.reg)
+reg_twfe <- plm(y ~ x1 + x2 + P,
+              model="within", 
+              effects="twoways", data=data.reg)
+reg_re <- plm(y ~ x1 + x2 + P,
+              model="random", data=data.reg)
+```
+
+
+## Resultados - caso 1
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+stargazer(reg_ols,reg_fe, reg_twfe, reg_re, keep.stat=c("rsq", "n"), header=FALSE, font.size = "scriptsize", column.sep.width = "2pt", digits=4,
+           column.labels = c("OLS", "FE", "TWFE", "RE"))
+```
+
+## Usando LGN 
+
+\scriptsize
+```{r, echo=TRUE}
+get_models <- function(i){
+  set.seed(i)
+  data <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0, theta_2=0,
+            zeta=0)
+  ols <- plm(y ~ x1+ x2 + P, data=data, model="pooling")
+  fe <- plm(y ~ x1+ x2 + P, data=data, model="within")
+  twfe <- plm(y ~ x1+ x2 + P, data=data, effect = "twoways",
+              model="within")
+  re <- plm(y ~ x1+ x2 + P, data=data, model="random")
+  output <- data.frame(sample=i,
+                       ols = ols$coefficients["P"],
+                       fe = fe$coefficients["P"],
+                       twfe = twfe$coefficients["P"],
+                       re = re$coefficients["P"])}
+
+```
+
+## Usando LGN
+
+```{r, echo=TRUE}
+lgn.data <- lapply(1:50, get_models) %>% 
+  rbindlist()
+head(lgn.data)
+```
+
+## Usando LGN (Histograms - caso 1)
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+data.temp <- lgn.data %>% 
+  pivot_longer(cols=c("ols", "fe", "twfe", "re"),
+               names_to = "model",
+               values_to = "coef")
+
+fig <- ggplot(data.temp) +
+  geom_density(aes(coef, fill=as.factor(model)),
+               alpha=0.1,
+               color=cores$cinza_claro) +
+  scale_fill_manual(values=c(cores$azul_escuro, cores$amarelo_escuro, cores$vermelho_escuro, cores$verde_claro)) +
+  geom_vline(xintercept = 1, color=cores$preto) +
+  labs(title="Distribuição dos coeficientes de P",
+       y="Densidade",
+       x="Coeficiente",
+       fill="Modelo") +
+  tema_base_fundobranco()
+fig
+```
+
+## Caso 2: $\alpha_i$ afeta acesso
+
+- Neste segundo caso $\alpha_{it} = \alpha_i \; \forall \; t$ e o acesso à política é fortemente influenciado por ele.
+  - $\theta_{1}=0 \textit{ e } \zeta=1$
+
+- Os demais parâmetros seguem os mesmos: qual é o modelo mais adequado?
+
+## Implementando o PGD - caso 2
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+set.seed(13)
+data2 <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0, theta_2=0,
+            zeta=1)
+```
+
+## Resultados - caso 2
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+data.reg <- data2 %>%
+  plm.data(index=c("id", "t"))
+
+reg_ols <- plm(y ~ x1 + x2 + P, 
+               model="pooling", data=data.reg)
+reg_fe <- plm(y ~ x1 + x2 + P,
+              model="within", data=data.reg)
+reg_twfe <- plm(y ~ x1 + x2 + P,
+              model="within", 
+              effects="twoways", data=data.reg)
+reg_re <- plm(y ~ x1 + x2 + P,
+              model="random", data=data.reg)
+
+stargazer(reg_ols,reg_fe, reg_twfe, reg_re, keep.stat=c("rsq", "n"), header=FALSE, font.size = "scriptsize", column.sep.width = "2pt", digits=4,
+           column.labels = c("OLS", "FE", "TWFE", "RE"))
+```
+
+## Usando LGN (Histograms - caso 2)
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+get_models <- function(i){
+  set.seed(i)
+  data <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0, theta_2=0,
+            zeta=1)
+  ols <- plm(y ~ x1+ x2 + P, data=data, model="pooling")
+  fe <- plm(y ~ x1+ x2 + P, data=data, model="within")
+  twfe <- plm(y ~ x1+ x2 + P, data=data, effect = "twoways",
+              model="within")
+  re <- plm(y ~ x1+ x2 + P, data=data, model="random")
+  output <- data.frame(sample=i,
+                       ols = ols$coefficients["P"],
+                       fe = fe$coefficients["P"],
+                       twfe = twfe$coefficients["P"],
+                       re = re$coefficients["P"])}
+
+lgn.data <- lapply(1:50, get_models) %>% 
+  rbindlist()
+
+data.temp <- lgn.data %>% 
+  pivot_longer(cols=c("ols", "fe", "twfe", "re"),
+               names_to = "model",
+               values_to = "coef")
+
+fig <- ggplot(data.temp) +
+  geom_density(aes(coef, fill=as.factor(model)),
+               alpha=0.1,
+               color=cores$cinza_claro) +
+  scale_fill_manual(values=c(cores$azul_escuro, cores$amarelo_escuro, cores$vermelho_escuro, cores$verde_claro)) +
+  geom_vline(xintercept = 1, color=cores$preto) +
+  labs(title="Distribuição dos coeficientes de P",
+       y="Densidade",
+       x="Coeficiente",
+       fill="Modelo") +
+  tema_base_fundobranco()
+fig
+```
+
+## Caso 3: Tendência temporal
+
+- Neste segundo caso $\alpha_{it} = \alpha_i \; \forall \; t$ e o acesso à política é fortemente influenciado por ele.
+  - $\theta_{1}=0 \textit{ e } \zeta=1$
+  
+- Além disso, há uma tendência temporal, de tal forma que $\gamma_t$ cresce, em módulo, com o tempo.
+  - $\theta_{2}=0.25 \textit{ e } \zeta=1$
+
+- Os demais parâmetros seguem os mesmos: qual é o modelo mais adequado?
+
+## Implementando o PGD - caso 3
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+set.seed(13)
+data3 <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0, theta_2=0.25,
+            zeta=1)
+```
+
+## Resultados - caso 3
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+data.reg <- data1 %>%
+  plm.data(index=c("id", "t"))
+
+reg_ols <- plm(y ~ x1 + x2 + P, 
+               model="pooling", data=data.reg)
+reg_fe <- plm(y ~ x1 + x2 + P,
+              model="within", data=data.reg)
+reg_twfe <- plm(y ~ x1 + x2 + P,
+              model="within", 
+              effects="twoways", data=data.reg)
+reg_re <- plm(y ~ x1 + x2 + P,
+              model="random", data=data.reg)
+
+stargazer(reg_ols,reg_fe, reg_twfe, reg_re, keep.stat=c("rsq", "n"), header=FALSE, font.size = "scriptsize", column.sep.width = "2pt", digits=4,
+           column.labels = c("OLS", "FE", "TWFE", "RE"))
+```
+
+## Usando LGN (Histograms - caso 3)
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+get_models <- function(i){
+  set.seed(i)
+  data <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0, theta_2=0.25,
+            zeta=1)
+  ols <- plm(y ~ x1+ x2 + P, data=data, model="pooling")
+  fe <- plm(y ~ x1+ x2 + P, data=data, model="within")
+  twfe <- plm(y ~ x1+ x2 + P, data=data, model="within", effect = "twoways")
+  re <- plm(y ~ x1+ x2 + P, data=data, model="random")
+  output <- data.frame(sample=i,
+                       ols = ols$coefficients["P"],
+                       fe = fe$coefficients["P"],
+                       twfe = twfe$coefficients["P"],
+                       re = re$coefficients["P"])}
+
+lgn.data <- lapply(1:50, get_models) %>% 
+  rbindlist()
+
+data.temp <- lgn.data %>% 
+  pivot_longer(cols=c("ols", "fe", "twfe", "re"),
+               names_to = "model",
+               values_to = "coef")
+
+fig <- ggplot(data.temp) +
+  geom_density(aes(coef, fill=as.factor(model)),
+               alpha=0.1,
+               color=cores$cinza_claro) +
+  scale_fill_manual(values=c(cores$azul_escuro, cores$amarelo_escuro, cores$vermelho_escuro, cores$verde_claro)) +
+  geom_vline(xintercept = 1, color=cores$preto) +
+  labs(title="Distribuição dos coeficientes de P",
+       y="Densidade",
+       x="Coeficiente",
+       fill="Modelo") +
+  tema_base_fundobranco()
+fig
+```
+
+## Caso 4: Tendências distintas
+
+- Neste segundo caso $\alpha_{it} = \alpha_i \; \forall \; t$ e o acesso à política é fortemente influenciado por ele.
+  - $\theta_{1}=0 \textit{ e } \zeta=1$
+  
+- Além disso, há uma tendência temporal em $\alpha_it$, de tal forma que $\alpha_t$ cresce, em módulo, com o tempo.
+  - $\theta_{1}=0.25 \textit{ e } \zeta=1$
+
+- Os demais parâmetros seguem os mesmos do caso 3: qual é o modelo mais adequado?
+
+## Implementando o PGD - caso 4
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+set.seed(13)
+data4 <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0.25, theta_2=0.25,
+            zeta=1)
+```
+
+## Resultados - caso 4
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+data.reg <- data4 %>%
+  plm.data(index=c("id", "t"))
+
+reg_ols <- plm(y ~ x1 + x2 + P, 
+               model="pooling", data=data.reg)
+reg_fe <- plm(y ~ x1 + x2 + P,
+              model="within", data=data.reg)
+reg_twfe <- plm(y ~ x1 + x2 + P,
+              model="within", 
+              effects="twoways", data=data.reg)
+reg_re <- plm(y ~ x1 + x2 + P,
+              model="random", data=data.reg)
+
+stargazer(reg_ols,reg_fe, reg_twfe, reg_re, keep.stat=c("rsq", "n"), header=FALSE, font.size = "scriptsize", column.sep.width = "2pt", digits=4,
+           column.labels = c("OLS", "FE", "TWFE", "RE"))
+```
+
+## Usando LGN (Histograms - caso 4)
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+get_models <- function(i){
+  set.seed(i)
+  data <- pgd(n.id=5570, n.t=6, beta=c(0.5, 0.1), 
+            delta=1, mu_x=c(7, 40), 
+            sigma_x=c(0.5, 10), mu_alpha=0,
+            sigma_alpha=2, theta_1=0.25, theta_2=0.25,
+            zeta=1)
+  ols <- plm(y ~ x1+ x2 + P, data=data, model="pooling")
+  fe <- plm(y ~ x1+ x2 + P, data=data, model="within")
+  twfe <- plm(y ~ x1+ x2 + P, data=data, model="within", effect = "twoways")
+  re <- plm(y ~ x1+ x2 + P, data=data, model="random")
+  output <- data.frame(sample=i,
+                       ols = ols$coefficients["P"],
+                       fe = fe$coefficients["P"],
+                       twfe = twfe$coefficients["P"],
+                       re = re$coefficients["P"])}
+
+lgn.data <- lapply(1:50, get_models) %>% 
+  rbindlist()
+
+data.temp <- lgn.data %>% 
+  pivot_longer(cols=c("ols", "fe", "twfe", "re"),
+               names_to = "model",
+               values_to = "coef")
+
+fig <- ggplot(data.temp) +
+  geom_density(aes(coef, fill=as.factor(model)),
+               alpha=0.1,
+               color=cores$cinza_claro) +
+  scale_fill_manual(values=c(cores$azul_escuro, cores$amarelo_escuro, cores$vermelho_escuro, cores$verde_claro)) +
+  geom_vline(xintercept = 1, color=cores$preto) +
+  labs(title="Distribuição dos coeficientes de P",
+       y="Densidade",
+       x="Coeficiente",
+       fill="Modelo") +
+  tema_base_fundobranco()
+fig
+```
+
+## O que aconteceu?
+
+- No caso 4, $\alpha_{it}$ varia ao longo do tempo de tal forma que os indivíduos estão em trajetórias diferentes.
+
+- Tal qual no caso do DiD, um painel de efeitos fixos depende da hipótese de que as variações within ("tendência") dos indivíduos controle são uma boa referência para a trajetória dos indivíduos tratados.
+   - se $\alpha_{it}$ varia no tempo de maneira distinta entre tratados e controles, então isso não vale.
+   
+- Por isso, quando vamos usar TWFE, DiD ou mesmo painel de efeitos fixos para avaliar impacto de políticas, precisamos avaliar a validade da hipótese de tendências paralelas.
+   
+## Tendências paralelas - caso 3
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+data.temp <- data3 %>% 
+  group_by(D, t) %>% 
+  summarise(y = mean(y)) %>% 
+  mutate(grupo = case_when(D==1 ~ "tratado",
+                           D==0 ~ "controle"))
+```
+
+## Tendências paralelas - caso 3
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+fig <- ggplot(data.temp) +
+  geom_line(aes(y=y, x=t, color=as.factor(grupo)), linewidth=1.3) +
+  scale_color_manual(values=c(cores$azul_escuro, cores$vermelho_escuro)) +
+  geom_vline(xintercept = 1, color=cores$preto) +
+  labs(title="Evolução da média de y por grupo de tratamento",
+       subtitle = "Caso 3",
+       y="y",
+       x="t",
+       color="Grupo") +
+  tema_base_fundobranco()
+fig
+```
+
+## Tendências paralelas - caso 4
+
+```{=tex}
+\begin{tikzpicture}
+\useasboundingbox;
+\node[anchor=south west] at (-3.5, -5.7){\includegraphics[width=17cm, height=12cm]{whitebox.png}};
+\end{tikzpicture}
+```
+
+```{r, echo=FALSE, results='asis', fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+data.temp <- data4 %>% 
+  group_by(D, t) %>% 
+  summarise(y = mean(y)) %>% 
+  mutate(grupo = case_when(D==1 ~ "tratado",
+                           D==0 ~ "controle"))
+
+fig <- ggplot(data.temp) +
+  geom_line(aes(y=y, x=t, color=as.factor(grupo)), linewidth=1.3) +
+  scale_color_manual(values=c(cores$azul_escuro, cores$vermelho_escuro)) +
+  geom_vline(xintercept = 1, color=cores$preto) +
+  labs(title="Evolução da média de y por grupo de tratamento",
+       subtitle = "Caso 4",
+       y="y",
+       x="t",
+       color="Grupo") +
+  tema_base_fundobranco()
+fig
+```   
+
+
+```{r, echo=FALSE, eval=FALSE}
+data %<>%
+  group_by(id) %>% 
+  mutate(y_i = mean(y),
+         x1_i = mean(x1),
+         x2_i = mean(x2),
+         P_i = mean(P)) %>% 
+  ungroup() %>%
+  group_by(t) %>% 
+  mutate(y_t = mean(y),
+         x1_t = mean(x1),
+         x2_t = mean(x2),
+         P_t = mean(P)) %>%
+  ungroup() %>% 
+  mutate(y_within = (y - y_i) - y_t,
+         x1_within = (x1 - x1_i) - x1_t,
+         x2_within = (x2 - x2_i) - x2_t,
+         P_within = (P - P_i) - P_t) 
+```
+

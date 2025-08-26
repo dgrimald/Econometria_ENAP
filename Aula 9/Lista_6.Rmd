@@ -1,0 +1,121 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Lista VI: Modelos em painel"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r echo=FALSE}
+# loading required packages
+if(!require(knitr)){install.packages("knitr")}
+if(!require(devtools)){install.packages("devtools")}
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+if(!require(ggdag)){install.packages("ggdag")}
+if(!require(mvtnorm)){install.packages("mvtnorm")}
+if(!require(estimatr)){install.packages("estimatr")}
+if(!require(modelsummary)){install.packages("modelsummary")}
+if(!require(plm)){install.packages("plm")}
+if(!require(stargazer)){install.packages("stargazer")}
+source("https://github.com/dgrimald/Econometria_ENAP/blob/f5b67d1b932043859af815ff04b7c6a3221a9fa6/Aula%209/pgd.R")
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+### *pgd*
+
+Para fazer essa lista, você pode usar uma função chamada *pgd* (já carregada no chunk inicial dessa lista). Essa função aceita 11 argumentos, a saber:
+
+i. *n.id*: um escalar que define a quantidade de indivíduos que compõem a amostra;
+ii. *n.t*: um escalar que define o número de períodos no painel;
+iii. *beta*: um vetor de tamanho 2, que controla o impacto de $x^1_{it}$ e $x^2_{it}$ em $y_{it}$;
+iv. *delta*: um escalar que define o impacto da política P em $y_{it}$;
+v. *mu_x*: um vetor de tamanho 2, que controla a média de $x^1_{it}$ e $x^2_{it}$;
+vi. *sigma_x*: um vetor de tamanho 2, que controla o desvio-padrão de $x^1_{it}$ e $x^2_{it}$;
+vii. *mu_alpha*: um escalar que define o valor médio de $\alpha$;
+viii. *sigma_alpha*: um escalar que define o desvio-padrão de $\alpha$;
+ix. *theta_1*: um escalar que define a intensidade da tendência temporal na formação de $\alpha_{it}$
+x. *theta_2*: um escalar que define a intensidade da tendência temporal na formação de $\gamma_{it}$ 
+xi. *zeta*: um escalar que define a importância de $\alpha$ para a decisão de acesso ao tratamento.
+
+Se você ainda tiver dúvidas sobre a função, pode consultar os slides das aulas 8 e 9 na nossa página do Github.
+
+### (1) Crie um caso teórico de avaliação de política pública
+
+Busque um caso de referência e, inspirado nele, monte um caso teórico de avaliação de política pública (**caso base**). Lembre-se de:
+
+ - citar pelo menos uma referência acadêmica que tenha servido de inspiração para o seu caso;
+ - descrever sua variável dependente (apenas 1);
+ - descrever cada uma das (exatamente) 2 variáveis observáveis envolvidas no caso;
+ - descrever quais fatores não observáveis **podem** estar associados simultaneamente a variável dependente e o acesso à política.
+
+R: [insira aqui sua resposta]
+
+### (2) Caso 1: RE como estimador não viesado
+
+#### (2a) Construa uma base de dados simulados
+
+Construa uma base de dados que simule o seu caso base e que tenha as seguintes características:
+
+  - 5000 indivíduos;
+  - 6 períodos de tempo;
+  - o estimador de efeitos aleatórios (RE) é um estimador não viesado do impacto da política. 
+  
+Você pode usar a função *pgd* para fazer isso ou criar a sua própria programação. Usando o **chunk 2**, Dê o nome de **data_1** a essa base de dados que você criará e use a função *head* para incluir no seu relatório as 20 primeiras linhas de **data_1**. Lembre-se de usar o comando set.seed para que seu código possa ser reproduzido.
+
+**Chunk 2: Usa função pgd para criar amostra**
+```{r echo=TRUE, eval=FALSE}
+
+[inserir seu código aqui]
+```
+
+#### (2b) Estime os modelos usados nas aulas 8 e 9
+
+Usando o **Chunk 3**, crie uma função denominada **aplicar_modelos**. Essa função deve apenas input: **data.source**, que será um objeto do tipo data.frame. A sua função deverá usar esse data frame para estimar o impacto da política pública por meio dos seguintes modelos: Pooled OLS, RE, FE e TWFE. A sua função terá exatamente 4 outputs, denominados *results_ols*, *results_re*, *results_fe* e *results_twfe*. Todos esses outputs devem ser equivalentes a estimativas de modelos em painel feitas por meio do pacote plm. 
+
+Em seguinda, ainda no **Chunk 3**, use essa função sobre a sua base de dados criada no passo anterior e apresente os resultados das 4 estimativas.
+
+**Chunk 3: Estimando o impacto da política**
+```{r echo=TRUE, eval=FALSE}
+[inserir seu código aqui]
+```
+
+### (3) Caso 2: FE como estimador não viesado
+
+#### (3a) Construa uma base de dados simulados
+
+Construa uma base de dados que simule o seu caso base e que tenha as seguintes características:
+
+  - 5000 indivíduos;
+  - 6 períodos de tempo;
+  - o estimador de efeitos aleatórios (RE) é um estimador viesado do impacto da política; e
+  - o estimador de efeitos fixos (FE) é um estimador viesado do impacto da política; e
+  
+Você pode usar a função *pgd* para fazer isso ou criar a sua própria programação. Usando o **chunk 2**, Dê o nome de **data_1** a essa base de dados que você criará e use a função *head* para incluir no seu relatório as 20 primeiras linhas de **data_1**. Lembre-se de usar o comando set.seed para que seu código possa ser reproduzido.
+
+**Chunk 4: Usa função pgd para criar amostra**
+```{r echo=TRUE, eval=FALSE}
+[inserir seu código aqui]
+```
+
+#### (2b) Estime os modelos usados nas aulas 8 e 9
+
+Usando o **Chunk 5**, use a função **aplicar_modelos** sobre a sua base de dados criada no passo anterior e apresente os resultados das 4 estimativas.
+
+**Chunk 5: Estimando o impacto da política**
+```{r echo=TRUE, eval=FALSE}
+[inserir seu código aqui]
+```
+
+### (4) Considerando o contexto real da sua política, qual caso teórico te parece mais factível? Justifique sua resposta.
+
+R: [insira aqui sua resposta]
