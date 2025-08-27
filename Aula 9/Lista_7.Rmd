@@ -1,0 +1,83 @@
+---
+title: "Métodos Quantitativos I"
+subtitle: "Lista VII: Modelos em painel: Tópicos Avançados"
+author: "Professores: Daniel Grimaldi e Arthur Bragança"
+institute: "Mestrado Profissional em Avaliação e Monitoramento de Políticas Públicas"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r echo=FALSE}
+# loading required packages
+if(!require(knitr)){install.packages("knitr")}
+if(!require(devtools)){install.packages("devtools")}
+if(!require(tidyverse)){install.packages("tidyverse")}
+if(!require(magrittr)){install.packages("magrittr")}
+if(!require(data.table)){install.packages("data.table")}
+if(!require(haven)){install.packages("haven")}
+if(!require(openxlsx)){install.packages("openxlsx")}
+if(!require(stargazer)){install.packages("stargazer")}
+if(!require(knitr)){install.packages("knitr")}
+if(!require(kableExtra)){install.packages("kableExtra")}
+if(!require(formatR)){install.packages("formatR")}
+if(!require(extraDistr)){install.packages("extraDistr")}
+if(!require(ggdag)){install.packages("ggdag")}
+if(!require(mvtnorm)){install.packages("mvtnorm")}
+if(!require(estimatr)){install.packages("estimatr")}
+if(!require(modelsummary)){install.packages("modelsummary")}
+if(!require(plm)){install.packages("plm")}
+if(!require(stargazer)){install.packages("stargazer")}
+source("https://github.com/dgrimald/Econometria_ENAP/blob/f5b67d1b932043859af815ff04b7c6a3221a9fa6/Aula%209/pgd.R")
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
+```
+
+## (1) Crie um caso teórico de avaliação de política pública
+
+Dentro do *Chunk 1*, recrie exatamente a mesma base de dados usada para o **Caso 2 da Lista VI** (lembre-se de usar o mesmo set.seed usando na **Lista VI** para que os resultados sejam idênticos). Aqui essa base deverá receber o nome de **data_1**
+
+**Chunk 1: Cria a amostra denominada data_1**
+```{r echo=TRUE, eval=FALSE}
+[inserir seu código aqui]
+```
+
+### (2) Estimando o modelo TWFE por meio da transformação within
+
+Usando o **Chunk 2**, crie uma função denominada **aplicar_within**. Essa função deve ter apenas 2 inputs: (i) **data.source**, que será um objeto do tipo data.frame; e (ii) nome_aluno, que você deverá preencher com seu nome. Esssa função será usada para estimar o impacto da política pública por meio dos seguintes modelos: TWFE_plm e TWFE_within. 
+
+A sua função terá exatamente 3 outputs: (i) *nome*, que será o nome do aluno; (ii) *data*, que é a base de dados usada para as estimativas; e (iii) *results*, que é um objeto do tipo lista que armazenará os resultados dos 2 modelos propostos. 
+
+Em seguinda, o **Chunk 2**, usará essa função sobre a base de dados criada no passo anterior (*Chunck 1*) e apresentará os resultados dos 2 modelos.
+
+**Chunk 2: Estimando o impacto da política**
+```{r echo=TRUE, eval=FALSE}
+aplicar_modelos <- function(nome, data.source=data_1){
+  
+  ## escreva aqui a sua função...
+  
+  # preparando objeto de saída da função
+  return <- list("nome"=nome, "data"=data.source, "results"=list("twfe_plm"= , "twfe_within"= ))
+}
+```
+
+**Chunk 3: Resultados**
+```{r echo=TRUE, eval=FALSE}
+estimativas <- aplicar_modelos(nome=, data.source=)
+estimativas$nome,
+head(estimativas$data)
+summary(estimativas$results$twfe_plm)
+summary(estimativas$results$twfe_within)
+```
+
+### (3) Demonstre que a estimativa obtida por meio da transformação within está centrado em torno do parâmetro populacional verdadeiro
+
+Usando o Chunk 4, replique o gráfico apresentado no slide 22 da Aula 9, mas usando como referência os 2 modelos estimados na etapa (2) dessa lista. Lembre de traçar a linha vertical no valor verdadeiro de $\delta$ definido pelo seu PGD.
+
+**Chunk 4: Resultados**
+```{r echo=TRUE, eval=FALSE}
+estimativas <- aplicar_modelos(nome=, data.source=)
+estimativas$nome,
+head(estimativas$data)
+summary(estimativas$results$twfe_plm)
+summary(estimativas$results$twfe_within)
+```
+

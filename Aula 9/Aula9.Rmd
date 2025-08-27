@@ -258,7 +258,7 @@ get_models <- function(i){
 ## Usando LGN
 
 ```{r, echo=TRUE}
-lgn.data <- lapply(1:50, get_models) %>% 
+lgn.data <- lapply(1:500, get_models) %>% 
   rbindlist()
 head(lgn.data)
 ```
@@ -358,7 +358,7 @@ get_models <- function(i){
                        twfe = twfe$coefficients["P"],
                        re = re$coefficients["P"])}
 
-lgn.data <- lapply(1:50, get_models) %>% 
+lgn.data <- lapply(1:500, get_models) %>% 
   rbindlist()
 
 data.temp <- lgn.data %>% 
@@ -448,7 +448,7 @@ get_models <- function(i){
                        twfe = twfe$coefficients["P"],
                        re = re$coefficients["P"])}
 
-lgn.data <- lapply(1:50, get_models) %>% 
+lgn.data <- lapply(1:500, get_models) %>% 
   rbindlist()
 
 data.temp <- lgn.data %>% 
@@ -538,7 +538,7 @@ get_models <- function(i){
                        twfe = twfe$coefficients["P"],
                        re = re$coefficients["P"])}
 
-lgn.data <- lapply(1:50, get_models) %>% 
+lgn.data <- lapply(1:500, get_models) %>% 
   rbindlist()
 
 data.temp <- lgn.data %>% 

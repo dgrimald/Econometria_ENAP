@@ -72,21 +72,39 @@ Construa uma base de dados que simule o seu caso base e que tenha as seguintes c
   
 Você pode usar a função *pgd* para fazer isso ou criar a sua própria programação. Usando o **chunk 2**, Dê o nome de **data_1** a essa base de dados que você criará e use a função *head* para incluir no seu relatório as 20 primeiras linhas de **data_1**. Lembre-se de usar o comando set.seed para que seu código possa ser reproduzido.
 
-**Chunk 2: Usa função pgd para criar amostra**
+**Chunk 2: Cria a amostra denominada data_1**
 ```{r echo=TRUE, eval=FALSE}
-
 [inserir seu código aqui]
 ```
 
 #### (2b) Estime os modelos usados nas aulas 8 e 9
 
-Usando o **Chunk 3**, crie uma função denominada **aplicar_modelos**. Essa função deve apenas input: **data.source**, que será um objeto do tipo data.frame. A sua função deverá usar esse data frame para estimar o impacto da política pública por meio dos seguintes modelos: Pooled OLS, RE, FE e TWFE. A sua função terá exatamente 4 outputs, denominados *results_ols*, *results_re*, *results_fe* e *results_twfe*. Todos esses outputs devem ser equivalentes a estimativas de modelos em painel feitas por meio do pacote plm. 
+Usando o **Chunk 3**, crie uma função denominada **aplicar_modelos**. Essa função deve ter apenas 2 inputs: (i) **data.source**, que será um objeto do tipo data.frame; e (ii) nome_aluno, que você deverá preencher com seu nome. Esssa função será usada para estimar o impacto da política pública por meio dos seguintes modelos: Pooled OLS, RE, FE e TWFE. 
 
-Em seguinda, ainda no **Chunk 3**, use essa função sobre a sua base de dados criada no passo anterior e apresente os resultados das 4 estimativas.
+A sua função terá exatamente 3 outputs: (i) *nome*, que será o nome do aluno; (ii) *data*, que é a base de dados usada para as estimativas; e (iii) *results*, que é um objeto do tipo lista que armazenará os resultados dos 4 modelos propostos. 
+
+Em seguinda, o **Chunk 4**, usará essa função sobre a base de dados criada no passo anterior (*Chunck 2*) e apresentará os resultados dos 4 modelos.
 
 **Chunk 3: Estimando o impacto da política**
 ```{r echo=TRUE, eval=FALSE}
-[inserir seu código aqui]
+aplicar_modelos <- function(nome, data.source=data_1){
+  
+  ## escreva aqui a sua função...
+  
+  # preparando objeto de saída da função
+  return <- list("nome"=nome, "data"=data.source, "results"=list("ols"= , "re"= , "fe"=, "twfe"= ))
+}
+```
+
+**Chunk 4: Resultados - Caso 1**
+```{r echo=TRUE, eval=FALSE}
+estimativas <- aplicar_modelos(nome=, data.source=)
+estimativas$nome,
+head(estimativas$data)
+summary(estimativas$results$ols)
+summary(estimativas$results$re)
+summary(estimativas$results$fe)
+summary(estimativas$results$twfe)
 ```
 
 ### (3) Caso 2: FE como estimador não viesado
@@ -100,22 +118,37 @@ Construa uma base de dados que simule o seu caso base e que tenha as seguintes c
   - o estimador de efeitos aleatórios (RE) é um estimador viesado do impacto da política; e
   - o estimador de efeitos fixos (FE) é um estimador viesado do impacto da política; e
   
-Você pode usar a função *pgd* para fazer isso ou criar a sua própria programação. Usando o **chunk 2**, Dê o nome de **data_1** a essa base de dados que você criará e use a função *head* para incluir no seu relatório as 20 primeiras linhas de **data_1**. Lembre-se de usar o comando set.seed para que seu código possa ser reproduzido.
+Dentro  do **Chunk 5**, use a mesma função desenvolvida no *Chunk 1* para criar a amostra denonominada **data_2**, seguindo os parâmetros dados para esse Caso 2. Dentro do mesmo *Chunk 5*, use a função *head* para incluir no seu relatório as 20 primeiras linhas de **data_2**. Lembre-se de usar o comando set.seed para que seu código possa ser reproduzido.
 
-**Chunk 4: Usa função pgd para criar amostra**
+**Chunk 5: Cria a amostra denominada data_2**
 ```{r echo=TRUE, eval=FALSE}
 [inserir seu código aqui]
 ```
 
 #### (2b) Estime os modelos usados nas aulas 8 e 9
 
-Usando o **Chunk 5**, use a função **aplicar_modelos** sobre a sua base de dados criada no passo anterior e apresente os resultados das 4 estimativas.
+Usando o **Chunk 6**, use a função **aplicar_modelos** sobre a amostra **data_2** e apresente os resultados das 4 estimativas.
 
-**Chunk 5: Estimando o impacto da política**
+**Chunk 6: Estimando o impacto da política**
 ```{r echo=TRUE, eval=FALSE}
 [inserir seu código aqui]
 ```
 
-### (4) Considerando o contexto real da sua política, qual caso teórico te parece mais factível? Justifique sua resposta.
+**Chunk 7: Resultados - Caso 2**
+```{r echo=TRUE, eval=FALSE}
+estimativas <- aplicar_modelos(nome=, data.source=)
+estimativas$nome,
+head(estimativas$data)
+summary(estimativas$results$ols)
+summary(estimativas$results$re)
+summary(estimativas$results$fe)
+summary(estimativas$results$twfe)
+```
+
+### (4) Quais modelos estimam o impacto verdadeiro da política no Caso 1? E no caso 2? Explique as diferenças entre os dois casos.
+
+R: [insira aqui sua resposta]
+
+### (5) Considerando o contexto real da sua política, qual caso teórico te parece mais factível? Justifique sua resposta.
 
 R: [insira aqui sua resposta]
