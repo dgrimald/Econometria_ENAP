@@ -116,7 +116,7 @@ Construa uma base de dados que simule o seu caso base e que tenha as seguintes c
   - 5000 indivíduos;
   - 6 períodos de tempo;
   - o estimador de efeitos aleatórios (RE) é um estimador viesado do impacto da política; e
-  - o estimador de efeitos fixos (FE) é um estimador viesado do impacto da política; e
+  - o estimador de efeitos fixos (FE) é um estimador não viesado do impacto da política.
   
 Dentro  do **Chunk 5**, use a mesma função desenvolvida no *Chunk 1* para criar a amostra denonominada **data_2**, seguindo os parâmetros dados para esse Caso 2. Dentro do mesmo *Chunk 5*, use a função *head* para incluir no seu relatório as 20 primeiras linhas de **data_2**. Lembre-se de usar o comando set.seed para que seu código possa ser reproduzido.
 

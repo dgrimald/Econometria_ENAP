@@ -70,14 +70,10 @@ summary(estimativas$results$twfe_within)
 
 ### (3) Demonstre que a estimativa obtida por meio da transformação within está centrado em torno do parâmetro populacional verdadeiro
 
-Usando o Chunk 4, replique o gráfico apresentado no slide 22 da Aula 9, mas usando como referência os 2 modelos estimados na etapa (2) dessa lista. Lembre de traçar a linha vertical no valor verdadeiro de $\delta$ definido pelo seu PGD.
+Usando o Chunk 4, replique o gráfico apresentado no slide 22 da Aula 9, mas usando como referência os 2 modelos estimados na etapa (2) dessa lista. Lembre-se de traçar a linha vertical no valor verdadeiro de $\delta$ definido pelo seu PGD.
 
-**Chunk 4: Resultados**
+**Chunk 4: Gráfico com distribuição das estimativas**
 ```{r echo=TRUE, eval=FALSE}
-estimativas <- aplicar_modelos(nome=, data.source=)
-estimativas$nome,
-head(estimativas$data)
-summary(estimativas$results$twfe_plm)
-summary(estimativas$results$twfe_within)
+## escreva aqui o seu código
 ```
 
