@@ -7,7 +7,7 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-```{r echo=FALSE}
+```{r echo=TRUE, warning=FALSE, message=FALSE}
 # loading required packages
 if(!require(knitr)){install.packages("knitr")}
 if(!require(devtools)){install.packages("devtools")}
@@ -27,7 +27,7 @@ if(!require(estimatr)){install.packages("estimatr")}
 if(!require(modelsummary)){install.packages("modelsummary")}
 if(!require(plm)){install.packages("plm")}
 if(!require(stargazer)){install.packages("stargazer")}
-source("https://github.com/dgrimald/Econometria_ENAP/blob/f5b67d1b932043859af815ff04b7c6a3221a9fa6/Aula%209/pgd.R")
+source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Aula%209/pgd.R")
 source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/main/Tema%20Beamer/themes_enap.R")
 ```
 
@@ -36,8 +36,22 @@ source("https://raw.githubusercontent.com/dgrimald/Econometria_ENAP/refs/heads/m
 Dentro do *Chunk 1*, recrie exatamente a mesma base de dados usada para o **Caso 2 da Lista VI** (lembre-se de usar o mesmo set.seed usando na **Lista VI** para que os resultados sejam idênticos). Aqui essa base deverá receber o nome de **data_1**
 
 **Chunk 1: Cria a amostra denominada data_1**
-```{r echo=TRUE, eval=FALSE}
-[inserir seu código aqui]
+```{r echo=TRUE, eval=TRUE}
+set.seed(13) 
+data_1 <- pgd(
+  n.id = 5000, 
+  n.t = 6, 
+  beta = c(0.5, -0.5), 
+  delta = -2, 
+  mu_x = c(200, 500), 
+  sigma_x = c(20, 80), 
+  mu_alpha = 25, 
+  sigma_alpha = 1,
+  theta_1 = 0,
+  theta_2 = 0,
+  zeta = 1
+)
+head(data_1, 20)
 ```
 
 ### (2) Estimando o modelo TWFE por meio da transformação within
@@ -49,20 +63,39 @@ A sua função terá exatamente 3 outputs: (i) *nome*, que será o nome do aluno
 Em seguinda, o **Chunk 2**, usará essa função sobre a base de dados criada no passo anterior (*Chunck 1*) e apresentará os resultados dos 2 modelos.
 
 **Chunk 2: Estimando o impacto da política**
-```{r echo=TRUE, eval=FALSE}
-aplicar_modelos <- function(nome, data.source=data_1){
+```{r echo=TRUE, eval=TRUE}
+aplicar_within <- function(nome, data.source=data_1){
   
-  ## escreva aqui a sua função...
+  data.source %<>% 
+  group_by(id) %>% 
+  mutate(y_i = mean(y),
+         x1_i = mean(x1),
+         x2_i = mean(x2),
+         P_i = mean(P)) %>% 
+  ungroup() %>%
+  group_by(t) %>% 
+  mutate(y_t = mean(y),
+         x1_t = mean(x1),
+         x2_t = mean(x2),
+         P_t = mean(P)) %>%
+  ungroup() %>% 
+  mutate(y_within = (y - y_i) - y_t,
+         x1_within = (x1 - x1_i) - x1_t,
+         x2_within = (x2 - x2_i) - x2_t,
+         P_within = (P - P_i) - P_t) 
+  
+  reg_within <- lm(y_within ~ x1_within + x2_within + P_within, data=data.source)
+  reg_plm <- plm(y ~ x1 + x2 + P, data = data.source, model = "within", effect = "twoways")
   
   # preparando objeto de saída da função
-  return <- list("nome"=nome, "data"=data.source, "results"=list("twfe_plm"= , "twfe_within"= ))
+  return <- list("nome"=nome, "data"=data.source, "results"=list("twfe_plm"=reg_plm, "twfe_within"= reg_within))
 }
 ```
 
 **Chunk 3: Resultados**
-```{r echo=TRUE, eval=FALSE}
-estimativas <- aplicar_modelos(nome=, data.source=)
-estimativas$nome,
+```{r echo=TRUE, eval=TRUE}
+estimativas <- aplicar_within(nome="Daniel Grimaldi", data.source=data_1)
+estimativas$nome
 head(estimativas$data)
 summary(estimativas$results$twfe_plm)
 summary(estimativas$results$twfe_within)
@@ -73,7 +106,77 @@ summary(estimativas$results$twfe_within)
 Usando o Chunk 4, replique o gráfico apresentado no slide 22 da Aula 9, mas usando como referência os 2 modelos estimados na etapa (2) dessa lista. Lembre-se de traçar a linha vertical no valor verdadeiro de $\delta$ definido pelo seu PGD.
 
 **Chunk 4: Gráfico com distribuição das estimativas**
-```{r echo=TRUE, eval=FALSE}
-## escreva aqui o seu código
+```{r echo=TRUE, eval=TRUE, warning=FALSE}
+# constroi função para replicação
+get_models <- function(i){
+  
+  # define seed
+  set.seed(i)
+  
+  # cria base de dados 
+  data_i <- pgd(
+    n.id = 5000, 
+    n.t = 6, 
+    beta = c(0.5, -0.5), 
+    delta = -2, 
+    mu_x = c(200, 500), 
+    sigma_x = c(20, 80), 
+    mu_alpha = 25, 
+    sigma_alpha = 1,
+    theta_1 = 0,
+    theta_2 = 0,
+    zeta = 1)
+  
+  # aplica transformação within
+  data_i %<>% 
+  group_by(id) %>% 
+  mutate(y_i = mean(y),
+         x1_i = mean(x1),
+         x2_i = mean(x2),
+         P_i = mean(P)) %>% 
+  ungroup() %>%
+  group_by(t) %>% 
+  mutate(y_t = mean(y),
+         x1_t = mean(x1),
+         x2_t = mean(x2),
+         P_t = mean(P)) %>%
+  ungroup() %>% 
+  mutate(y_within = (y - y_i) - y_t,
+         x1_within = (x1 - x1_i) - x1_t,
+         x2_within = (x2 - x2_i) - x2_t,
+         P_within = (P - P_i) - P_t) 
+  
+  # estima modelos
+  reg_within <- lm(y_within ~ x1_within + x2_within + P_within, data=data_i)
+  reg_plm <- plm(y ~ x1 + x2 + P, data = data_i, model = "within", effect = "twoways")
+
+  # salva resultados
+  output <- data.frame(sample=i,
+                       plm = reg_plm$coefficients["P"],
+                       within = reg_within$coefficients["P_within"])}
+
+# aplica função
+lgn.data <- lapply(1:500, get_models) %>% 
+  rbindlist()
+
+# organiza resultados
+data.temp <- lgn.data %>% 
+  pivot_longer(cols=c("plm", "within"),
+               names_to = "model",
+               values_to = "coef")
+
+# gera figura
+fig <- ggplot(data.temp) +
+  geom_density(aes(coef, fill=as.factor(model)),
+               alpha=0.1,
+               color=cores$cinza_claro) +
+  scale_fill_manual(values=c(cores$azul_escuro, cores$amarelo_escuro)) +
+  geom_vline(xintercept = -2, color=cores$preto, linewidth=1.3) +
+  labs(title="Distribuição dos coeficientes de P",
+       y="Densidade",
+       x="Coeficiente",
+       fill="Modelo") +
+  tema_base_fundobranco()
+fig
 ```
 
